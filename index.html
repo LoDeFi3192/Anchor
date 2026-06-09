@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#fdf5f2">
+<title>Anchor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Anchor">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{
+  --bg:#fdf5f2;
+  --bg-2:#f7e6ea;
+  --surface:rgba(255,255,255,0.6);
+  --surface-2:rgba(255,255,255,0.86);
+  --line:rgba(150,95,115,0.13);
+  --text:#4d3b42;
+  --muted:#9c8590;
+  --accent:#e8918a;       /* soft coral */
+  --accent-2:#bfa8e6;     /* soft lavender */
+  --warm:#f3c19c;         /* peach */
+  --danger:#ef8c87;       /* gentle coral */
+  --glow:#f8cdc4;         /* blush glow */
+  --ink:#5a2f33;          /* warm dark ink on accents */
+  --shadow:0 16px 34px rgba(205,120,135,0.18);
+  --shadow-sm:0 8px 20px rgba(205,120,135,0.12);
+  --radius:30px;
+  --tap:64px;
+  --font-d:"Fraunces","Georgia",serif;
+  --font:"Hanken Grotesk",-apple-system,system-ui,"Segoe UI",sans-serif;
+  --maxw:480px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:var(--font);color:var(--text);
+  background:
+    radial-gradient(90% 60% at 15% 0%, #fde7ec 0%, transparent 55%),
+    radial-gradient(80% 60% at 95% 25%, #efe6fb 0%, transparent 55%),
+    radial-gradient(90% 70% at 50% 110%, #fdeede 0%, transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;user-select:none;
+}
+/* floating organic blobs */
+body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(46px);z-index:0;pointer-events:none}
+body::before{width:62vmax;height:62vmax;top:-22vmax;left:-18vmax;
+  background:radial-gradient(circle,rgba(232,145,138,.34),transparent 70%);animation:drift 22s ease-in-out infinite}
+body::after{width:54vmax;height:54vmax;bottom:-20vmax;right:-16vmax;
+  background:radial-gradient(circle,rgba(191,168,230,.32),transparent 70%);animation:drift 26s ease-in-out infinite reverse}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(4vmax,3vmax) scale(1.08)}}
+
+button{font-family:inherit;color:inherit;border:none;background:none;cursor:pointer}
+.app{max-width:var(--maxw);margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;z-index:1}
+.screen{flex:1;padding:24px 20px 118px;display:none;animation:fade .4s ease}
+.screen.active{display:flex;flex-direction:column}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.reduce-motion *{animation-duration:.001s!important;transition-duration:.05s!important}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-d);font-weight:600;font-size:23px;letter-spacing:.2px}
+.brand .dot{width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 16px var(--glow)}
+.lang{display:flex;background:var(--surface);border-radius:30px;padding:3px;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.lang button{padding:6px 13px;border-radius:30px;font-size:13px;font-weight:600;color:var(--muted)}
+.lang button.on{background:var(--accent);color:#fff}
+
+h1{font-family:var(--font-d);font-size:30px;font-weight:500;margin:0 0 6px;letter-spacing:.2px;line-height:1.15}
+h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
+.sub{color:var(--muted);font-size:15px;line-height:1.55;margin:0}
+
+.companion-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:10px 0 20px}
+.companion{width:160px;height:160px;display:flex;align-items:center;justify-content:center;position:relative}
+.companion .aura{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,var(--glow) 0%,rgba(191,168,230,.25) 45%,transparent 70%);opacity:.7;
+  animation:pulse 4.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(.88);opacity:.45}50%{transform:scale(1.18);opacity:.75}}
+.creature{font-size:78px;animation:float 5.5s ease-in-out infinite;z-index:1;filter:drop-shadow(0 10px 22px rgba(180,110,130,.3))}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
+.companion.sleepy .creature{filter:grayscale(.25) drop-shadow(0 5px 12px rgba(180,110,130,.25));opacity:.82}
+.companion-name{font-family:var(--font-d);font-weight:500;font-size:20px}
+.companion-msg{color:var(--muted);font-size:14px;text-align:center;max-width:290px;min-height:18px;line-height:1.5}
+
+.meta-row{display:flex;gap:12px;width:100%;margin-bottom:8px}
+.meta{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 16px;box-shadow:var(--shadow-sm);backdrop-filter:blur(8px)}
+.meta .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;font-weight:600}
+.meta .val{font-family:var(--font-d);font-size:22px;font-weight:500;margin-top:3px}
+.bar{height:9px;border-radius:30px;background:rgba(150,95,115,.12);overflow:hidden;margin-top:9px}
+.bar > i{display:block;height:100%;border-radius:30px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .8s ease}
+
+.panic-zone{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:10px}
+.panic-btn{
+  width:206px;height:206px;border-radius:50%;
+  background:radial-gradient(circle at 50% 32%, #f6b3a8, #ec8276 72%);
+  box-shadow:0 0 0 0 rgba(236,130,118,.45),0 22px 46px rgba(236,130,118,.4);
+  color:#fff;font-family:var(--font-d);font-size:23px;font-weight:500;letter-spacing:.5px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  animation:breathe 4.8s ease-in-out infinite;
+}
+.panic-btn small{font-family:var(--font);font-weight:600;font-size:13px;opacity:.92;letter-spacing:.3px}
+.panic-btn:active{transform:scale(.96)}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(236,130,118,.4),0 22px 46px rgba(236,130,118,.34)}50%{box-shadow:0 0 0 28px rgba(236,130,118,0),0 22px 46px rgba(236,130,118,.34)}}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);backdrop-filter:blur(8px)}
+.btn{width:100%;min-height:var(--tap);border-radius:22px;background:var(--accent);color:#fff;
+  font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 12px 26px rgba(232,145,138,.36);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--surface-2);color:var(--text);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.btn.warm{background:var(--warm);color:var(--ink);box-shadow:0 12px 26px rgba(243,193,156,.4)}
+.btn.danger{background:var(--danger);color:#fff}
+.stack{display:flex;flex-direction:column;gap:12px}
+
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--maxw);
+  display:flex;justify-content:space-around;padding:11px 8px calc(11px + env(safe-area-inset-bottom));
+  background:rgba(255,250,250,.78);backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid var(--line);z-index:40}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:10px;font-weight:600;padding:4px 4px}
+.nav button .ic{font-size:20px}
+.nav button.on{color:var(--accent)}
+
+/* PANIC MODE — soft dusk plum, warm and enveloping */
+.panic-mode{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;
+  background:radial-gradient(120% 90% at 50% -10%, #4a3350 0%, #382440 55%, #2a1a33 100%);
+  color:#f4e8ef;padding:env(safe-area-inset-top) 22px 30px;overflow:hidden}
+.panic-mode.active{display:flex;animation:fade .5s ease}
+.storm{position:absolute;inset:0;pointer-events:none;transition:opacity 1.6s ease;
+  background:
+    radial-gradient(120% 90% at 50% 120%, rgba(0,0,0,0), rgba(20,10,25,.6)),
+    repeating-linear-gradient(115deg, rgba(180,160,190,.05) 0 14px, rgba(90,70,110,.12) 14px 28px);
+  opacity:1}
+.pm-inner{position:relative;z-index:2;display:flex;flex-direction:column;flex:1}
+.pm-top{display:flex;justify-content:space-between;align-items:center;padding:14px 2px 6px}
+.timer{font-variant-numeric:tabular-nums;font-size:15px;color:#d6bfd0;font-weight:600}
+.pm-exit{font-size:14px;color:#e7d3e2;padding:9px 14px;border:1px solid rgba(255,255,255,.22);border-radius:30px}
+.pm-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:20px}
+.pm-step{display:none;flex-direction:column;align-items:center;gap:20px;width:100%;animation:fade .5s}
+.pm-step.active{display:flex}
+.pm-title{font-family:var(--font-d);font-size:27px;font-weight:500;line-height:1.25;max-width:340px;color:#fdf3f8}
+.pm-line{font-size:18px;color:#f0c8d6;max-width:340px;line-height:1.55;min-height:26px}
+.pm-step .companion .aura{background:radial-gradient(circle,rgba(248,205,196,.6),rgba(191,168,230,.3) 50%,transparent 70%)}
+
+.breath{width:236px;height:236px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,rgba(248,205,196,.28),rgba(191,168,230,.06) 70%);
+  border:2px solid rgba(248,205,196,.5);transition:transform 4s ease-in-out;position:relative;
+  box-shadow:0 0 60px rgba(248,205,196,.25)}
+.breath .ring{position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(191,168,230,.3)}
+.breath .word{font-family:var(--font-d);font-size:23px;font-weight:500;letter-spacing:.4px;color:#fff}
+.breath .count{position:absolute;bottom:36px;font-size:14px;color:#e2cadb;font-variant-numeric:tabular-nums}
+
+.sense{display:flex;flex-direction:column;gap:14px;width:100%;max-width:360px;align-items:center}
+.sense .big{font-family:var(--font-d);font-size:70px;font-weight:500;color:#f6b3a8;line-height:1}
+.sense .what{font-family:var(--font-d);font-size:22px;font-weight:500;color:#fdf3f8}
+.sense .hint{color:#dcc4d6;font-size:14px;max-width:300px;line-height:1.55}
+.dots{display:flex;gap:8px}
+.dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18);transition:.3s}
+.dots i.on{background:#f6b3a8;transform:scale(1.25)}
+.pm-actions{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;margin-top:6px}
+
+.recap{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.recap .reward{font-size:64px;animation:float 4.5s ease-in-out infinite}
+
+.garden{min-height:250px;border-radius:var(--radius);position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#fbe3e9 0%,#f4e2f5 55%,#e7f0e4 100%);border:1px solid var(--line);padding:16px;box-shadow:var(--shadow-sm)}
+.garden .sky-glow{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:170px;height:170px;border-radius:50%;
+  background:radial-gradient(circle,var(--warm),transparent 70%);opacity:.6}
+.plants{position:absolute;bottom:16px;left:0;right:0;display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:center;gap:6px 10px;padding:0 14px}
+.plant{font-size:30px;animation:sway 6s ease-in-out infinite;transform-origin:bottom;filter:drop-shadow(0 4px 8px rgba(160,100,130,.2))}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.garden-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9c8590;font-size:14px;text-align:center;padding:30px;line-height:1.5}
+
+.row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:none}
+.row .r-main{font-weight:700}
+.row .r-sub{font-size:13px;color:var(--muted)}
+.tag{font-size:12px;padding:5px 12px;border-radius:30px;background:rgba(191,168,230,.2);color:#7d6aa0;font-weight:600}
+.contact{display:flex;align-items:center;gap:12px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:22px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
+.contact .av{width:46px;height:46px;border-radius:50%;background:rgba(243,193,156,.3);display:flex;align-items:center;justify-content:center;font-size:22px}
+.contact .info{flex:1}.contact .info b{font-size:15px}.contact .info div{font-size:13px;color:var(--muted)}
+.contact a{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;box-shadow:0 8px 18px rgba(232,145,138,.4)}
+.contact.sos a{background:var(--danger)}
+
+input,select,textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:16px;
+  padding:14px 15px;color:var(--text);font-size:15px;font-family:inherit;margin-top:6px}
+input::placeholder,textarea::placeholder{color:#c2afb8}
+input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+label{font-size:13px;color:var(--muted);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{padding:10px 15px;border-radius:30px;background:var(--surface);border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--muted)}
+.chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.field{margin-bottom:16px}
+.toggle{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line);font-weight:600}
+.sw{width:52px;height:31px;border-radius:30px;background:rgba(150,95,115,.18);position:relative;transition:.25s;border:1px solid var(--line)}
+.sw i{position:absolute;top:3px;left:3px;width:23px;height:23px;border-radius:50%;background:#fff;transition:.25s;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.sw.on{background:var(--accent)}.sw.on i{left:24px}
+
+.note{font-size:12.5px;color:var(--muted);line-height:1.55;text-align:center;margin-top:20px}
+.milestone{display:flex;align-items:center;gap:12px;padding:13px 15px;background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;box-shadow:var(--shadow-sm)}
+.milestone .m-ic{font-size:26px}
+.milestone.locked{opacity:.42}
+.memory-item{padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;font-size:14px;line-height:1.55;font-style:italic;box-shadow:var(--shadow-sm)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.picker{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pick{padding:15px 8px;border-radius:20px;background:var(--surface);border:1.5px solid var(--line);text-align:center;box-shadow:var(--shadow-sm)}
+.pick.on{border-color:var(--accent);background:rgba(232,145,138,.12)}
+.pick .e{font-size:36px}.pick .n{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600}
+
+/* mood tracker */
+.mood-home{margin-top:6px;padding:16px 18px}
+.mood-home-q{font-family:var(--font-d);font-size:17px;font-weight:500;margin-bottom:13px;text-align:center}
+.mood-scale{display:flex;justify-content:space-between;gap:9px}
+.mood-dot{flex:1;height:48px;border-radius:16px;border:2px solid transparent;transition:transform .15s,box-shadow .2s;box-shadow:inset 0 -3px 9px rgba(0,0,0,.1)}
+.mood-dot:active{transform:scale(.9)}
+.mood-dot.on{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.2),0 0 0 3px #fff,0 0 0 5px rgba(0,0,0,.05)}
+.mood-chosen{text-align:center;color:var(--muted);font-size:14px;margin-top:14px;min-height:18px;font-weight:600}
+.mood-month-row{display:flex;justify-content:space-between;align-items:center;margin:26px 0 12px}
+.mood-month-row h2{font-family:var(--font-d);font-weight:500;text-transform:capitalize}
+.mc-nav{width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);font-size:24px;line-height:1;color:var(--text);box-shadow:var(--shadow-sm)}
+.mc-nav:active{transform:scale(.92)}
+.mc-nav:disabled{opacity:.35;pointer-events:none}
+.mood-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-h{text-align:center;font-size:11px;color:var(--muted);font-weight:700;padding-bottom:2px}
+.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:13px;font-size:13px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);transition:transform .12s}
+.cal-cell:active{transform:scale(.88)}
+.cal-cell.empty{background:transparent;border:none;pointer-events:none}
+.cal-cell.filled{color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);border-color:transparent}
+.cal-cell.future{opacity:.4;pointer-events:none}
+.cal-cell.today{outline:2px solid var(--accent);outline-offset:1px}
+.mood-legend{display:flex;flex-wrap:wrap;gap:9px 14px;justify-content:center;margin-top:18px}
+.leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:600}
+.leg i{width:14px;height:14px;border-radius:5px;display:inline-block}
+
+/* tutorial / onboarding */
+.tutorial{position:fixed;inset:0;z-index:150;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(253,245,242,.88);backdrop-filter:blur(16px)}
+.tutorial.active{display:flex;animation:fade .45s ease}
+.tut-card{width:100%;max-width:380px;background:var(--surface-2);border:1px solid var(--line);border-radius:34px;
+  padding:40px 26px 26px;box-shadow:var(--shadow);text-align:center;display:flex;flex-direction:column;align-items:center;position:relative}
+.tut-skip{position:absolute;top:16px;right:18px;font-size:13px;color:var(--muted);font-weight:600;padding:6px 8px}
+.tut-icon{font-size:66px;animation:float 5s ease-in-out infinite;margin-bottom:8px;filter:drop-shadow(0 8px 18px rgba(180,110,130,.28))}
+.tut-title{font-family:var(--font-d);font-size:25px;font-weight:500;line-height:1.2}
+.tut-body{color:var(--muted);font-size:15px;line-height:1.6;margin-top:10px;min-height:108px}
+.tut-dots{display:flex;gap:7px;margin:6px 0 20px}
+.tut-dots i{width:8px;height:8px;border-radius:50%;background:rgba(150,95,115,.22);transition:.35s}
+.tut-dots i.on{background:var(--accent);width:22px;border-radius:10px}
+.tut-card .btn{margin-top:0}
+
+/* companion view + activities + mini games */
+.tap-hint{font-size:11px;color:var(--muted);opacity:.65;margin-top:2px}
+#home-companion{cursor:pointer}
+.companion-view{position:fixed;inset:0;z-index:90;display:none;flex-direction:column;
+  background:radial-gradient(90% 60% at 15% 0%, #fde7ec 0%, transparent 55%),radial-gradient(80% 60% at 95% 25%, #efe6fb 0%, transparent 55%),var(--bg);
+  padding:env(safe-area-inset-top) 0 0}
+.companion-view.active{display:flex;animation:fade .4s ease}
+.cv-top{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 8px;max-width:var(--maxw);margin:0 auto;width:100%}
+.cv-title{font-family:var(--font-d);font-weight:600;font-size:21px}
+.cv-scroll{flex:1;overflow-y:auto;padding:8px 20px 40px;max-width:var(--maxw);margin:0 auto;width:100%}
+.cv-h{font-family:var(--font-d);font-weight:500;margin:24px 0 12px}
+.comp-hero{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:6px}
+.comp-name{font-family:var(--font-d);font-size:22px;font-weight:500}
+.comp-stage{color:var(--muted);font-size:14px;font-weight:600}
+.evo-path{display:flex;gap:8px;margin-top:20px;overflow-x:auto;padding-bottom:6px}
+.evo{flex:0 0 auto;width:78px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:12px 6px;text-align:center;box-shadow:var(--shadow-sm)}
+.evo-g{font-size:30px;line-height:1.1}
+.evo-n{font-size:11px;font-weight:700;margin-top:4px}
+.evo-need{font-size:10px;color:var(--muted);margin-top:2px}
+.evo.cur{border-color:var(--accent);background:rgba(232,145,138,.12)}
+.evo.lock{opacity:.55}
+.evo.lock .evo-g{filter:grayscale(1)}
+.act{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:15px;background:var(--surface);border:1px solid var(--line);border-radius:20px;margin-bottom:11px;box-shadow:var(--shadow-sm)}
+.act:active{transform:scale(.98)}
+.act-ic{font-size:30px;flex:0 0 auto}
+.act-txt{flex:1;display:flex;flex-direction:column}
+.act-txt b{font-family:var(--font-d);font-weight:500;font-size:16px}
+.act-txt i{font-style:normal;color:var(--muted);font-size:13px;margin-top:2px;line-height:1.4}
+.act-go{font-size:24px;color:var(--accent)}
+.act-lock{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+.act.locked{opacity:.6;pointer-events:none}
+.mini{position:fixed;inset:0;z-index:110;display:none;flex-direction:column;
+  background:radial-gradient(120% 90% at 50% -10%, #4a3350 0%, #382440 55%, #2a1a33 100%);color:#f4e8ef;
+  padding:env(safe-area-inset-top) 0 0}
+.mini.active{display:flex;animation:fade .4s ease}
+.mini .cv-top .mini-title{font-family:var(--font-d);font-weight:500;font-size:20px;color:#fdf3f8}
+.mini-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden;padding:20px}
+.mini-hint{color:#dcc4d6;font-size:14px;text-align:center;position:absolute;bottom:34px;left:0;right:0}
+.fb-circle{width:220px;height:220px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,rgba(248,205,196,.28),rgba(191,168,230,.06) 70%);border:2px solid rgba(248,205,196,.5);
+  transition:transform 4s ease-in-out;box-shadow:0 0 60px rgba(248,205,196,.25);font-family:var(--font-d);font-size:22px;color:#fff}
+.fb-sub{color:#dcc4d6;font-size:14px}
+.bubbles-area{position:absolute;inset:0}
+.bubble{position:absolute;bottom:-60px;border-radius:50%;opacity:.85;cursor:pointer;
+  box-shadow:inset -6px -8px 14px rgba(0,0,0,.18),0 4px 12px rgba(0,0,0,.18);
+  animation:rise linear forwards}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(-115vh)}}
+.bubble.pop{transition:transform .2s,opacity .2s;transform:scale(1.5)!important;opacity:0}
+.sky{position:absolute;inset:0;cursor:crosshair}
+.star{position:absolute;transform:translate(-50%,-50%);color:#fff;font-size:18px;
+  text-shadow:0 0 10px #fff,0 0 18px var(--accent-2);animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="screen active" id="screen-home">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span>Anchor</div>
+      <div class="lang">
+        <button data-lang="fr" class="on">FR</button>
+        <button data-lang="en">EN</button>
+      </div>
+    </div>
+    <div class="companion-wrap">
+      <div class="companion" id="home-companion">
+        <div class="aura"></div>
+        <div class="creature" id="home-creature">🌱</div>
+      </div>
+      <div class="companion-name" id="home-cname">Lueur</div>
+      <div class="companion-msg" id="home-cmsg"></div>
+      <div class="tap-hint" data-t="tapHint">(touche-moi)</div>
+    </div>
+    <div class="meta-row">
+      <div class="meta">
+        <div class="lbl" data-t="energy">Énergie</div>
+        <div class="val"><span id="m-energy">0</span>%</div>
+        <div class="bar"><i id="energy-bar" style="width:0%"></i></div>
+      </div>
+      <div class="meta">
+        <div class="lbl" data-t="stage">Évolution</div>
+        <div class="val" id="m-stage">—</div>
+        <div class="bar"><i id="stage-bar" style="width:0%"></i></div>
+      </div>
+    </div>
+    <div class="mood-home card" id="mood-home">
+      <div class="mood-home-q" data-t="moodTodayQ">Comment te sens-tu aujourd'hui ?</div>
+      <div class="mood-scale" id="home-mood-scale"></div>
+    </div>
+
+    <div class="panic-zone">
+      <p class="sub" style="text-align:center" data-t="homeHint">Une crise commence ? Appuie. Je reste avec toi.</p>
+      <button class="panic-btn" id="panic-open">
+        <span data-t="panicNow">JE PANIQUE</span>
+        <small data-t="panicSub">Appuie pour de l'aide</small>
+      </button>
+    </div>
+  </section>
+  <section class="screen" id="screen-garden">
+    <div class="topbar"><div class="brand"><span class="dot"></span><span data-t="navGarden">Jardin</span></div></div>
+    <h1 data-t="gardenTitle">Ton jardin</h1>
+    <p class="sub" data-t="gardenSub">Chaque épisode traversé fait pousser quelque chose. C'est ta récupération, rendue visible.</p>
+    <div class="garden" id="garden" style="margin-top:18px">
+      <div class="sky-glow"></div>
+      <div class="garden-empty" id="garden-empty" data-t="gardenEmpty">Ton jardin est encore nu. Termine une session pour y planter ta première lueur.</div>
+      <div class="plants" id="plants"></div>
+    </div>
+    <h2 style="margin-top:26px" data-t="memTitle">Mémoires</h2>
+    <p class="sub" data-t="memSub">Ce que tu as déjà surmonté. À relire quand c'est dur.</p>
+    <div id="memories" style="margin-top:14px"></div>
+    <div class="card" style="margin-top:8px">
+      <label data-t="memAdd">Ajouter une victoire ou une note encourageante</label>
+      <textarea id="mem-input" rows="2" placeholder="..."></textarea>
+      <button class="btn ghost" id="mem-save" style="margin-top:10px" data-t="save">Enregistrer</button>
+    </div>
+  </section>
+  <section class="screen" id="screen-dash">
+    <div class="topbar"><div class="brand"><span class="dot"></span><span data-t="navDash">Suivi</span></div></div>
+    <h1 data-t="dashTitle">Ton suivi</h1>
+    <p class="sub" data-t="dashSub">Des faits, pas un jugement. Les crises ont une durée. Elles finissent toujours.</p>
+    <div class="grid2" style="margin:18px 0">
+      <div class="meta"><div class="lbl" data-t="dEpisodes">Épisodes</div><div class="val" id="d-count">0</div></div>
+      <div class="meta"><div class="lbl" data-t="dAvg">Durée moyenne</div><div class="val" id="d-avg">—</div></div>
+      <div class="meta"><div class="lbl" data-t="dLast">Dernier</div><div class="val" id="d-last">—</div></div>
+      <div class="meta"><div class="lbl" data-t="dResil">Résilience</div><div class="val" id="d-resil">0</div></div>
+    </div>
+    <h2 data-t="dMilestones">Jalons</h2>
+    <div id="milestones" style="margin-bottom:24px"></div>
+    <h2 data-t="dHistory">Historique</h2>
+    <div class="card" id="history"></div>
+  </section>
+  <!-- MOOD -->
+  <section class="screen" id="screen-mood">
+    <div class="topbar"><div class="brand"><span class="dot"></span><span data-t="navMood">Humeur</span></div></div>
+    <h1 data-t="moodTitle">Ton humeur</h1>
+    <p class="sub" data-t="moodSub">Note ta journée d'un toucher. Une couleur, c'est tout. Touche un jour passé pour le corriger.</p>
+
+    <div class="card" style="margin-top:18px">
+      <div class="mood-home-q" data-t="moodTodayQ">Comment te sens-tu aujourd'hui ?</div>
+      <div class="mood-scale" id="mood-scale"></div>
+      <div class="mood-chosen" id="mood-chosen"></div>
+    </div>
+
+    <div class="mood-month-row">
+      <button class="mc-nav" id="mood-prev">&lsaquo;</button>
+      <h2 id="mood-month" style="margin:0"></h2>
+      <button class="mc-nav" id="mood-next">&rsaquo;</button>
+    </div>
+    <div class="mood-cal" id="mood-cal"></div>
+    <div class="mood-legend" id="mood-legend"></div>
+
+    <h2 style="margin-top:26px" data-t="moodStatsT">Aperçu</h2>
+    <div class="grid2" style="margin-top:6px">
+      <div class="meta"><div class="lbl" data-t="mood7">7 derniers jours</div><div class="val" id="mood-7avg">—</div></div>
+      <div class="meta"><div class="lbl" data-t="moodLogged">Jours notés</div><div class="val" id="mood-logged">0</div></div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section class="screen" id="screen-contacts">
+    <div class="topbar"><div class="brand"><span class="dot"></span><span data-t="navContacts">Contacts</span></div></div>
+    <h1 data-t="contactsTitle">Contacts sûrs</h1>
+    <p class="sub" data-t="contactsSub">Une personne, un appui. Touche pour appeler.</p>
+    <div id="contacts-list" style="margin-top:18px"></div>
+    <div class="card" style="margin-top:8px">
+      <label data-t="cName">Nom</label><input id="c-name" placeholder="ex: Papa">
+      <label style="margin-top:10px;display:block" data-t="cNum">Numéro</label><input id="c-num" type="tel" placeholder="+33...">
+      <button class="btn ghost" id="c-add" style="margin-top:12px" data-t="cAdd">Ajouter</button>
+    </div>
+    <p class="note" data-t="contactsNote">Anchor n'est pas un service d'urgence. En cas de danger immédiat, appelle le 112 (UE) ou le 15 (FR).</p>
+  </section>
+  <section class="screen" id="screen-settings">
+    <div class="topbar"><div class="brand"><span class="dot"></span><span data-t="navSettings">Réglages</span></div></div>
+    <h1 data-t="setTitle">Réglages</h1>
+    <h2 style="margin-top:18px" data-t="setCompanion">Ton compagnon</h2>
+    <div id="companion-card"></div>
+    <button class="btn ghost" id="reroll" data-t="setReroll" style="margin-top:12px">Tirer un nouveau compagnon</button>
+    <div class="field" style="margin-top:14px">
+      <label data-t="setCname">Son nom</label>
+      <input id="set-cname" maxlength="16">
+    </div>
+    <h2 data-t="setBreath">Respiration</h2>
+    <div class="chips" id="breath-picker"></div>
+    <h2 style="margin-top:22px" data-t="setPrefs">Préférences</h2>
+    <div class="toggle"><span data-t="setVoice">Voix guide</span><div class="sw" id="sw-voice"><i></i></div></div>
+    <div class="toggle"><span data-t="setHaptic">Vibrations</span><div class="sw" id="sw-haptic"><i></i></div></div>
+    <div class="toggle"><span data-t="setMotion">Réduire les animations</span><div class="sw" id="sw-motion"><i></i></div></div>
+    <button class="btn ghost" id="tut-replay" data-t="tutReplay" style="margin-top:8px">Revoir le tutoriel</button>
+    <button class="btn ghost" id="reset" style="margin-top:24px" data-t="setReset">Réinitialiser les données</button>
+    <p class="note" data-t="setPrivacy">Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.</p>
+  </section>
+  <nav class="nav">
+    <button data-go="home" class="on"><span class="ic">⚓</span><span data-t="navHome">Accueil</span></button>
+    <button data-go="garden"><span class="ic">🌿</span><span data-t="navGarden">Jardin</span></button>
+    <button data-go="dash"><span class="ic">📈</span><span data-t="navDash">Suivi</span></button>
+    <button data-go="mood"><span class="ic">🌈</span><span data-t="navMood">Humeur</span></button>
+    <button data-go="contacts"><span class="ic">🤍</span><span data-t="navContacts">Contacts</span></button>
+    <button data-go="settings"><span class="ic">⚙️</span><span data-t="navSettings">Réglages</span></button>
+  </nav>
+</div>
+<!-- ===== COMPANION VIEW ===== -->
+<div class="companion-view" id="companion-view">
+  <div class="cv-top">
+    <div class="cv-title">Anchor</div>
+    <button class="pm-exit" id="cv-close" data-t="cvClose">Fermer</button>
+  </div>
+  <div class="cv-scroll">
+    <div id="cv-card"></div>
+    <h2 class="cv-h" data-t="cvActs">Activités</h2>
+    <div class="cv-acts" id="cv-acts"></div>
+  </div>
+</div>
+
+<!-- ===== MINI GAMES ===== -->
+<div class="mini" id="mini">
+  <div class="cv-top">
+    <div class="mini-title" id="mini-title"></div>
+    <button class="pm-exit" id="mini-close" data-t="miniClose">Terminer</button>
+  </div>
+  <div class="mini-content" id="mini-content"></div>
+</div>
+
+<!-- ===== TUTORIAL ===== -->
+<div class="tutorial" id="tutorial">
+  <div class="tut-card">
+    <button class="tut-skip" id="tut-skip" data-t="tutSkip">Passer</button>
+    <div class="tut-icon" id="tut-icon">⚓</div>
+    <div class="tut-title" id="tut-title"></div>
+    <div class="tut-body" id="tut-body"></div>
+    <div class="tut-dots" id="tut-dots"></div>
+    <button class="btn" id="tut-next" data-t="tutNext">Suivant</button>
+  </div>
+</div>
+
+<!-- ===== PANIC MODE ===== -->
+<div class="panic-mode" id="panic-mode">
+  <div class="storm" id="storm"></div>
+  <div class="pm-inner">
+    <div class="pm-top">
+      <div class="timer" id="pm-timer">00:00</div>
+      <button class="pm-exit" id="pm-exit" data-t="pmExit">Je vais mieux</button>
+    </div>
+    <div class="pm-body">
+      <div class="pm-step active" id="step-reality">
+        <div class="companion" style="width:110px;height:110px">
+          <div class="aura"></div><div class="creature" id="pm-creature" style="font-size:54px">🌱</div>
+        </div>
+        <div class="pm-title" id="reality-title">Tu es en sécurité.</div>
+        <div class="pm-line" id="reality-line"></div>
+        <div class="pm-actions">
+          <button class="btn" id="reality-next" data-t="pmStart">Respirons ensemble</button>
+        </div>
+      </div>
+      <div class="pm-step" id="step-breath">
+        <div class="breath" id="breath-circle">
+          <div class="ring"></div>
+          <div class="word" id="breath-word">Inspire</div>
+          <div class="count" id="breath-count"></div>
+        </div>
+        <div class="pm-line" id="breath-sub" data-t="pmFollow">Suis le cercle. Rien d'autre à faire.</div>
+        <div class="pm-actions">
+          <button class="btn ghost" id="breath-done" data-t="pmGround">Passer à l'ancrage</button>
+        </div>
+      </div>
+      <div class="pm-step" id="step-ground">
+        <div class="sense">
+          <div class="big" id="sense-num">5</div>
+          <div class="what" id="sense-what">choses que tu vois</div>
+          <div class="hint" id="sense-hint">Regarde autour. Nomme-les, tout bas ou dans ta tête.</div>
+          <div class="dots" id="sense-dots"></div>
+        </div>
+        <div class="pm-actions">
+          <button class="btn" id="sense-next" data-t="pmDone">C'est fait</button>
+        </div>
+      </div>
+      <div class="pm-step" id="step-recap">
+        <div class="recap">
+          <div class="reward" id="recap-reward">🌸</div>
+          <div class="pm-title" id="recap-title">Tu l'as traversée.</div>
+          <div class="pm-line" id="recap-line"></div>
+          <div class="pm-actions">
+            <button class="btn warm" id="recap-close" data-t="pmReturn">Revenir au calme</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const I18N = {
+  fr:{
+    homeHint:"Une crise commence ? Appuie. Je reste avec toi.",
+    panicNow:"JE PANIQUE", panicSub:"Appuie pour de l'aide",
+    energy:"Énergie", stage:"Évolution",
+    navHome:"Accueil",navGarden:"Jardin",navDash:"Suivi",navContacts:"Contacts",navSettings:"Réglages",
+    gardenTitle:"Ton jardin", gardenSub:"Chaque épisode traversé fait pousser quelque chose. C'est ta récupération, rendue visible.",
+    gardenEmpty:"Ton jardin est encore nu. Termine une session pour y planter ta première lueur.",
+    memTitle:"Mémoires", memSub:"Ce que tu as déjà surmonté. À relire quand c'est dur.",
+    memAdd:"Ajouter une victoire ou une note encourageante", save:"Enregistrer",
+    dashTitle:"Ton suivi", dashSub:"Des faits, pas un jugement. Les crises ont une durée. Elles finissent toujours.",
+    dEpisodes:"Épisodes", dAvg:"Durée moyenne", dLast:"Dernier", dResil:"Résilience",
+    dMilestones:"Jalons", dHistory:"Historique",
+    contactsTitle:"Contacts sûrs", contactsSub:"Une personne, un appui. Touche pour appeler.",
+    cName:"Nom", cNum:"Numéro", cAdd:"Ajouter",
+    contactsNote:"Anchor n'est pas un service d'urgence. En cas de danger immédiat, appelle le 112 (UE) ou le 15 (FR).",
+    setTitle:"Réglages", setCompanion:"Ton compagnon", setCname:"Son nom",
+    setBreath:"Respiration", setPrefs:"Préférences",
+    setVoice:"Voix guide", setHaptic:"Vibrations", setMotion:"Réduire les animations",
+    setReset:"Réinitialiser les données",
+    setPrivacy:"Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.",
+    pmExit:"Je vais mieux", pmStart:"Respirons ensemble", pmFollow:"Suis le cercle. Rien d'autre à faire.",
+    pmGround:"Passer à l'ancrage", pmDone:"C'est fait", pmReturn:"Revenir au calme",
+    inhale:"Inspire", hold:"Retiens", exhale:"Expire", pause:"Pause",
+    realityTitles:["Tu es en sécurité.","Ceci va passer.","C'est une réaction de panique, pas un danger.","Ton corps fait du bruit. Tu n'es pas en danger."],
+    realityLines:["Ton corps réagit fort, mais il n'y a pas de menace réelle ici.","Une crise dure quelques minutes. Pas plus. Elle redescend toujours.","Tu as déjà traversé ça. Tu peux le refaire, là, maintenant.","Pose tes pieds au sol. Sens le contact. Tu es ici."],
+    senses:[
+      {n:5,w:"choses que tu vois",h:"Regarde autour. Nomme-les, tout bas ou dans ta tête."},
+      {n:4,w:"choses que tu peux toucher",h:"Touche-les vraiment. La texture, la température."},
+      {n:3,w:"sons que tu entends",h:"Même les plus discrets. Écoute."},
+      {n:2,w:"choses que tu sens (odorat)",h:"Inspire doucement par le nez."},
+      {n:1,w:"chose que tu goûtes",h:"Ou imagine un goût familier et rassurant."}
+    ],
+    recapLines:["Durée : {d}. C'était une crise, pas un danger. Et c'est fini.","{n}e épisode traversé. Chaque fois, tu prouves que tu peux.","Tu es revenu(e) au calme. Note-le. Ton corps l'apprend."],
+    cmsgEnergyLow:["Je t'attends, tranquillement. Quand tu veux.","Pas de pression. Je suis là quand tu reviens."],
+    cmsgNormal:["Content de te voir. On respire un peu ?","Je suis fier de l'effort que tu fais.","Tu prends soin de toi. Ça compte."],
+    cmsgAfter:["On l'a fait ensemble. Bien joué.","Tu vois ? Tu sais faire ça maintenant."],
+    sleepy:"Je somnolais. Heureux que tu sois là.",
+    stageNames:["Œuf","Éveil","Croissance","Épanoui","Lumineux"],
+    milestones:[
+      {n:1,ic:"🌱",t:"Première session terminée"},
+      {n:3,ic:"🌿",t:"3 épisodes traversés"},
+      {n:7,ic:"🌳",t:"7 fois, tu t'es ancré(e)"},
+      {n:15,ic:"✨",t:"15 récupérations"},
+      {n:30,ic:"🏔️",t:"30 crises surmontées"}
+    ],
+    proud:"Je suis fier de l'effort que tu as fait aujourd'hui.",
+    memBefore:"Tu as déjà traversé ça. {n} fois.",
+    navMood:"Humeur", moodTitle:"Ton humeur",
+    moodSub:"Note ta journée d'un toucher. Une couleur, c'est tout. Touche un jour passé pour le corriger.",
+    moodTodayQ:"Comment te sens-tu aujourd'hui ?",
+    moodStatsT:"Aperçu", mood7:"7 derniers jours", moodLogged:"Jours notés",
+    moodToday:"Aujourd'hui : ",
+    moodNames:["Mauvais jour","Difficile","Moyen","Bien","Très bien"],
+    tutSkip:"Passer", tutNext:"Suivant", tutStart:"Commencer", tutReplay:"Revoir le tutoriel",
+    setReroll:"Tirer un nouveau compagnon", tapHint:"(touche-moi)",
+    cvActs:"Activités", cvClose:"Fermer", miniClose:"Terminer",
+    act_breathe:"Souffle libre", act_breathe_d:"Respire à ton rythme, sans crise.",
+    act_bubbles:"Bulles anti-stress", act_bubbles_d:"Fais éclater les bulles, tranquillement.",
+    act_stars:"Ciel d'étoiles", act_stars_d:"Pose des étoiles. Aucun but, juste le calme.",
+    actNeed:"sessions", fbSub:"Suis le cercle, à ton rythme.",
+    bubHint:"Touche les bulles pour les faire éclater.",
+    starHint:"Touche le ciel pour allumer des étoiles.",
+    tutTitles:["Bienvenue dans Anchor","Le bouton","Ton compagnon","Tu le nourris","Note ta journée","Ton jardin","Prêt(e) ?"],
+    tutBodies:[
+      "Ton ancre quand l'anxiété monte. Tout est simple, ici. Une seule action à la fois.",
+      "Une crise commence ? Touche le grand bouton rouge. Je te guide pas à pas : respiration, ancrage, retour au calme. En 2 à 10 minutes.",
+      "Une petite créature vit avec toi. Elle grandit quand tu prends soin de toi, pas quand tu te connectes. Ta résilience la fait évoluer.",
+      "Respirer, t'ancrer, noter ton humeur : chaque geste sain lui donne de l'énergie. Si tu t'absentes, elle ne meurt jamais. Elle somnole et t'attend. Aucune punition.",
+      "Une couleur par jour, d'un simple toucher. Le calendrier révèle tes tendances, sans jugement.",
+      "Chaque crise traversée plante quelque chose. Avec le temps, tu construis un sanctuaire. La preuve visible que tu avances.",
+      "Tout se fait en moins de deux touchers. Je reste avec toi. On y va."
+    ]
+  },
+  en:{
+    homeHint:"Feeling a wave coming? Tap. I'll stay with you.",
+    panicNow:"I'M PANICKING", panicSub:"Tap for help",
+    energy:"Energy", stage:"Growth",
+    navHome:"Home",navGarden:"Garden",navDash:"Track",navContacts:"Contacts",navSettings:"Settings",
+    gardenTitle:"Your garden", gardenSub:"Every episode you get through grows something. Your recovery, made visible.",
+    gardenEmpty:"Your garden is still bare. Finish a session to plant your first glow.",
+    memTitle:"Memories", memSub:"What you've already overcome. Reread it when it's hard.",
+    memAdd:"Add a win or an encouraging note", save:"Save",
+    dashTitle:"Your tracking", dashSub:"Facts, not judgement. Panic has a duration. It always ends.",
+    dEpisodes:"Episodes", dAvg:"Avg duration", dLast:"Last", dResil:"Resilience",
+    dMilestones:"Milestones", dHistory:"History",
+    contactsTitle:"Safe contacts", contactsSub:"One person, one anchor. Tap to call.",
+    cName:"Name", cNum:"Number", cAdd:"Add",
+    contactsNote:"Anchor is not an emergency service. In immediate danger, call 112 (EU) or 911 (US).",
+    setTitle:"Settings", setCompanion:"Your companion", setCname:"Its name",
+    setBreath:"Breathing", setPrefs:"Preferences",
+    setVoice:"Guide voice", setHaptic:"Haptics", setMotion:"Reduce motion",
+    setReset:"Reset data",
+    setPrivacy:"All your data stays on this device. Nothing is sent. No account. No ads.",
+    pmExit:"I feel better", pmStart:"Let's breathe together", pmFollow:"Follow the circle. Nothing else to do.",
+    pmGround:"Move to grounding", pmDone:"Done", pmReturn:"Back to calm",
+    inhale:"Breathe in", hold:"Hold", exhale:"Breathe out", pause:"Pause",
+    realityTitles:["You are safe.","This will pass.","It's a panic response, not danger.","Your body is making noise. You are not in danger."],
+    realityLines:["Your body is reacting hard, but there's no real threat here.","A panic attack lasts a few minutes. No more. It always comes down.","You've been through this before. You can do it again, right now.","Place your feet on the ground. Feel the contact. You are here."],
+    senses:[
+      {n:5,w:"things you can see",h:"Look around. Name them, quietly or in your head."},
+      {n:4,w:"things you can touch",h:"Touch them for real. The texture, the temperature."},
+      {n:3,w:"sounds you can hear",h:"Even the faint ones. Listen."},
+      {n:2,w:"things you can smell",h:"Breathe in gently through your nose."},
+      {n:1,w:"thing you can taste",h:"Or imagine a familiar, reassuring taste."}
+    ],
+    recapLines:["Duration: {d}. It was panic, not danger. And it's over.","Episode {n} done. Each time, you prove you can.","You came back to calm. Note it. Your body is learning."],
+    cmsgEnergyLow:["I'm waiting, calmly. Whenever you want.","No pressure. I'm here when you come back."],
+    cmsgNormal:["Good to see you. Shall we breathe a little?","I'm proud of the effort you make.","You're taking care of yourself. That counts."],
+    cmsgAfter:["We did it together. Well done.","See? You know how to do this now."],
+    sleepy:"I was dozing. Glad you're here.",
+    stageNames:["Egg","Awakening","Growing","Blooming","Radiant"],
+    milestones:[
+      {n:1,ic:"🌱",t:"First session completed"},
+      {n:3,ic:"🌿",t:"3 episodes overcome"},
+      {n:7,ic:"🌳",t:"Grounded yourself 7 times"},
+      {n:15,ic:"✨",t:"15 recoveries"},
+      {n:30,ic:"🏔️",t:"30 attacks overcome"}
+    ],
+    proud:"I'm proud of the effort you made today.",
+    memBefore:"You've gotten through this before. {n} times.",
+    navMood:"Mood", moodTitle:"Your mood",
+    moodSub:"Log your day with one tap. Just a color. Tap a past day to fix it.",
+    moodTodayQ:"How are you feeling today?",
+    moodStatsT:"Overview", mood7:"Last 7 days", moodLogged:"Days logged",
+    moodToday:"Today: ",
+    moodNames:["Rough day","Hard","Okay","Good","Great"],
+    tutSkip:"Skip", tutNext:"Next", tutStart:"Start", tutReplay:"Replay tutorial",
+    setReroll:"Draw a new companion", tapHint:"(tap me)",
+    cvActs:"Activities", cvClose:"Close", miniClose:"Done",
+    act_breathe:"Free breathing", act_breathe_d:"Breathe at your pace, no crisis needed.",
+    act_bubbles:"Stress bubbles", act_bubbles_d:"Pop the bubbles, gently.",
+    act_stars:"Star sky", act_stars_d:"Place stars. No goal, just calm.",
+    actNeed:"sessions", fbSub:"Follow the circle, at your pace.",
+    bubHint:"Tap the bubbles to pop them.",
+    starHint:"Tap the sky to light up stars.",
+    tutTitles:["Welcome to Anchor","The button","Your companion","You feed it","Log your day","Your garden","Ready?"],
+    tutBodies:[
+      "Your anchor when anxiety rises. Everything here is simple. One action at a time.",
+      "Feeling a wave coming? Tap the big red button. I guide you step by step: breathing, grounding, back to calm. In 2 to 10 minutes.",
+      "A small creature lives with you. It grows when you take care of yourself, not when you log in. Your resilience makes it evolve.",
+      "Breathing, grounding, logging your mood: every healthy act gives it energy. If you are away, it never dies. It dozes and waits. No punishment, ever.",
+      "One color a day, with a single tap. The calendar reveals your trends, no judgement.",
+      "Every attack you get through plants something. Over time you build a sanctuary. Visible proof you are moving forward.",
+      "Everything takes less than two taps. I will stay with you. Let's go."
+    ]
+  }
+};
+const COMPANIONS = {
+  spirit:{name:{fr:"Lueur",en:"Glow"}, stages:["🥚","🔅","✨","🌟","💫"]},
+  fox:{name:{fr:"Renart",en:"Foxy"}, stages:["🥚","🦊","🦊","🦊","🦊"]},
+  cat:{name:{fr:"Minou",en:"Whiskers"}, stages:["🥚","🐱","🐈","🐈","🐈‍⬛"]},
+  dragon:{name:{fr:"Braise",en:"Ember"}, stages:["🥚","🐉","🐉","🐲","🐲"]},
+  forest:{name:{fr:"Sylve",en:"Sylph"}, stages:["🥚","🌱","🌿","🪴","🌳"]},
+  robot:{name:{fr:"Bolt",en:"Bolt"}, stages:["🥚","🤖","🤖","🤖","🛸"]}
+};
+const COMPANION_LABELS={spirit:"Orbe",fox:"Renard",cat:"Chat",dragon:"Dragon",forest:"Forêt",robot:"Robot"};
+const PLANTS=["🌷","🌸","🌼","🌻","🪻","🌹","🪷","🌲","🪔","💎","🍄","🌾"];
+const BREATHING={
+  box:{label:{fr:"Carrée 4-4-4-4",en:"Box 4-4-4-4"}, seq:[["inhale",4],["hold",4],["exhale",4],["hold",4]]},
+  relax:{label:{fr:"4-7-8 relax",en:"4-7-8 relax"}, seq:[["inhale",4],["hold",7],["exhale",8]]},
+  calm:{label:{fr:"Apaisée 4-6",en:"Calm 4-6"}, seq:[["inhale",4],["exhale",6]]}
+};
+const KEY="anchor.v1";
+const DEFAULT={
+  lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
+  history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
+  settings:{breath:"box", voice:true, haptic:true, motion:false},
+  lastVisit:Date.now()
+};
+let S=load();
+function load(){
+  try{const r=localStorage.getItem(KEY);if(r){return Object.assign(JSON.parse(JSON.stringify(DEFAULT)),JSON.parse(r));}}catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function t(k){return (I18N[S.lang]&&I18N[S.lang][k])!=null?I18N[S.lang][k]:(I18N.fr[k]||k);}
+function $(id){return document.getElementById(id);}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+(function soften(){
+  const days=(Date.now()-(S.lastVisit||Date.now()))/86400000;
+  if(days>=1){ S.energy=Math.max(20, Math.round(S.energy - Math.min(25, days*6))); }
+  S.lastVisit=Date.now(); save();
+})();
+/* random companion at birth */
+(function birth(){
+  if(!S.companionRandomized){
+    const keys=Object.keys(COMPANIONS);
+    S.companion=keys[Math.floor(Math.random()*keys.length)];
+    S.companionRandomized=true; save();
+  }
+})();
+function stageIndex(){
+  const n=S.sessions;
+  if(n>=20)return 4; if(n>=10)return 3; if(n>=4)return 2; if(n>=1)return 1; return 0;
+}
+function stageProgress(){
+  const th=[0,1,4,10,20,20]; const i=stageIndex();
+  const lo=th[i], hi=th[i+1]||(lo+1);
+  if(i>=4)return 100;
+  return Math.min(100, Math.round(((S.sessions-lo)/(hi-lo))*100));
+}
+function creatureGlyph(){return COMPANIONS[S.companion].stages[stageIndex()];}
+function companionName(){return S.cname||COMPANIONS[S.companion].name[S.lang];}
+function renderHome(){
+  $("home-creature").textContent=creatureGlyph();
+  $("pm-creature").textContent=creatureGlyph();
+  $("home-cname").textContent=companionName();
+  const c=$("home-companion");
+  const sleepy=S.energy<35;
+  c.classList.toggle("sleepy",sleepy);
+  let msg;
+  if(sleepy) msg=pick(t("cmsgEnergyLow"));
+  else msg=pick(t("cmsgNormal"));
+  $("home-cmsg").textContent=msg;
+  $("m-energy").textContent=Math.round(S.energy);
+  $("energy-bar").style.width=S.energy+"%";
+  $("m-stage").textContent=t("stageNames")[stageIndex()];
+  $("stage-bar").style.width=stageProgress()+"%";
+}
+function renderGarden(){
+  const p=$("plants"); p.innerHTML="";
+  $("garden-empty").style.display=S.garden.length?"none":"flex";
+  S.garden.slice(-40).forEach((g,i)=>{
+    const s=document.createElement("span");
+    s.className="plant"; s.textContent=g.type;
+    s.style.animationDelay=(i*0.2)+"s";
+    s.style.fontSize=(24+Math.random()*14)+"px";
+    p.appendChild(s);
+  });
+  const m=$("memories"); m.innerHTML="";
+  if(!S.memories.length){
+    const d=document.createElement("div"); d.className="sub"; d.style.opacity=".7";
+    d.textContent=S.lang==="fr"?"Aucune mémoire pour l'instant.":"No memories yet.";
+    m.appendChild(d);
+  }
+  S.memories.slice().reverse().forEach(txt=>{
+    const d=document.createElement("div"); d.className="memory-item"; d.textContent="“"+txt+"”";
+    m.appendChild(d);
+  });
+}
+function fmtDur(s){const m=Math.floor(s/60),ss=s%60;return m+"m"+(ss<10?"0":"")+ss+"s";}
+function renderDash(){
+  $("d-count").textContent=S.history.length;
+  $("d-resil").textContent=S.sessions;
+  if(S.history.length){
+    const avg=Math.round(S.history.reduce((a,h)=>a+h.dur,0)/S.history.length);
+    $("d-avg").textContent=fmtDur(avg);
+    $("d-last").textContent=fmtDur(S.history[S.history.length-1].dur);
+  }else{$("d-avg").textContent="—";$("d-last").textContent="—";}
+  const ms=$("milestones"); ms.innerHTML="";
+  t("milestones").forEach(m=>{
+    const row=document.createElement("div");
+    row.className="milestone"+(S.sessions>=m.n?"":" locked");
+    row.innerHTML='<span class="m-ic">'+m.ic+'</span><span>'+m.t+'</span>';
+    ms.appendChild(row);
+  });
+  const h=$("history"); h.innerHTML="";
+  if(!S.history.length){h.innerHTML='<div class="sub" style="opacity:.7">'+(S.lang==="fr"?"Rien encore. C'est très bien.":"Nothing yet. That's just fine.")+'</div>';}
+  S.history.slice().reverse().slice(0,20).forEach(ep=>{
+    const d=new Date(ep.ts);
+    const row=document.createElement("div"); row.className="row";
+    const date=d.toLocaleDateString(S.lang,{day:"2-digit",month:"short"})+" "+d.toLocaleTimeString(S.lang,{hour:"2-digit",minute:"2-digit"});
+    row.innerHTML='<div><div class="r-main">'+fmtDur(ep.dur)+'</div><div class="r-sub">'+date+'</div></div>'+
+      (ep.trigger?'<span class="tag">'+ep.trigger+'</span>':'');
+    h.appendChild(row);
+  });
+}
+function renderContacts(){
+  const l=$("contacts-list"); l.innerHTML="";
+  const sos=document.createElement("div");
+  sos.className="contact sos";
+  sos.innerHTML='<div class="av">🚨</div><div class="info"><b>'+(S.lang==="fr"?"Urgences":"Emergency")+'</b><div>112</div></div><a href="tel:112">📞</a>';
+  l.appendChild(sos);
+  S.contacts.forEach((c,i)=>{
+    const d=document.createElement("div"); d.className="contact";
+    d.innerHTML='<div class="av">🤍</div><div class="info"><b>'+c.name+'</b><div>'+c.num+'</div></div>'+
+      '<a href="tel:'+c.num+'">📞</a>';
+    const del=document.createElement("button");
+    del.textContent="✕"; del.style.cssText="color:var(--muted);font-size:16px;padding:8px";
+    del.onclick=()=>{S.contacts.splice(i,1);save();renderContacts();};
+    d.appendChild(del);
+    l.appendChild(d);
+  });
+}
+function renderSettings(){
+  renderCompanionCard($("companion-card"));
+  $("set-cname").value=companionName();
+  const bp=$("breath-picker"); bp.innerHTML="";
+  Object.keys(BREATHING).forEach(k=>{
+    const b=document.createElement("button");
+    b.className="chip"+(S.settings.breath===k?" on":"");
+    b.textContent=BREATHING[k].label[S.lang];
+    b.onclick=()=>{S.settings.breath=k;save();renderSettings();};
+    bp.appendChild(b);
+  });
+  setSw("sw-voice",S.settings.voice);
+  setSw("sw-haptic",S.settings.haptic);
+  setSw("sw-motion",S.settings.motion);
+  document.body.classList.toggle("reduce-motion",S.settings.motion);
+}
+function setSw(id,on){$(id).classList.toggle("on",!!on);}
+function applyLang(){
+  document.documentElement.lang=S.lang;
+  document.querySelectorAll("[data-t]").forEach(el=>{
+    const k=el.getAttribute("data-t"); const v=t(k);
+    if(typeof v==="string") el.textContent=v;
+  });
+  document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===S.lang));
+  renderAll();
+  if($("tutorial").classList.contains("active"))renderTut();
+}
+function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();}
+function go(name){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $("screen-"+name).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("on",b.dataset.go===name));
+  window.scrollTo(0,0);
+}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.go));
+$("mood-prev").onclick=moodPrev;
+$("mood-next").onclick=moodNext;
+$("tut-next").onclick=tutNext;
+$("tut-skip").onclick=closeTut;
+$("tut-replay").onclick=openTut;
+$("home-companion").onclick=openCompanion;
+$("cv-close").onclick=closeCompanion;
+$("mini-close").onclick=closeMini;
+$("reroll").onclick=()=>{const keys=Object.keys(COMPANIONS).filter(k=>k!==S.companion);S.companion=keys[Math.floor(Math.random()*keys.length)];S.cname=null;save();buzz(30);renderSettings();renderHome();};
+function speak(txt){
+  if(!S.settings.voice||!("speechSynthesis"in window))return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(txt);
+    u.lang=S.lang==="fr"?"fr-FR":"en-US";
+    u.rate=0.82; u.pitch=1.0; u.volume=0.9;
+    const vs=speechSynthesis.getVoices().filter(v=>v.lang.startsWith(S.lang));
+    if(vs.length)u.voice=vs[0];
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function buzz(ms){if(S.settings.haptic&&navigator.vibrate)try{navigator.vibrate(ms);}catch(e){}}
+/* ---------- mood tracker ---------- */
+const MOODS=[
+  {lvl:1,color:"#df766f"},
+  {lvl:2,color:"#f0a878"},
+  {lvl:3,color:"#f1cf7a"},
+  {lvl:4,color:"#a8cf9a"},
+  {lvl:5,color:"#5fb98a"}
+];
+let moodView=new Date(); moodView.setDate(1);
+function dayKey(d){d=d||new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function moodLabel(lvl){return (t("moodNames")||[])[lvl-1]||"";}
+function buildScale(cont,selected){
+  cont.innerHTML="";
+  MOODS.forEach(m=>{
+    const b=document.createElement("button");
+    b.className="mood-dot"+(selected===m.lvl?" on":"");
+    b.style.background=m.color; b.setAttribute("aria-label",moodLabel(m.lvl));
+    b.onclick=()=>logMood(m.lvl);
+    cont.appendChild(b);
+  });
+}
+function logMood(lvl){
+  const k=dayKey();
+  S.moods[k]=lvl;
+  if(S.moodEnergyDay!==k){S.moodEnergyDay=k;S.energy=Math.min(100,S.energy+8);}
+  buzz(25); save();
+  renderHomeMood(); renderMood(); renderHome();
+}
+function renderHomeMood(){
+  buildScale($("home-mood-scale"), S.moods[dayKey()]||null);
+}
+function renderMood(){
+  buildScale($("mood-scale"), S.moods[dayKey()]||null);
+  const today=S.moods[dayKey()];
+  $("mood-chosen").textContent = today ? t("moodToday")+moodLabel(today) : "";
+  // month label
+  $("mood-month").textContent = moodView.toLocaleDateString(S.lang,{month:"long",year:"numeric"});
+  // next disabled if at/after current month
+  const now=new Date();
+  $("mood-next").disabled = (moodView.getFullYear()>now.getFullYear() || (moodView.getFullYear()===now.getFullYear() && moodView.getMonth()>=now.getMonth()));
+  renderCalendar();
+  renderLegend();
+  renderMoodStats();
+}
+function renderCalendar(){
+  const cal=$("mood-cal"); cal.innerHTML="";
+  const wd = S.lang==="fr"?["L","M","M","J","V","S","D"]:["M","T","W","T","F","S","S"];
+  wd.forEach(d=>{const h=document.createElement("div");h.className="cal-h";h.textContent=d;cal.appendChild(h);});
+  const y=moodView.getFullYear(), mo=moodView.getMonth();
+  let startDow=(new Date(y,mo,1).getDay()+6)%7; // Monday-first
+  const days=new Date(y,mo+1,0).getDate();
+  for(let i=0;i<startDow;i++){const e=document.createElement("div");e.className="cal-cell empty";cal.appendChild(e);}
+  const todayK=dayKey(); const today=new Date(); today.setHours(0,0,0,0);
+  for(let d=1;d<=days;d++){
+    const k=y+"-"+String(mo+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+    const cell=document.createElement("div"); cell.className="cal-cell"; cell.textContent=d;
+    const cd=new Date(y,mo,d);
+    const lvl=S.moods[k];
+    if(lvl){const m=MOODS.find(x=>x.lvl===lvl);cell.style.background=m.color;cell.classList.add("filled");}
+    if(k===todayK)cell.classList.add("today");
+    if(cd>today){cell.classList.add("future");}
+    else{
+      cell.onclick=()=>{
+        const cur=S.moods[k]||0; const next=cur>=5?0:cur+1;
+        if(next===0)delete S.moods[k]; else S.moods[k]=next;
+        save(); renderCalendar(); renderMoodStats(); renderHomeMood();
+        if(k===todayK){buildScale($("mood-scale"),S.moods[k]||null);$("mood-chosen").textContent=S.moods[k]?t("moodToday")+moodLabel(S.moods[k]):"";}
+      };
+    }
+    cal.appendChild(cell);
+  }
+}
+function renderLegend(){
+  const l=$("mood-legend"); l.innerHTML="";
+  MOODS.forEach(m=>{
+    const s2=document.createElement("span"); s2.className="leg";
+    s2.innerHTML='<i style="background:'+m.color+'"></i>'+moodLabel(m.lvl);
+    l.appendChild(s2);
+  });
+}
+function renderMoodStats(){
+  $("mood-logged").textContent=Object.keys(S.moods).length;
+  let sum=0,c=0;
+  for(let i=0;i<7;i++){const d=new Date();d.setDate(d.getDate()-i);const k=dayKey(d);if(S.moods[k]){sum+=S.moods[k];c++;}}
+  $("mood-7avg").textContent = c ? (sum/c).toFixed(1)+"/5" : "—";
+}
+function moodPrev(){moodView.setMonth(moodView.getMonth()-1);renderMood();}
+function moodNext(){const now=new Date();if(moodView.getFullYear()<now.getFullYear()||(moodView.getFullYear()===now.getFullYear()&&moodView.getMonth()<now.getMonth())){moodView.setMonth(moodView.getMonth()+1);renderMood();}}
+
+/* ---------- tutorial ---------- */
+let tutIdx=0;
+const TUT_ICONS=["⚓","🛟","__COMP__","⚡","🌈","🌿","💗"];
+function openTut(){tutIdx=0;$("tutorial").classList.add("active");renderTut();}
+function closeTut(){$("tutorial").classList.remove("active");S.onboarded=true;save();}
+function renderTut(){
+  const titles=t("tutTitles"), bodies=t("tutBodies"), n=titles.length;
+  let ic=TUT_ICONS[tutIdx];
+  if(ic==="__COMP__")ic=COMPANIONS[S.companion].stages[Math.max(1,stageIndex())];
+  $("tut-icon").textContent=ic;
+  $("tut-title").textContent=titles[tutIdx];
+  $("tut-body").textContent=bodies[tutIdx];
+  const dots=$("tut-dots"); dots.innerHTML="";
+  for(let i=0;i<n;i++){const d=document.createElement("i");if(i===tutIdx)d.classList.add("on");dots.appendChild(d);}
+  $("tut-next").textContent = tutIdx===n-1 ? t("tutStart") : t("tutNext");
+  $("tut-skip").style.visibility = tutIdx===n-1 ? "hidden" : "visible";
+}
+function tutNext(){const n=t("tutTitles").length; if(tutIdx<n-1){tutIdx++;renderTut();} else {closeTut();}}
+
+/* ---------- companion view + activities + mini games ---------- */
+const ACTIVITIES=[
+  {id:"breathe",stage:1,icon:"🫧"},
+  {id:"bubbles",stage:2,icon:"🎈"},
+  {id:"stars",stage:3,icon:"✨"}
+];
+const EVO_NEED=[0,1,4,10,20];
+function renderEvoPath(cont){
+  cont.innerHTML="";
+  const stages=COMPANIONS[S.companion].stages, idx=stageIndex(), names=t("stageNames");
+  stages.forEach((g,i)=>{
+    const cell=document.createElement("div");
+    cell.className="evo"+(i===idx?" cur":"")+(i>idx?" lock":"");
+    const glyph=i<=idx?g:"❔";
+    cell.innerHTML='<div class="evo-g">'+glyph+'</div><div class="evo-n">'+names[i]+'</div>'+
+      (i>idx?'<div class="evo-need">'+EVO_NEED[i]+' '+t("actNeed")+'</div>':'');
+    cont.appendChild(cell);
+  });
+}
+function renderCompanionCard(cont){
+  const idx=stageIndex();
+  cont.innerHTML='<div class="comp-hero"><div class="companion" style="width:120px;height:120px"><div class="aura"></div>'+
+    '<div class="creature" style="font-size:58px">'+creatureGlyph()+'</div></div>'+
+    '<div class="comp-name">'+companionName()+'</div><div class="comp-stage">'+t("stageNames")[idx]+'</div></div>'+
+    '<div class="evo-path" id="__evo"></div>';
+  renderEvoPath(cont.querySelector("#__evo"));
+}
+function openCompanion(){$("companion-view").classList.add("active");renderCompanionView();}
+function closeCompanion(){$("companion-view").classList.remove("active");}
+function renderCompanionView(){
+  renderCompanionCard($("cv-card"));
+  const list=$("cv-acts"); list.innerHTML=""; const idx=stageIndex();
+  ACTIVITIES.forEach(a=>{
+    const unlocked=idx>=a.stage;
+    const row=document.createElement("button");
+    row.className="act"+(unlocked?"":" locked");
+    row.innerHTML='<span class="act-ic">'+a.icon+'</span><span class="act-txt"><b>'+t("act_"+a.id)+'</b><i>'+t("act_"+a.id+"_d")+'</i></span>'+
+      (unlocked?'<span class="act-go">›</span>':'<span class="act-lock">🔒 '+t("stageNames")[a.stage]+'</span>');
+    if(unlocked)row.onclick=()=>startActivity(a.id);
+    list.appendChild(row);
+  });
+}
+function grantActivityEnergy(){
+  const k=dayKey();
+  if(S.actEnergyDay!==k){S.actEnergyDay=k;S.energy=Math.min(100,S.energy+6);save();renderHome();}
+}
+function startActivity(id){
+  if(id==="breathe")startFreeBreath();
+  else if(id==="bubbles")startBubbles();
+  else if(id==="stars")startStars();
+  grantActivityEnergy();
+}
+let miniTimers=[];
+function miniClear(){miniTimers.forEach(i=>{clearTimeout(i);clearInterval(i);});miniTimers=[];$("mini-content").innerHTML="";try{speechSynthesis.cancel();}catch(e){}}
+function openMini(title){miniClear();$("mini-title").textContent=title;$("mini").classList.add("active");}
+function closeMini(){miniClear();$("mini").classList.remove("active");}
+function startFreeBreath(){
+  openMini(t("act_breathe"));
+  $("mini-content").innerHTML='<div class="fb-circle" id="fb"><span id="fb-word"></span></div><div class="fb-sub">'+t("fbSub")+'</div>';
+  const fb=$("fb"), w=$("fb-word"), seq=[["inhale",4],["hold",2],["exhale",6]]; let i=0;
+  (function step(){
+    const ph=seq[i%seq.length][0], dur=seq[i%seq.length][1];
+    w.textContent=t(ph); fb.style.transitionDuration=dur+"s";
+    if(ph==="inhale")fb.style.transform="scale(1.3)"; else if(ph==="exhale")fb.style.transform="scale(0.85)";
+    speak(t(ph)); buzz(ph==="inhale"?50:25); i++;
+    miniTimers.push(setTimeout(step,dur*1000));
+  })();
+}
+function startBubbles(){
+  openMini(t("act_bubbles"));
+  $("mini-content").innerHTML='<div class="bubbles-area" id="barea"></div><div class="mini-hint">'+t("bubHint")+'</div>';
+  const area=$("barea"), colors=["#e8918a","#f0a878","#f1cf7a","#a8cf9a","#5fb98a","#bfa8e6","#a8c7ff"];
+  miniTimers.push(setInterval(()=>{
+    const b=document.createElement("div"); b.className="bubble";
+    const size=34+Math.random()*42; b.style.width=b.style.height=size+"px";
+    b.style.left=(Math.random()*82)+"%"; b.style.background=colors[Math.floor(Math.random()*colors.length)];
+    b.style.animationDuration=(6+Math.random()*4)+"s";
+    b.onclick=()=>{b.classList.add("pop");buzz(18);setTimeout(()=>b.remove(),200);};
+    area.appendChild(b);
+    miniTimers.push(setTimeout(()=>{if(b.parentNode&&!b.classList.contains("pop"))b.remove();},11000));
+  },720));
+}
+function startStars(){
+  openMini(t("act_stars"));
+  $("mini-content").innerHTML='<div class="sky" id="sky"></div><div class="mini-hint">'+t("starHint")+'</div>';
+  const sky=$("sky");
+  sky.onclick=(e)=>{
+    const r=sky.getBoundingClientRect();
+    const st=document.createElement("div"); st.className="star"; st.textContent="✦";
+    st.style.left=(e.clientX-r.left)+"px"; st.style.top=(e.clientY-r.top)+"px";
+    st.style.animationDelay=(Math.random()*1.5)+"s"; buzz(12); sky.appendChild(st);
+  };
+}
+
+let pm={open:false,start:0,timer:null,breathTO:null,senseIdx:0,senseCount:0};
+function openPanic(){
+  pm.open=true; pm.start=Date.now(); pm.senseIdx=0; pm.senseCount=0;
+  $("panic-mode").classList.add("active");
+  $("storm").style.opacity="1";
+  showStep("reality");
+  $("reality-title").textContent=pick(t("realityTitles"));
+  $("reality-line").textContent=pick(t("realityLines"));
+  if(S.history.length){
+    $("reality-line").textContent += "  "+t("memBefore").replace("{n}",S.history.length);
+  }
+  speak($("reality-title").textContent);
+  buzz(40);
+  pm.timer=setInterval(()=>{
+    const s=Math.floor((Date.now()-pm.start)/1000);
+    const m=Math.floor(s/60), ss=s%60;
+    $("pm-timer").textContent=(m<10?"0":"")+m+":"+(ss<10?"0":"")+ss;
+  },1000);
+  document.querySelector(".nav").style.display="none";
+}
+function clearStorm(frac){
+  $("storm").style.opacity=String(Math.max(0, 1-frac));
+}
+function showStep(id){
+  document.querySelectorAll(".pm-step").forEach(s=>s.classList.remove("active"));
+  $("step-"+id).classList.add("active");
+}
+function startBreath(){
+  showStep("breath"); clearStorm(0.34);
+  runBreath(0);
+}
+function runBreath(i){
+  const seq=BREATHING[S.settings.breath].seq;
+  const [phase,dur]=seq[i%seq.length];
+  const circle=$("breath-circle");
+  const word=$("breath-word");
+  word.textContent=t(phase);
+  $("breath-count").textContent="";
+  circle.style.transitionDuration=dur+"s";
+  if(phase==="inhale")circle.style.transform="scale(1.35)";
+  else if(phase==="exhale")circle.style.transform="scale(0.8)";
+  speak(t(phase));
+  buzz(phase==="inhale"?60:30);
+  let left=dur;
+  $("breath-count").textContent=left;
+  const cd=setInterval(()=>{left--; if(left>0)$("breath-count").textContent=left; else clearInterval(cd);},1000);
+  pm.breathTO=setTimeout(()=>{clearInterval(cd); if(pm.open && $("step-breath").classList.contains("active")) runBreath(i+1);},dur*1000);
+}
+function stopBreath(){clearTimeout(pm.breathTO);}
+function renderSense(){
+  const s=t("senses")[pm.senseIdx];
+  $("sense-num").textContent=s.n;
+  $("sense-what").textContent=s.w;
+  $("sense-hint").textContent=s.h;
+  const dots=$("sense-dots"); dots.innerHTML="";
+  for(let k=0;k<t("senses").length;k++){
+    const i=document.createElement("i"); if(k<=pm.senseIdx)i.classList.add("on"); dots.appendChild(i);
+  }
+  speak(s.n+" "+s.w);
+  clearStorm(0.34 + (0.5*((pm.senseIdx+1)/t("senses").length)));
+}
+function startGround(){ stopBreath(); showStep("ground"); pm.senseIdx=0; renderSense(); }
+function finishPanic(completed){
+  const dur=Math.max(1,Math.floor((Date.now()-pm.start)/1000));
+  if(completed){
+    clearStorm(1);
+    S.history.push({ts:Date.now(),dur:dur,trigger:null});
+    S.sessions+=1;
+    S.energy=Math.min(100,S.energy+18);
+    const plant=pick(PLANTS);
+    S.garden.push({type:plant,ts:Date.now()});
+    save();
+    showStep("recap");
+    $("recap-reward").textContent=plant;
+    let line=pick(t("recapLines")).replace("{d}",fmtDur(dur)).replace("{n}",S.history.length);
+    $("recap-line").textContent=line;
+    speak($("recap-title").textContent+" "+line);
+    buzz([40,60,40]);
+  }else{
+    closePanic();
+  }
+}
+function closePanic(){
+  pm.open=false;
+  clearInterval(pm.timer); stopBreath();
+  try{speechSynthesis.cancel();}catch(e){}
+  $("panic-mode").classList.remove("active");
+  document.querySelector(".nav").style.display="flex";
+  $("pm-timer").textContent="00:00";
+  renderAll(); go("home");
+}
+$("panic-open").onclick=openPanic;
+$("reality-next").onclick=startBreath;
+$("breath-done").onclick=startGround;
+$("sense-next").onclick=()=>{
+  buzz(30);
+  if(pm.senseIdx<t("senses").length-1){pm.senseIdx++;renderSense();}
+  else{finishPanic(true);}
+};
+$("recap-close").onclick=closePanic;
+$("pm-exit").onclick=()=>{
+  const dur=Math.max(1,Math.floor((Date.now()-pm.start)/1000));
+  S.history.push({ts:Date.now(),dur:dur,trigger:null});
+  S.sessions+=1; S.energy=Math.min(100,S.energy+10);
+  S.garden.push({type:pick(PLANTS),ts:Date.now()}); save();
+  closePanic();
+};
+document.querySelectorAll(".lang button").forEach(b=>{
+  b.onclick=()=>{S.lang=b.dataset.lang;save();applyLang();};
+});
+$("mem-save").onclick=()=>{
+  const v=$("mem-input").value.trim();
+  if(v){S.memories.push(v);save();$("mem-input").value="";renderGarden();}
+};
+$("c-add").onclick=()=>{
+  const n=$("c-name").value.trim(), num=$("c-num").value.trim();
+  if(n&&num){S.contacts.push({name:n,num:num});save();$("c-name").value="";$("c-num").value="";renderContacts();}
+};
+$("set-cname").onchange=e=>{S.cname=e.target.value.trim()||null;save();renderHome();};
+$("sw-voice").onclick=()=>{S.settings.voice=!S.settings.voice;save();renderSettings();};
+$("sw-haptic").onclick=()=>{S.settings.haptic=!S.settings.haptic;save();renderSettings();};
+$("sw-motion").onclick=()=>{S.settings.motion=!S.settings.motion;save();renderSettings();};
+$("reset").onclick=()=>{
+  const msg=S.lang==="fr"?"Tout effacer ? Action irréversible.":"Erase everything? This cannot be undone.";
+  if(confirm(msg)){localStorage.removeItem(KEY);S=load();applyLang();go("home");}
+};
+if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{};speechSynthesis.getVoices();}
+document.body.classList.toggle("reduce-motion",S.settings.motion);
+applyLang();
+go("home");
+if(!S.onboarded)openTut();
+</script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  });
+}
+</script>
+</body>
+</html>
