@@ -16,26 +16,33 @@
 <meta name="mobile-web-app-capable" content="yes">
 <style>
 :root{
-  --bg:#fdf5f2;
-  --bg-2:#f7e6ea;
-  --surface:rgba(255,255,255,0.6);
-  --surface-2:rgba(255,255,255,0.86);
-  --line:rgba(150,95,115,0.13);
-  --text:#4d3b42;
-  --muted:#9c8590;
-  --accent:#e8918a;       /* soft coral */
-  --accent-2:#bfa8e6;     /* soft lavender */
-  --warm:#f3c19c;         /* peach */
-  --danger:#ef8c87;       /* gentle coral */
-  --glow:#f8cdc4;         /* blush glow */
-  --ink:#5a2f33;          /* warm dark ink on accents */
-  --shadow:0 16px 34px rgba(205,120,135,0.18);
-  --shadow-sm:0 8px 20px rgba(205,120,135,0.12);
-  --radius:30px;
+  --bg:#fff8f6;
+  --bg-2:#fceae6;
+  --surface:#faece8;
+  --surface-2:#f5e3de;
+  --line:#e9d6d1;
+  --text:#3f2d2a;
+  --muted:#8c7570;
+  --accent:#c25b4e;       /* soft coral */
+  --accent-2:#6b5d97;     /* soft lavender */
+  --warm:#f1c19a;         /* peach */
+  --danger:#c4544a;       /* gentle coral */
+  --glow:#ffdad4;         /* blush glow */
+  --ink:#44140f;          /* warm dark ink on accents */
+  --shadow:0 12px 28px rgba(80,40,40,0.14);
+  --shadow-sm:0 2px 8px rgba(80,40,40,0.10);
+  --radius:28px;
   --tap:64px;
   --font-d:"Fraunces","Georgia",serif;
   --font:"Hanken Grotesk",-apple-system,system-ui,"Segoe UI",sans-serif;
   --maxw:480px;
+  --m3-primary:#c25b4e; --m3-on-primary:#ffffff;
+  --m3-primary-container:#ffdad4; --m3-on-primary-container:#410001;
+  --m3-secondary-container:#efddee; --m3-on-secondary-container:#281828;
+  --m3-tertiary-container:#ffdcc2; --m3-on-tertiary-container:#2f1700;
+  --m3-surface-container:#faece8; --m3-surface-container-high:#f5e3de; --m3-surface-container-highest:#efddd8;
+  --m3-outline:#85736f; --m3-outline-variant:#e9d6d1;
+  --ease-emph:cubic-bezier(.2,0,0,1); --ease-emph-dec:cubic-bezier(.05,.7,.1,1); --ease-standard:cubic-bezier(.2,0,0,1);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -302,6 +309,93 @@ label{font-size:13px;color:var(--muted);font-weight:600}
 .star{position:absolute;transform:translate(-50%,-50%);color:#fff;font-size:18px;
   text-shadow:0 0 10px #fff,0 0 18px var(--accent-2);animation:tw 2.4s ease-in-out infinite}
 @keyframes tw{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}}
+
+/* daily boost + journal */
+.boost{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,rgba(243,193,156,.28),rgba(191,168,230,.2));border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+.boost-ic{font-size:20px;flex:0 0 auto}
+.boost-text{font-family:var(--font-d);font-size:14.5px;font-weight:500;line-height:1.35}
+.jrn-item{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:13px 15px;margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden}
+.jrn-d{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.jrn-t{font-size:14px;line-height:1.55;white-space:pre-wrap}
+.jrn-del{float:right;color:var(--muted);font-size:14px;padding:2px 8px;margin:-4px -6px 0 0}
+
+/* gentle movement */
+.rt-pick{display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px}
+.rt-card{display:flex;align-items:center;gap:14px;text-align:left;padding:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;color:#fdf3f8}
+.rt-card:active{transform:scale(.98)}
+.rt-ic{font-size:30px}
+.rt-meta{flex:1;display:flex;flex-direction:column}
+.rt-meta b{font-family:var(--font-d);font-weight:500;font-size:17px}
+.rt-meta i{font-style:normal;color:#dcc4d6;font-size:13px;margin-top:2px}
+.rt-run{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.rt-step{font-family:var(--font-d);font-size:26px;font-weight:500;color:#fdf3f8;max-width:330px;line-height:1.2}
+.rt-instr{font-size:17px;color:#f0c8d6;max-width:330px;line-height:1.5}
+.rt-count{font-variant-numeric:tabular-nums;font-size:34px;font-weight:700;color:#f6b3a8;margin-top:4px}
+.rt-done{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.rt-done-ic{font-size:60px;animation:float 4s ease-in-out infinite}
+
+/* ===== Material You 3 overrides + motion ===== */
+.brand .dot{box-shadow:0 0 16px var(--glow)}
+/* screen transition + staggered entrance */
+.screen.active{animation:m3fade .42s var(--ease-emph-dec)}
+@keyframes m3fade{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.screen.active > *{animation:m3up .5s var(--ease-emph-dec) both}
+.screen.active > *:nth-child(1){animation-delay:.03s}
+.screen.active > *:nth-child(2){animation-delay:.07s}
+.screen.active > *:nth-child(3){animation-delay:.11s}
+.screen.active > *:nth-child(4){animation-delay:.15s}
+.screen.active > *:nth-child(5){animation-delay:.19s}
+.screen.active > *:nth-child(6){animation-delay:.23s}
+.screen.active > *:nth-child(n+7){animation-delay:.26s}
+@keyframes m3up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* tonal surfaces, rounded */
+.card,.contact,.milestone,.memory-item,.jrn-item,.mood-home{background:var(--m3-surface-container);border:1px solid var(--m3-outline-variant);border-radius:28px;box-shadow:0 1px 3px rgba(80,40,40,.07);backdrop-filter:none}
+.meta{background:var(--m3-surface-container);border:1px solid var(--m3-outline-variant);border-radius:24px;box-shadow:0 1px 3px rgba(80,40,40,.07);backdrop-filter:none}
+.boost{background:var(--m3-secondary-container);border:1px solid transparent;border-radius:24px}
+.boost-text{color:var(--m3-on-secondary-container)}
+.bar{background:#eadcd7}
+/* buttons: filled / tonal, pill, state layer */
+.btn{border-radius:100px;background:var(--m3-primary);color:var(--m3-on-primary);box-shadow:0 1px 3px rgba(80,40,40,.2);position:relative;overflow:hidden;transition:transform .18s var(--ease-emph),box-shadow .2s}
+.btn:active{transform:scale(.97);box-shadow:0 3px 10px rgba(80,40,40,.26)}
+.btn.ghost{background:var(--m3-surface-container-high);color:var(--text);border:1px solid var(--m3-outline-variant);box-shadow:none}
+.btn.warm{background:var(--m3-tertiary-container);color:var(--m3-on-tertiary-container);box-shadow:none}
+.btn.danger{background:var(--danger);color:#fff}
+.btn::after{content:"";position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .2s;pointer-events:none;border-radius:inherit}
+.btn:active::after{opacity:.1}
+/* chips m3 */
+.chip{border-radius:100px;border:1px solid var(--m3-outline-variant);background:transparent;position:relative;overflow:hidden}
+.chip.on{background:var(--m3-secondary-container);color:var(--m3-on-secondary-container);border-color:transparent}
+/* inputs rounded */
+input,select,textarea{border-radius:16px;background:var(--m3-surface-container-high);border:1px solid var(--m3-outline-variant)}
+/* M3 switch */
+.sw{width:54px;height:32px;border-radius:100px;background:var(--m3-surface-container-highest);border:2px solid var(--m3-outline);transition:background .25s,border-color .25s}
+.sw i{width:16px;height:16px;top:6px;left:6px;background:var(--m3-outline);box-shadow:none;transition:.28s var(--ease-emph)}
+.sw.on{background:var(--m3-primary);border-color:var(--m3-primary)}
+.sw.on i{width:24px;height:24px;top:2px;left:24px;background:#fff}
+/* navigation bar M3 with active pill indicator */
+.nav{background:var(--m3-surface-container);border-top:1px solid var(--m3-outline-variant);backdrop-filter:none}
+.nav button{position:relative;overflow:visible;padding-top:10px}
+.nav button .ic{position:relative;z-index:1;transition:transform .3s var(--ease-emph)}
+.nav button span:last-child{position:relative;z-index:1}
+.nav button::before{content:"";position:absolute;top:4px;left:50%;transform:translateX(-50%) scaleX(.45);width:56px;height:30px;border-radius:16px;background:var(--m3-secondary-container);opacity:0;transition:opacity .25s,transform .32s var(--ease-emph);z-index:0}
+.nav button.on::before{opacity:1;transform:translateX(-50%) scaleX(1)}
+.nav button.on{color:var(--m3-on-secondary-container)}
+.nav button.on .ic{transform:translateY(-1px)}
+/* round circular controls */
+.mc-nav,.pm-exit{position:relative;overflow:hidden}
+.mc-nav{border-radius:100px;background:var(--m3-surface-container-high);border:1px solid var(--m3-outline-variant)}
+.act,.rt-card,.evo,.pick{border-radius:24px;position:relative;overflow:hidden}
+.act,.pick{background:var(--m3-surface-container);border:1px solid var(--m3-outline-variant)}
+.mood-dot{position:relative;overflow:hidden}
+.contact a{position:relative;overflow:hidden}
+/* panic FAB M3 elevation */
+.panic-btn{box-shadow:0 6px 18px rgba(196,84,74,.42)}
+/* ripple ink */
+.rp-ink{position:absolute;border-radius:50%;background:currentColor;opacity:.22;transform:scale(0);animation:rp .6s var(--ease-standard);pointer-events:none}
+@keyframes rp{to{transform:scale(2.6);opacity:0}}
+/* gentle emphasis on companion */
+.creature{transition:transform .3s var(--ease-emph)}
+#home-companion:active .creature{transform:scale(.92)}
 </style>
 </head>
 <body>
@@ -314,6 +408,8 @@ label{font-size:13px;color:var(--muted);font-weight:600}
         <button data-lang="en">EN</button>
       </div>
     </div>
+    <div class="boost" id="boost"><span class="boost-ic">💛</span><span class="boost-text" id="boost-text"></span></div>
+
     <div class="companion-wrap">
       <div class="companion" id="home-companion">
         <div class="aura"></div>
@@ -406,6 +502,14 @@ label{font-size:13px;color:var(--muted);font-weight:600}
       <div class="meta"><div class="lbl" data-t="mood7">7 derniers jours</div><div class="val" id="mood-7avg">—</div></div>
       <div class="meta"><div class="lbl" data-t="moodLogged">Jours notés</div><div class="val" id="mood-logged">0</div></div>
     </div>
+
+    <h2 style="margin-top:28px" data-t="jrnTitle">Journal</h2>
+    <p class="sub" data-t="jrnSub">Vide ta tête. Une note par jour, ou autant que tu veux.</p>
+    <div class="card" style="margin-top:12px">
+      <textarea id="jrn-input" rows="3" data-tph="jrnPlaceholder" placeholder="Qu'est-ce qui te traverse aujourd'hui ?"></textarea>
+      <button class="btn ghost" id="jrn-save" style="margin-top:10px" data-t="save">Enregistrer</button>
+    </div>
+    <div id="jrn-list" style="margin-top:14px"></div>
   </section>
 
   <!-- CONTACTS -->
@@ -435,8 +539,17 @@ label{font-size:13px;color:var(--muted);font-weight:600}
     <div class="chips" id="breath-picker"></div>
     <h2 style="margin-top:22px" data-t="setPrefs">Préférences</h2>
     <div class="toggle"><span data-t="setVoice">Voix guide</span><div class="sw" id="sw-voice"><i></i></div></div>
+    <div id="voice-controls" style="margin:10px 0 6px">
+      <label data-t="setVoicePick">Choisir la voix</label>
+      <select id="voice-select"></select>
+      <label style="display:block;margin-top:12px" data-t="setVoiceRate">Rythme</label>
+      <div class="chips" id="voice-rate" style="margin-top:6px"></div>
+      <button class="btn ghost" id="voice-test" data-t="setVoiceTest" style="margin-top:12px;min-height:50px">Tester la voix</button>
+    </div>
     <div class="toggle"><span data-t="setHaptic">Vibrations</span><div class="sw" id="sw-haptic"><i></i></div></div>
     <div class="toggle"><span data-t="setMotion">Réduire les animations</span><div class="sw" id="sw-motion"><i></i></div></div>
+    <div class="toggle"><span data-t="setNotif">Boost quotidien</span><div class="sw" id="sw-notif"><i></i></div></div>
+    <p class="note" style="margin-top:8px;text-align:left" data-t="setNotifNote"></p>
     <button class="btn ghost" id="tut-replay" data-t="tutReplay" style="margin-top:8px">Revoir le tutoriel</button>
     <button class="btn ghost" id="reset" style="margin-top:24px" data-t="setReset">Réinitialiser les données</button>
     <p class="note" data-t="setPrivacy">Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.</p>
@@ -559,6 +672,9 @@ const I18N = {
     setTitle:"Réglages", setCompanion:"Ton compagnon", setCname:"Son nom",
     setBreath:"Respiration", setPrefs:"Préférences",
     setVoice:"Voix guide", setHaptic:"Vibrations", setMotion:"Réduire les animations",
+    setVoicePick:"Choisir la voix", setVoiceRate:"Rythme", setVoiceTest:"Tester la voix",
+    voiceSample:"Tu es en sécurité. Respire avec moi, doucement.",
+    rates:["Posé","Lent","Très lent"],
     setReset:"Réinitialiser les données",
     setPrivacy:"Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.",
     pmExit:"Je vais mieux", pmStart:"Respirons ensemble", pmFollow:"Suis le cercle. Rien d'autre à faire.",
@@ -600,9 +716,14 @@ const I18N = {
     act_breathe:"Souffle libre", act_breathe_d:"Respire à ton rythme, sans crise.",
     act_bubbles:"Bulles anti-stress", act_bubbles_d:"Fais éclater les bulles, tranquillement.",
     act_stars:"Ciel d'étoiles", act_stars_d:"Pose des étoiles. Aucun but, juste le calme.",
-    actNeed:"sessions", fbSub:"Suis le cercle, à ton rythme.",
+    act_move:"Mouvement doux", act_move_d:"Étirements et mobilité pour relâcher les tensions.",
+    actNeed:"pts", fbSub:"Suis le cercle, à ton rythme.",
     bubHint:"Touche les bulles pour les faire éclater.",
     starHint:"Touche le ciel pour allumer des étoiles.",
+    setNotif:"Boost quotidien", setNotifNote:"Un message d'encouragement. Notif fiable seulement app ouverte (pas de serveur push).",
+    jrnTitle:"Journal", jrnSub:"Vide ta tête. Une note par jour, ou autant que tu veux.",
+    jrnPlaceholder:"Qu'est-ce qui te traverse aujourd'hui ?", jrnEmpty:"Aucune note pour l'instant.",
+    boosts:["Tu es plus fort(e) que tu ne le penses.","Tu vas y arriver.","Une respiration à la fois.","Ce que tu ressens va passer.","Tu as déjà survécu à tous tes pires jours.","Sois doux(ce) avec toi aujourd'hui.","Ton calme est plus proche que tu ne crois.","Tu n'es pas tes pensées.","Chaque petit pas compte.","Tu mérites du repos.","Le courage, c'est avancer avec la peur.","Tu fais de ton mieux, et c'est assez.","Respire. Tu es là. Ça suffit.","Demain n'a pas besoin d'être réglé maintenant."],
     tutTitles:["Bienvenue dans Anchor","Le bouton","Ton compagnon","Tu le nourris","Note ta journée","Ton jardin","Prêt(e) ?"],
     tutBodies:[
       "Ton ancre quand l'anxiété monte. Tout est simple, ici. Une seule action à la fois.",
@@ -632,6 +753,9 @@ const I18N = {
     setTitle:"Settings", setCompanion:"Your companion", setCname:"Its name",
     setBreath:"Breathing", setPrefs:"Preferences",
     setVoice:"Guide voice", setHaptic:"Haptics", setMotion:"Reduce motion",
+    setVoicePick:"Choose voice", setVoiceRate:"Pace", setVoiceTest:"Test voice",
+    voiceSample:"You are safe. Breathe with me, slowly.",
+    rates:["Steady","Slow","Very slow"],
     setReset:"Reset data",
     setPrivacy:"All your data stays on this device. Nothing is sent. No account. No ads.",
     pmExit:"I feel better", pmStart:"Let's breathe together", pmFollow:"Follow the circle. Nothing else to do.",
@@ -673,9 +797,14 @@ const I18N = {
     act_breathe:"Free breathing", act_breathe_d:"Breathe at your pace, no crisis needed.",
     act_bubbles:"Stress bubbles", act_bubbles_d:"Pop the bubbles, gently.",
     act_stars:"Star sky", act_stars_d:"Place stars. No goal, just calm.",
-    actNeed:"sessions", fbSub:"Follow the circle, at your pace.",
+    act_move:"Gentle movement", act_move_d:"Stretches and mobility to release tension.",
+    actNeed:"pts", fbSub:"Follow the circle, at your pace.",
     bubHint:"Tap the bubbles to pop them.",
     starHint:"Tap the sky to light up stars.",
+    setNotif:"Daily boost", setNotifNote:"An encouraging message. Reliable only while the app is open (no push server).",
+    jrnTitle:"Journal", jrnSub:"Empty your head. One note a day, or as many as you like.",
+    jrnPlaceholder:"What's on your mind today?", jrnEmpty:"No notes yet.",
+    boosts:["You are stronger than you think.","You will get through this.","One breath at a time.","What you feel will pass.","You have survived all your worst days.","Be gentle with yourself today.","Your calm is closer than you think.","You are not your thoughts.","Every small step counts.","You deserve rest.","Courage is moving with the fear.","You are doing your best, and that is enough.","Breathe. You are here. That is enough.","Tomorrow doesn't need fixing right now."],
     tutTitles:["Welcome to Anchor","The button","Your companion","You feed it","Log your day","Your garden","Ready?"],
     tutBodies:[
       "Your anchor when anxiety rises. Everything here is simple. One action at a time.",
@@ -707,7 +836,8 @@ const KEY="anchor.v1";
 const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
-  settings:{breath:"box", voice:true, haptic:true, motion:false},
+  xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null,
+  settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75},
   lastVisit:Date.now()
 };
 let S=load();
@@ -731,16 +861,22 @@ function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
     S.companion=keys[Math.floor(Math.random()*keys.length)];
     S.companionRandomized=true; save();
   }
+  if(!S.xpInit){ S.xp=Math.max(S.xp||0,(S.sessions||0)*20); S.xpInit=true; save(); }
 })();
+const XP_THRESH=[0,15,60,150,320];
+function awardXp(src,amount,daily){
+  if(daily){ S.xpAward=S.xpAward||{}; const k=dayKey(); if(S.xpAward[src]===k)return false; S.xpAward[src]=k; }
+  S.xp=(S.xp||0)+amount; save(); return true;
+}
 function stageIndex(){
-  const n=S.sessions;
-  if(n>=20)return 4; if(n>=10)return 3; if(n>=4)return 2; if(n>=1)return 1; return 0;
+  const x=S.xp||0;
+  for(let i=XP_THRESH.length-1;i>=0;i--){ if(x>=XP_THRESH[i]) return i; }
+  return 0;
 }
 function stageProgress(){
-  const th=[0,1,4,10,20,20]; const i=stageIndex();
-  const lo=th[i], hi=th[i+1]||(lo+1);
-  if(i>=4)return 100;
-  return Math.min(100, Math.round(((S.sessions-lo)/(hi-lo))*100));
+  const i=stageIndex(); if(i>=4)return 100;
+  const lo=XP_THRESH[i], hi=XP_THRESH[i+1];
+  return Math.min(100, Math.round(((S.xp||0)-lo)/(hi-lo)*100));
 }
 function creatureGlyph(){return COMPANIONS[S.companion].stages[stageIndex()];}
 function companionName(){return S.cname||COMPANIONS[S.companion].name[S.lang];}
@@ -839,6 +975,8 @@ function renderSettings(){
   setSw("sw-voice",S.settings.voice);
   setSw("sw-haptic",S.settings.haptic);
   setSw("sw-motion",S.settings.motion);
+  setSw("sw-notif",S.settings.notif);
+  renderVoiceUI();
   document.body.classList.toggle("reduce-motion",S.settings.motion);
 }
 function setSw(id,on){$(id).classList.toggle("on",!!on);}
@@ -848,11 +986,12 @@ function applyLang(){
     const k=el.getAttribute("data-t"); const v=t(k);
     if(typeof v==="string") el.textContent=v;
   });
+  document.querySelectorAll("[data-tph]").forEach(el=>{ const v=t(el.getAttribute("data-tph")); if(typeof v==="string")el.placeholder=v; });
   document.querySelectorAll(".lang button").forEach(b=>b.classList.toggle("on",b.dataset.lang===S.lang));
   renderAll();
   if($("tutorial").classList.contains("active"))renderTut();
 }
-function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();}
+function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();}
 function go(name){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   $("screen-"+name).classList.add("active");
@@ -869,15 +1008,57 @@ $("home-companion").onclick=openCompanion;
 $("cv-close").onclick=closeCompanion;
 $("mini-close").onclick=closeMini;
 $("reroll").onclick=()=>{const keys=Object.keys(COMPANIONS).filter(k=>k!==S.companion);S.companion=keys[Math.floor(Math.random()*keys.length)];S.cname=null;save();buzz(30);renderSettings();renderHome();};
+$("jrn-save").onclick=()=>{
+  const v=$("jrn-input").value.trim();
+  if(!v)return;
+  S.journal=S.journal||[]; S.journal.push({ts:Date.now(),text:v});
+  awardXp("journal",5,true); save(); $("jrn-input").value="";
+  buzz(20); renderJournal(); renderHome();
+};
+$("sw-notif").onclick=()=>{
+  if(!S.settings.notif){
+    if("Notification"in window){
+      Notification.requestPermission().then(p=>{ S.settings.notif=(p==="granted"); save(); renderSettings(); if(S.settings.notif)maybeNotify(); });
+    } else { alert(S.lang==="fr"?"Notifications non supportées par ce navigateur.":"Notifications not supported by this browser."); }
+  } else { S.settings.notif=false; save(); renderSettings(); }
+};
+$("voice-select").onchange=(e)=>{ S.settings.voiceName=e.target.value; _voiceCache=null; save(); speak(t("voiceSample")); };
+$("voice-test").onclick=()=>{ if(!S.settings.voice){S.settings.voice=true;save();renderSettings();} speak(t("voiceSample")); };
+const FEMALE_VOICES={
+  fr:["amélie","amelie","audrey","aurélie","aurelie","marie","virginie","julie","céline","celine","chantal","caroline","léa","lea","hortense","sandy","flo"],
+  en:["samantha","karen","victoria","tessa","moira","fiona","allison","ava","susan","serena","catherine","zira","jenny","aria","sonia","libby","emma","google uk english female","google us english"]
+};
+let _voiceCache=null,_voiceLang=null;
+function pickVoice(){
+  if(!("speechSynthesis"in window))return null;
+  if(_voiceCache&&_voiceLang===S.lang)return _voiceCache;
+  const voices=speechSynthesis.getVoices()||[];
+  const lang=S.lang;
+  const langVoices=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang));
+  const prefs=FEMALE_VOICES[lang]||[];
+  let chosen=null;
+  for(const name of prefs){
+    const hit=langVoices.find(v=>v.name.toLowerCase().includes(name));
+    if(hit){chosen=hit;break;}
+  }
+  if(!chosen){
+    // any voice whose name hints "female" within the language
+    chosen=langVoices.find(v=>/female|femme|woman/i.test(v.name))||langVoices[0]||null;
+  }
+  _voiceCache=chosen;_voiceLang=lang;
+  return chosen;
+}
 function speak(txt){
   if(!S.settings.voice||!("speechSynthesis"in window))return;
   try{
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(txt);
     u.lang=S.lang==="fr"?"fr-FR":"en-US";
-    u.rate=0.82; u.pitch=1.0; u.volume=0.9;
-    const vs=speechSynthesis.getVoices().filter(v=>v.lang.startsWith(S.lang));
-    if(vs.length)u.voice=vs[0];
+    u.rate=S.settings.voiceRate||0.75; u.pitch=1.08; u.volume=0.92;
+    let v=null;
+    if(S.settings.voiceName){ v=(speechSynthesis.getVoices()||[]).find(x=>x.name===S.settings.voiceName)||null; }
+    if(!v)v=pickVoice();
+    if(v)u.voice=v;
     speechSynthesis.speak(u);
   }catch(e){}
 }
@@ -907,6 +1088,7 @@ function logMood(lvl){
   const k=dayKey();
   S.moods[k]=lvl;
   if(S.moodEnergyDay!==k){S.moodEnergyDay=k;S.energy=Math.min(100,S.energy+8);}
+  awardXp("mood",5,true);
   buzz(25); save();
   renderHomeMood(); renderMood(); renderHome();
 }
@@ -992,11 +1174,32 @@ function tutNext(){const n=t("tutTitles").length; if(tutIdx<n-1){tutIdx++;render
 
 /* ---------- companion view + activities + mini games ---------- */
 const ACTIVITIES=[
-  {id:"breathe",stage:1,icon:"🫧"},
-  {id:"bubbles",stage:2,icon:"🎈"},
-  {id:"stars",stage:3,icon:"✨"}
+  {id:"breathe",stage:0,icon:"🫧"},
+  {id:"move",stage:0,icon:"🤸"},
+  {id:"bubbles",stage:1,icon:"🎈"},
+  {id:"stars",stage:2,icon:"✨"}
 ];
-const EVO_NEED=[0,1,4,10,20];
+const ROUTINES=[
+  {id:"calm",icon:"🧘",name:{fr:"Relâcher les tensions",en:"Release tension"},steps:[
+    {t:{fr:"Roule les épaules",en:"Roll your shoulders"},d:{fr:"Lentement, vers l'arrière. Respire.",en:"Slowly, backwards. Breathe."},sec:25},
+    {t:{fr:"Étire ton cou",en:"Stretch your neck"},d:{fr:"Oreille vers l'épaule, doucement, chaque côté.",en:"Ear toward shoulder, gently, each side."},sec:30},
+    {t:{fr:"Serre puis relâche les poings",en:"Clench then release fists"},d:{fr:"Serre 5 secondes, puis lâche tout.",en:"Squeeze 5 seconds, then let go."},sec:25},
+    {t:{fr:"Bras vers le ciel",en:"Reach to the sky"},d:{fr:"Grandis-toi, inspire. Redescends, expire.",en:"Grow tall, inhale. Lower, exhale."},sec:25},
+    {t:{fr:"Flexion avant douce",en:"Gentle forward fold"},d:{fr:"Laisse tomber la tête et les bras. Sans forcer.",en:"Let head and arms hang. No strain."},sec:30},
+    {t:{fr:"Relâche la mâchoire",en:"Release your jaw"},d:{fr:"Desserre les dents. Épaules basses.",en:"Unclench teeth. Drop the shoulders."},sec:20},
+    {t:{fr:"Respire et observe",en:"Breathe and notice"},d:{fr:"Sens ton corps plus léger.",en:"Feel your body lighter."},sec:20}
+  ]},
+  {id:"wake",icon:"🌅",name:{fr:"Réveil doux",en:"Gentle wake-up"},steps:[
+    {t:{fr:"Marche sur place",en:"March in place"},d:{fr:"Doucement, à ton rythme.",en:"Gently, at your pace."},sec:35},
+    {t:{fr:"Cercles de bras",en:"Arm circles"},d:{fr:"Petits cercles, puis plus grands.",en:"Small circles, then larger."},sec:30},
+    {t:{fr:"Étire les côtés",en:"Side stretch"},d:{fr:"Penche-toi à droite, puis à gauche.",en:"Lean right, then left."},sec:30},
+    {t:{fr:"Montées sur la pointe des pieds",en:"Rise on your toes"},d:{fr:"Monte, descends. Trouve ton équilibre.",en:"Up, down. Find your balance."},sec:25},
+    {t:{fr:"Rotation des hanches",en:"Hip circles"},d:{fr:"Cercles lents, dans chaque sens.",en:"Slow circles, each direction."},sec:30},
+    {t:{fr:"Secoue tout le corps",en:"Shake it out"},d:{fr:"Relâche bras et jambes en secouant.",en:"Loosen arms and legs by shaking."},sec:25},
+    {t:{fr:"Pose et respire",en:"Settle and breathe"},d:{fr:"Immobile. Sens ton énergie.",en:"Still. Feel your energy."},sec:20}
+  ]}
+];
+const EVO_NEED=XP_THRESH;
 function renderEvoPath(cont){
   cont.innerHTML="";
   const stages=COMPANIONS[S.companion].stages, idx=stageIndex(), names=t("stageNames");
@@ -1040,7 +1243,50 @@ function startActivity(id){
   if(id==="breathe")startFreeBreath();
   else if(id==="bubbles")startBubbles();
   else if(id==="stars")startStars();
+  else if(id==="move"){startMove();return;}
   grantActivityEnergy();
+  awardXp("game_"+id,4,true);
+  renderHome();
+}
+function startMove(){
+  openMini(t("act_move"));
+  const c=$("mini-content");
+  c.innerHTML='<div class="rt-pick" id="rtpick"></div>';
+  ROUTINES.forEach(r=>{
+    const b=document.createElement("button"); b.className="rt-card";
+    const mins=Math.max(1,Math.round(r.steps.reduce((a,st)=>a+st.sec,0)/60));
+    b.innerHTML='<span class="rt-ic">'+r.icon+'</span><span class="rt-meta"><b>'+r.name[S.lang]+'</b><i>~'+mins+' min</i></span><span class="act-go">›</span>';
+    b.onclick=()=>runRoutine(r);
+    $("rtpick").appendChild(b);
+  });
+}
+function runRoutine(r){
+  $("mini-title").textContent=r.name[S.lang];
+  const c=$("mini-content");
+  c.innerHTML='<div class="rt-run"><div class="rt-step" id="rtstep"></div><div class="rt-instr" id="rtinstr"></div><div class="rt-count" id="rtcount"></div><div class="dots" id="rtdots"></div></div><div class="pm-actions" style="max-width:340px"><button class="btn ghost" id="rtskip">'+(S.lang==="fr"?"Passer":"Skip")+'</button></div>';
+  let i=0,cd=null,to=null;
+  function clearStep(){ if(cd)clearInterval(cd); if(to)clearTimeout(to); }
+  function dots(){ const d=$("rtdots"); if(!d)return; d.innerHTML=""; r.steps.forEach((_,k)=>{const x=document.createElement("i"); if(k<=i)x.classList.add("on"); d.appendChild(x);}); }
+  function step(){
+    clearStep();
+    if(i>=r.steps.length){ finishRoutine(); return; }
+    const st=r.steps[i];
+    $("rtstep").textContent=st.t[S.lang];
+    $("rtinstr").textContent=st.d[S.lang];
+    dots();
+    speak(st.t[S.lang]+". "+st.d[S.lang]);
+    buzz(40);
+    let left=st.sec; $("rtcount").textContent=left+"s";
+    cd=setInterval(()=>{left--; if(left>=0)$("rtcount").textContent=Math.max(0,left)+"s"; if(left<=0)clearInterval(cd);},1000);
+    to=setTimeout(()=>{ i++; step(); }, st.sec*1000);
+    miniTimers.push(cd); miniTimers.push(to);
+  }
+  const sk=$("rtskip"); if(sk)sk.onclick=()=>{ i++; step(); };
+  step();
+}
+function finishRoutine(){
+  $("mini-content").innerHTML='<div class="rt-done"><div class="rt-done-ic">🌿</div><div class="rt-step" style="color:#fff">'+(S.lang==="fr"?"Bien joué.":"Well done.")+'</div><div class="rt-instr">'+(S.lang==="fr"?"Ton corps est plus détendu.":"Your body feels more relaxed.")+'</div></div>';
+  awardXp("game_move",4,true); grantActivityEnergy(); renderHome(); buzz([40,60,40]);
 }
 let miniTimers=[];
 function miniClear(){miniTimers.forEach(i=>{clearTimeout(i);clearInterval(i);});miniTimers=[];$("mini-content").innerHTML="";try{speechSynthesis.cancel();}catch(e){}}
@@ -1083,6 +1329,84 @@ function startStars(){
     st.style.animationDelay=(Math.random()*1.5)+"s"; buzz(12); sky.appendChild(st);
   };
 }
+
+/* ---------- daily boost + journal + notifications ---------- */
+function todaysBoost(){
+  const pool=t("boosts")||[]; if(!pool.length)return "";
+  return pool[Math.floor(Date.now()/86400000)%pool.length];
+}
+function renderBoost(){ var el=$("boost-text"); if(el)el.textContent=todaysBoost(); }
+function renderJournal(){
+  const box=$("jrn-list"); if(!box)return; box.innerHTML="";
+  if(!S.journal||!S.journal.length){
+    const d=document.createElement("div"); d.className="sub"; d.style.opacity=".7"; d.textContent=t("jrnEmpty");
+    box.appendChild(d); return;
+  }
+  S.journal.slice().reverse().forEach((e,ri)=>{
+    const real=S.journal.length-1-ri;
+    const d=document.createElement("div"); d.className="jrn-item";
+    const dt=new Date(e.ts);
+    const ds=dt.toLocaleDateString(S.lang,{day:"2-digit",month:"short"})+" "+dt.toLocaleTimeString(S.lang,{hour:"2-digit",minute:"2-digit"});
+    const del=document.createElement("button"); del.className="jrn-del"; del.textContent="✕";
+    del.onclick=()=>{ S.journal.splice(real,1); save(); renderJournal(); };
+    const head=document.createElement("div"); head.className="jrn-d"; head.textContent=ds; head.appendChild(del);
+    const body=document.createElement("div"); body.className="jrn-t"; body.textContent=e.text;
+    d.appendChild(head); d.appendChild(body); box.appendChild(d);
+  });
+}
+function maybeNotify(){
+  if(!S.settings.notif)return;
+  if(!("Notification"in window)||Notification.permission!=="granted")return;
+  const k=dayKey(); if(S.lastNotifDay===k)return; S.lastNotifDay=k; save();
+  try{ new Notification("Anchor",{body:todaysBoost(),icon:"./icon-192.png"}); }catch(e){}
+}
+
+/* ---------- voice selector ---------- */
+const RATE_VALUES=[0.85,0.75,0.6];
+function renderVoiceUI(){
+  const sel=$("voice-select"); if(!sel)return;
+  const voices=("speechSynthesis"in window)?(speechSynthesis.getVoices()||[]):[];
+  const lang=S.lang;
+  let langV=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(lang));
+  if(!langV.length)langV=voices.slice();
+  const prefs=FEMALE_VOICES[lang]||[];
+  function score(v){let sc=0;const n=v.name.toLowerCase();
+    if(prefs.some(p=>n.includes(p)))sc-=10;
+    if(/enhanced|premium|natural|neural|siri/i.test(v.name))sc-=3;
+    return sc;}
+  langV.sort((a,b)=>score(a)-score(b));
+  sel.innerHTML="";
+  if(!langV.length){const o=document.createElement("option");o.textContent=(S.lang==="fr"?"Aucune voix disponible":"No voice available");sel.appendChild(o);sel.disabled=true;}
+  else{ sel.disabled=false; langV.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=v.name.replace(/\s*\(.*?\)/g,"").trim()||v.name;sel.appendChild(o);}); }
+  if(S.settings.voiceName)sel.value=S.settings.voiceName;
+  const rc=$("voice-rate"); rc.innerHTML="";
+  const labels=t("rates")||["A","B","C"];
+  RATE_VALUES.forEach((rt,i)=>{
+    const b=document.createElement("button");
+    b.className="chip"+(((S.settings.voiceRate||0.75)===rt)?" on":"");
+    b.textContent=labels[i];
+    b.onclick=()=>{S.settings.voiceRate=rt;save();renderVoiceUI();speak(t("voiceSample"));};
+    rc.appendChild(b);
+  });
+}
+
+/* ---------- M3 ripple ---------- */
+(function(){
+  const SEL=".btn,.act,.rt-card,.chip,.pick,.mc-nav,.pm-exit,.mood-dot,.evo,.contact a,.tut-skip,.lang button,.nav button,.rt-card";
+  document.addEventListener("pointerdown",function(e){
+    if(S.settings&&S.settings.motion)return;
+    const el=e.target.closest(SEL); if(!el)return;
+    const r=el.getBoundingClientRect(); const d=Math.max(r.width,r.height);
+    const ink=document.createElement("span"); ink.className="rp-ink";
+    ink.style.width=ink.style.height=d+"px";
+    ink.style.left=(e.clientX-r.left-d/2)+"px";
+    ink.style.top=(e.clientY-r.top-d/2)+"px";
+    const cs=getComputedStyle(el); if(cs.position==="static")el.style.position="relative";
+    el.style.overflow="hidden";
+    el.appendChild(ink);
+    setTimeout(()=>{ if(ink.parentNode)ink.remove(); },620);
+  },{passive:true});
+})();
 
 let pm={open:false,start:0,timer:null,breathTO:null,senseIdx:0,senseCount:0};
 function openPanic(){
@@ -1152,6 +1476,7 @@ function finishPanic(completed){
     clearStorm(1);
     S.history.push({ts:Date.now(),dur:dur,trigger:null});
     S.sessions+=1;
+    S.xp=(S.xp||0)+20;
     S.energy=Math.min(100,S.energy+18);
     const plant=pick(PLANTS);
     S.garden.push({type:plant,ts:Date.now()});
@@ -1187,12 +1512,12 @@ $("recap-close").onclick=closePanic;
 $("pm-exit").onclick=()=>{
   const dur=Math.max(1,Math.floor((Date.now()-pm.start)/1000));
   S.history.push({ts:Date.now(),dur:dur,trigger:null});
-  S.sessions+=1; S.energy=Math.min(100,S.energy+10);
+  S.sessions+=1; S.xp=(S.xp||0)+10; S.energy=Math.min(100,S.energy+10);
   S.garden.push({type:pick(PLANTS),ts:Date.now()}); save();
   closePanic();
 };
 document.querySelectorAll(".lang button").forEach(b=>{
-  b.onclick=()=>{S.lang=b.dataset.lang;save();applyLang();};
+  b.onclick=()=>{S.lang=b.dataset.lang;_voiceCache=null;save();applyLang();};
 });
 $("mem-save").onclick=()=>{
   const v=$("mem-input").value.trim();
@@ -1210,17 +1535,16 @@ $("reset").onclick=()=>{
   const msg=S.lang==="fr"?"Tout effacer ? Action irréversible.":"Erase everything? This cannot be undone.";
   if(confirm(msg)){localStorage.removeItem(KEY);S=load();applyLang();go("home");}
 };
-if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{};speechSynthesis.getVoices();}
+if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{_voiceCache=null; if(document.getElementById("voice-select"))renderVoiceUI();};speechSynthesis.getVoices();}
 document.body.classList.toggle("reduce-motion",S.settings.motion);
 applyLang();
 go("home");
 if(!S.onboarded)openTut();
+maybeNotify();
 </script>
 <script>
 if("serviceWorker" in navigator){
-  window.addEventListener("load",function(){
-    navigator.serviceWorker.register("./sw.js").catch(function(){});
-  });
+  window.addEventListener("load",function(){ navigator.serviceWorker.register("./sw.js").catch(function(){}); });
 }
 </script>
 </body>
