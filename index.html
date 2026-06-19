@@ -268,7 +268,7 @@ label{font-size:13px;color:var(--muted);font-weight:600}
 .cv-title{font-family:var(--font-d);font-weight:600;font-size:21px}
 .cv-scroll{flex:1;overflow-y:auto;padding:8px 20px 40px;max-width:var(--maxw);margin:0 auto;width:100%}
 .cv-h{font-family:var(--font-d);font-weight:500;margin:24px 0 12px}
-.comp-hero{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:6px}
+.comp-hero{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:6px;position:relative}
 .comp-name{font-family:var(--font-d);font-size:22px;font-weight:500}
 .comp-stage{color:var(--muted);font-size:14px;font-weight:600}
 .evo-path{display:flex;gap:8px;margin-top:20px;overflow-x:auto;padding-bottom:6px}
@@ -420,6 +420,23 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .wd-msg{color:#dcc4d6;font-size:12.5px;text-align:center;line-height:1.4;max-width:300px}
 .wd-over{position:absolute;inset:-8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(42,26,51,.9);backdrop-filter:blur(5px);text-align:center;padding:24px;border-radius:18px;z-index:10}
 .wd-toast{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.18);color:#fff;padding:9px 18px;border-radius:30px;font-weight:600;font-family:var(--font-d);z-index:9;animation:m3fade .4s var(--ease-emph-dec,ease)}
+
+/* companion care + reminders */
+.cv-care{margin-bottom:4px}
+.care-bond{display:flex;align-items:center;font-size:13px;color:var(--muted);font-weight:600;margin:6px 0 12px}
+.care-bond .bar{flex:1;margin:0 10px}
+.care-bond .bar i{background:linear-gradient(90deg,#e8918a,#bfa8e6)}
+.care-row{display:flex;gap:10px}
+.care-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm);font-size:13px;font-weight:600;color:var(--text);position:relative;overflow:hidden}
+.care-btn:active{transform:scale(.96)}
+.care-ic{font-size:26px}
+.care-burst{position:absolute;top:28%;font-size:22px;pointer-events:none;animation:care-fly 1.05s ease-out forwards;z-index:3}
+@keyframes care-fly{0%{opacity:0;transform:translateY(0) scale(.6)}30%{opacity:1}100%{opacity:0;transform:translateY(-72px) scale(1.2)}}
+@keyframes care-bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px) scale(1.08)}}
+.nudge{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,rgba(168,199,255,.22),rgba(191,168,230,.18));border:1px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow-sm);animation:m3fade .4s var(--ease-emph-dec,ease)}
+.nudge-txt{flex:1;font-size:13.5px;line-height:1.4}
+.nudge-act{background:var(--accent);color:#fff;border-radius:30px;padding:9px 14px;font-size:13px;font-weight:700;white-space:nowrap}
+.nudge-x{color:var(--muted);font-size:12.5px;padding:6px 4px;font-weight:600;white-space:nowrap;background:none}
 </style>
 </head>
 <body>
@@ -433,6 +450,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
       </div>
     </div>
     <div class="boost" id="boost"><span class="boost-ic">💛</span><span class="boost-text" id="boost-text"></span></div>
+    <div id="nudge"></div>
 
     <div class="companion-wrap">
       <div class="companion" id="home-companion">
@@ -574,6 +592,14 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
     <div class="toggle"><span data-t="setMotion">Réduire les animations</span><div class="sw" id="sw-motion"><i></i></div></div>
     <div class="toggle"><span data-t="setNotif">Boost quotidien</span><div class="sw" id="sw-notif"><i></i></div></div>
     <p class="note" style="margin-top:8px;text-align:left" data-t="setNotifNote"></p>
+
+    <h2 style="margin-top:22px" data-t="remTitle">Rappels</h2>
+    <div class="toggle"><span data-t="remOn">Activer les rappels</span><div class="sw" id="sw-rem"><i></i></div></div>
+    <div class="toggle"><span data-t="remMood">Noter mon humeur</span><div class="sw" id="sw-rem-mood"><i></i></div></div>
+    <div class="toggle"><span data-t="remRelax">Faire une relaxation</span><div class="sw" id="sw-rem-relax"><i></i></div></div>
+    <div class="toggle"><span data-t="remJournal">Écrire dans le journal</span><div class="sw" id="sw-rem-journal"><i></i></div></div>
+    <div class="field" style="margin-top:10px"><label data-t="remTime">Heure préférée</label><input type="time" id="rem-time"></div>
+    <p class="note" style="text-align:left" data-t="remNote"></p>
     <button class="btn ghost" id="tut-replay" data-t="tutReplay" style="margin-top:8px">Revoir le tutoriel</button>
     <button class="btn ghost" id="reset" style="margin-top:24px" data-t="setReset">Réinitialiser les données</button>
     <p class="note" data-t="setPrivacy">Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.</p>
@@ -595,6 +621,8 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
   </div>
   <div class="cv-scroll">
     <div id="cv-card"></div>
+    <h2 class="cv-h" data-t="careTitle">Prends soin de lui</h2>
+    <div class="cv-care" id="cv-care"></div>
     <h2 class="cv-h" data-t="cvActs">Activités</h2>
     <div class="cv-acts" id="cv-acts"></div>
   </div>
@@ -747,6 +775,15 @@ const I18N = {
     bubHint:"Touche les bulles pour les faire éclater.",
     starHint:"Touche le ciel pour allumer des étoiles.",
     setNotif:"Boost quotidien", setNotifNote:"Un message d'encouragement. Notif fiable seulement app ouverte (pas de serveur push).",
+    careTitle:"Prends soin de lui", bondLabel:"Lien",
+    carePet:"Caresser", careFeed:"Nourrir", carePlay:"Jouer",
+    careMsgPet:"Il ronronne de bonheur.", careMsgFeed:"Miam. Merci !", careMsgPlay:"Il adore jouer avec toi.",
+    remTitle:"Rappels", remOn:"Activer les rappels", remMood:"Noter mon humeur", remRelax:"Faire une relaxation", remJournal:"Écrire dans le journal", remTime:"Heure préférée",
+    remNote:"Rappels doux, à l'ouverture de l'app. Notif OS best-effort (sans serveur push, pas de notif app fermée).",
+    nudgeMood:"Tu n'as pas encore noté ton humeur aujourd'hui.", nudgeMoodBtn:"Noter",
+    nudgeRelax:"Et si tu prenais un moment pour te détendre ?", nudgeRelaxBtn:"Se détendre",
+    nudgeJournal:"Envie de vider ta tête dans le journal ?", nudgeJournalBtn:"Écrire",
+    nudgeDismiss:"Plus tard",
     jrnTitle:"Journal", jrnSub:"Vide ta tête. Une note par jour, ou autant que tu veux.",
     jrnPlaceholder:"Qu'est-ce qui te traverse aujourd'hui ?", jrnEmpty:"Aucune note pour l'instant.",
     boosts:["Tu es plus fort(e) que tu ne le penses.","Tu vas y arriver.","Une respiration à la fois.","Ce que tu ressens va passer.","Tu as déjà survécu à tous tes pires jours.","Sois doux(ce) avec toi aujourd'hui.","Ton calme est plus proche que tu ne crois.","Tu n'es pas tes pensées.","Chaque petit pas compte.","Tu mérites du repos.","Le courage, c'est avancer avec la peur.","Tu fais de ton mieux, et c'est assez.","Respire. Tu es là. Ça suffit.","Demain n'a pas besoin d'être réglé maintenant."],
@@ -830,6 +867,15 @@ const I18N = {
     bubHint:"Tap the bubbles to pop them.",
     starHint:"Tap the sky to light up stars.",
     setNotif:"Daily boost", setNotifNote:"An encouraging message. Reliable only while the app is open (no push server).",
+    careTitle:"Take care of it", bondLabel:"Bond",
+    carePet:"Pet", careFeed:"Feed", carePlay:"Play",
+    careMsgPet:"It purrs with joy.", careMsgFeed:"Yum. Thank you!", careMsgPlay:"It loves playing with you.",
+    remTitle:"Reminders", remOn:"Enable reminders", remMood:"Log my mood", remRelax:"Do a relaxation", remJournal:"Write in the journal", remTime:"Preferred time",
+    remNote:"Gentle reminders when you open the app. OS notification is best-effort (no push server, no notification when closed).",
+    nudgeMood:"You haven't logged your mood today.", nudgeMoodBtn:"Log",
+    nudgeRelax:"How about a moment to relax?", nudgeRelaxBtn:"Relax",
+    nudgeJournal:"Want to empty your head in the journal?", nudgeJournalBtn:"Write",
+    nudgeDismiss:"Later",
     jrnTitle:"Journal", jrnSub:"Empty your head. One note a day, or as many as you like.",
     jrnPlaceholder:"What's on your mind today?", jrnEmpty:"No notes yet.",
     boosts:["You are stronger than you think.","You will get through this.","One breath at a time.","What you feel will pass.","You have survived all your worst days.","Be gentle with yourself today.","Your calm is closer than you think.","You are not your thoughts.","Every small step counts.","You deserve rest.","Courage is moving with the fear.","You are doing your best, and that is enough.","Breathe. You are here. That is enough.","Tomorrow doesn't need fixing right now."],
@@ -865,6 +911,7 @@ const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
   xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
+  bond:0, careAward:{}, nudgeDay:null, reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
   settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75},
   lastVisit:Date.now()
 };
@@ -1004,6 +1051,11 @@ function renderSettings(){
   setSw("sw-haptic",S.settings.haptic);
   setSw("sw-motion",S.settings.motion);
   setSw("sw-notif",S.settings.notif);
+  if(S.reminders){
+    setSw("sw-rem",S.reminders.on); setSw("sw-rem-mood",S.reminders.mood);
+    setSw("sw-rem-relax",S.reminders.relax); setSw("sw-rem-journal",S.reminders.journal);
+    const ti=$("rem-time"); if(ti)ti.value=String(S.reminders.hour||20).padStart(2,"0")+":00";
+  }
   renderVoiceUI();
   document.body.classList.toggle("reduce-motion",S.settings.motion);
 }
@@ -1019,7 +1071,7 @@ function applyLang(){
   renderAll();
   if($("tutorial").classList.contains("active"))renderTut();
 }
-function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();}
+function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();renderNudge();}
 function go(name){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   $("screen-"+name).classList.add("active");
@@ -1050,6 +1102,11 @@ $("sw-notif").onclick=()=>{
     } else { alert(S.lang==="fr"?"Notifications non supportées par ce navigateur.":"Notifications not supported by this browser."); }
   } else { S.settings.notif=false; save(); renderSettings(); }
 };
+$("sw-rem").onclick=()=>{ S.reminders.on=!S.reminders.on; if(S.reminders.on&&"Notification"in window&&Notification.permission==="default"){Notification.requestPermission();} save(); renderSettings(); renderNudge(); };
+$("sw-rem-mood").onclick=()=>{ S.reminders.mood=!S.reminders.mood; save(); renderSettings(); renderNudge(); };
+$("sw-rem-relax").onclick=()=>{ S.reminders.relax=!S.reminders.relax; save(); renderSettings(); renderNudge(); };
+$("sw-rem-journal").onclick=()=>{ S.reminders.journal=!S.reminders.journal; save(); renderSettings(); renderNudge(); };
+$("rem-time").onchange=(e)=>{ const h=parseInt((e.target.value||"20:00").split(":")[0]); S.reminders.hour=isNaN(h)?20:h; save(); };
 $("voice-select").onchange=(e)=>{ S.settings.voiceName=e.target.value; _voiceCache=null; save(); speak(t("voiceSample")); };
 $("voice-test").onclick=()=>{ if(!S.settings.voice){S.settings.voice=true;save();renderSettings();} speak(t("voiceSample")); };
 const FEMALE_VOICES={
@@ -1253,6 +1310,7 @@ function openCompanion(){$("companion-view").classList.add("active");renderCompa
 function closeCompanion(){$("companion-view").classList.remove("active");}
 function renderCompanionView(){
   renderCompanionCard($("cv-card"));
+  renderCareRow($("cv-care"));
   const list=$("cv-acts"); list.innerHTML=""; const idx=stageIndex();
   ACTIVITIES.forEach(a=>{
     const unlocked=idx>=a.stage;
@@ -1537,6 +1595,63 @@ function todaysBoost(){
   const pool=t("boosts")||[]; if(!pool.length)return "";
   return pool[Math.floor(Date.now()/86400000)%pool.length];
 }
+/* ---------- companion care ---------- */
+function renderCareRow(cont){
+  if(!cont)return;
+  const bond=S.bond||0;
+  cont.innerHTML=
+    '<div class="care-bond"><span>'+t("bondLabel")+'</span><div class="bar"><i style="width:'+bond+'%"></i></div><b>'+bond+'%</b></div>'+
+    '<div class="care-row">'+
+      '<button class="care-btn" data-k="pet"><span class="care-ic">🤍</span><span>'+t("carePet")+'</span></button>'+
+      '<button class="care-btn" data-k="feed"><span class="care-ic">🫐</span><span>'+t("careFeed")+'</span></button>'+
+      '<button class="care-btn" data-k="play"><span class="care-ic">🪀</span><span>'+t("carePlay")+'</span></button>'+
+    '</div>';
+  cont.querySelectorAll(".care-btn").forEach(b=>b.onclick=()=>careAction(b.dataset.k));
+}
+function careReact(kind){
+  const host=$("cv-card"); if(!host)return;
+  const hero=host.querySelector(".comp-hero"); if(!hero)return;
+  const emo={pet:"💗",feed:"✨",play:"⭐"}[kind]||"💗";
+  for(let i=0;i<6;i++){
+    const sp=document.createElement("span"); sp.className="care-burst"; sp.textContent=emo;
+    sp.style.left=(36+Math.random()*42)+"%"; sp.style.animationDelay=(i*0.05)+"s";
+    hero.appendChild(sp); setTimeout(()=>{if(sp.parentNode)sp.remove();},1150);
+  }
+  const cr=hero.querySelector(".creature");
+  if(cr){ cr.style.animation="none"; void cr.offsetWidth; cr.style.animation="care-bounce .5s var(--ease-emph,ease)"; }
+}
+function careAction(kind){
+  const k=dayKey(); S.careAward=S.careAward||{};
+  if(S.careAward[kind]!==k){ S.careAward[kind]=k; S.bond=Math.min(100,(S.bond||0)+4); S.energy=Math.min(100,S.energy+(kind==="feed"?4:3)); }
+  save(); buzz(kind==="play"?30:16);
+  careReact(kind);
+  renderCareRow($("cv-care")); renderHome();
+}
+/* ---------- reminders / gentle nudges ---------- */
+function computePending(){
+  const k=dayKey(); const r=S.reminders||{}; const out=[];
+  const moodDone=!!(S.moods&&S.moods[k]);
+  const journalDone=(S.journal||[]).some(e=>dayKey(new Date(e.ts))===k);
+  const relaxDone=(S.actEnergyDay===k)||Object.keys(S.xpAward||{}).some(key=>key.indexOf("game_")===0&&S.xpAward[key]===k);
+  if(r.mood&&!moodDone)out.push({text:t("nudgeMood"),btn:t("nudgeMoodBtn"),act:()=>go("mood")});
+  if(r.relax&&!relaxDone)out.push({text:t("nudgeRelax"),btn:t("nudgeRelaxBtn"),act:()=>openCompanion()});
+  if(r.journal&&!journalDone)out.push({text:t("nudgeJournal"),btn:t("nudgeJournalBtn"),act:()=>go("mood")});
+  return out;
+}
+function renderNudge(){
+  const host=$("nudge"); if(!host)return; host.innerHTML="";
+  if(!S.reminders||!S.reminders.on)return;
+  if(S.nudgeDay===dayKey())return;
+  const pend=computePending(); if(!pend.length)return;
+  const it=pend[0];
+  const el=document.createElement("div"); el.className="nudge";
+  const ic=document.createElement("span"); ic.className="boost-ic"; ic.textContent="🔔";
+  const tx=document.createElement("span"); tx.className="nudge-txt"; tx.textContent=it.text;
+  const act=document.createElement("button"); act.className="nudge-act"; act.textContent=it.btn; act.onclick=it.act;
+  const x=document.createElement("button"); x.className="nudge-x"; x.textContent=t("nudgeDismiss"); x.onclick=()=>{S.nudgeDay=dayKey();save();renderNudge();};
+  el.appendChild(ic); el.appendChild(tx); el.appendChild(act); el.appendChild(x); host.appendChild(el);
+}
+
 function renderBoost(){ var el=$("boost-text"); if(el)el.textContent=todaysBoost(); }
 function renderJournal(){
   const box=$("jrn-list"); if(!box)return; box.innerHTML="";
@@ -1557,10 +1672,14 @@ function renderJournal(){
   });
 }
 function maybeNotify(){
-  if(!S.settings.notif)return;
+  const remOn=S.reminders&&S.reminders.on;
+  if(!S.settings.notif&&!remOn)return;
   if(!("Notification"in window)||Notification.permission!=="granted")return;
-  const k=dayKey(); if(S.lastNotifDay===k)return; S.lastNotifDay=k; save();
-  try{ new Notification("Anchor",{body:todaysBoost(),icon:"./icon-192.png"}); }catch(e){}
+  const k=dayKey(); if(S.lastNotifDay===k)return;
+  let body=todaysBoost();
+  if(remOn){ const p=computePending(); if(p.length)body=p[0].text; }
+  S.lastNotifDay=k; save();
+  try{ new Notification("Anchor",{body:body,icon:"./icon-192.png"}); }catch(e){}
 }
 
 /* ---------- voice selector ---------- */

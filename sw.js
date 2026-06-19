@@ -1,5 +1,5 @@
 /* Anchor service worker — offline app shell + runtime font cache */
-const VERSION = "anchor-v5";
+const VERSION = "anchor-v6";
 const SHELL = [
   "./",
   "./index.html",
