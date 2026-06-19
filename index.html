@@ -396,6 +396,30 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 /* gentle emphasis on companion */
 .creature{transition:transform .3s var(--ease-emph)}
 #home-companion:active .creature{transform:scale(.92)}
+
+/* Woodoku - zen blocks */
+.wd-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;position:relative}
+.wd-hud{display:flex;align-items:center;width:100%;color:#fdf3f8;font-weight:600;font-size:13px}
+.wd-hud .lvl{font-family:var(--font-d);font-size:18px;font-weight:500}
+.wd-prog{flex:1;margin:0 12px;height:8px;border-radius:20px;background:rgba(255,255,255,.16);overflow:hidden}
+.wd-prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f6b3a8,#bfa8e6);transition:width .45s var(--ease-emph-dec,ease)}
+.wd-tgt{font-variant-numeric:tabular-nums}
+.wd-board{display:grid;grid-template-columns:repeat(9,1fr);grid-template-rows:repeat(9,1fr);gap:3px;width:min(92vw,358px);aspect-ratio:1;background:rgba(255,255,255,.06);padding:7px;border-radius:18px;touch-action:none;box-shadow:0 12px 32px rgba(0,0,0,.28)}
+.wd-cell{border-radius:5px;transition:background .15s,box-shadow .15s}
+.wd-cell.b1{background:rgba(255,255,255,.05)}
+.wd-cell.b2{background:rgba(255,255,255,.11)}
+.wd-cell.fill{box-shadow:inset 0 -3px 6px rgba(0,0,0,.22)}
+.wd-cell.prev-ok{box-shadow:inset 0 0 0 2px rgba(255,255,255,.85)}
+.wd-cell.prev-bad{background:rgba(239,138,134,.55)!important}
+.wd-tray{display:flex;justify-content:space-around;align-items:center;width:100%;gap:8px;min-height:78px}
+.wd-piece{display:grid;gap:3px;touch-action:none;padding:4px;cursor:grab}
+.wd-piece.empty{opacity:0;pointer-events:none}
+.wd-pcell{border-radius:4px}
+.wd-pcell.on{box-shadow:inset 0 -2px 4px rgba(0,0,0,.22)}
+.wd-ghost{position:fixed;display:grid;gap:3px;z-index:200;pointer-events:none;opacity:.95;filter:drop-shadow(0 8px 14px rgba(0,0,0,.35))}
+.wd-msg{color:#dcc4d6;font-size:12.5px;text-align:center;line-height:1.4;max-width:300px}
+.wd-over{position:absolute;inset:-8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:rgba(42,26,51,.9);backdrop-filter:blur(5px);text-align:center;padding:24px;border-radius:18px;z-index:10}
+.wd-toast{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.18);color:#fff;padding:9px 18px;border-radius:30px;font-weight:600;font-family:var(--font-d);z-index:9;animation:m3fade .4s var(--ease-emph-dec,ease)}
 </style>
 </head>
 <body>
@@ -717,6 +741,8 @@ const I18N = {
     act_bubbles:"Bulles anti-stress", act_bubbles_d:"Fais éclater les bulles, tranquillement.",
     act_stars:"Ciel d'étoiles", act_stars_d:"Pose des étoiles. Aucun but, juste le calme.",
     act_move:"Mouvement doux", act_move_d:"Étirements et mobilité pour relâcher les tensions.",
+    act_woodoku:"Blocs zen", act_woodoku_d:"Glisse les blocs, nettoie les lignes. Vide-toi la tête.",
+    wdLevel:"Niveau", wdRestart:"Recommencer", wdLevelUp:"Niveau {n}", wdBlocked:"Plus de place. Pas grave, on recommence.",
     actNeed:"pts", fbSub:"Suis le cercle, à ton rythme.",
     bubHint:"Touche les bulles pour les faire éclater.",
     starHint:"Touche le ciel pour allumer des étoiles.",
@@ -798,6 +824,8 @@ const I18N = {
     act_bubbles:"Stress bubbles", act_bubbles_d:"Pop the bubbles, gently.",
     act_stars:"Star sky", act_stars_d:"Place stars. No goal, just calm.",
     act_move:"Gentle movement", act_move_d:"Stretches and mobility to release tension.",
+    act_woodoku:"Zen blocks", act_woodoku_d:"Drag blocks, clear lines. Empty your head.",
+    wdLevel:"Level", wdRestart:"Restart", wdLevelUp:"Level {n}", wdBlocked:"No more room. That is okay, let us restart.",
     actNeed:"pts", fbSub:"Follow the circle, at your pace.",
     bubHint:"Tap the bubbles to pop them.",
     starHint:"Tap the sky to light up stars.",
@@ -836,7 +864,7 @@ const KEY="anchor.v1";
 const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
-  xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null,
+  xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
   settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75},
   lastVisit:Date.now()
 };
@@ -1177,7 +1205,8 @@ const ACTIVITIES=[
   {id:"breathe",stage:0,icon:"🫧"},
   {id:"move",stage:0,icon:"🤸"},
   {id:"bubbles",stage:1,icon:"🎈"},
-  {id:"stars",stage:2,icon:"✨"}
+  {id:"stars",stage:2,icon:"✨"},
+  {id:"woodoku",stage:1,icon:"🪵"}
 ];
 const ROUTINES=[
   {id:"calm",icon:"🧘",name:{fr:"Relâcher les tensions",en:"Release tension"},steps:[
@@ -1244,10 +1273,183 @@ function startActivity(id){
   else if(id==="bubbles")startBubbles();
   else if(id==="stars")startStars();
   else if(id==="move"){startMove();return;}
+  else if(id==="woodoku"){startWoodoku();return;}
   grantActivityEnergy();
   awardXp("game_"+id,4,true);
   renderHome();
 }
+/* ---------- Woodoku (Blocs zen) ---------- */
+const WD_PAL=["#e8918a","#f0a878","#f1cf7a","#a8cf9a","#bfa8e6","#a8c7ff","#5fb98a"];
+const WD_SHAPES=[
+ {t:1,c:[[0,0]]},
+ {t:1,c:[[0,0],[0,1]]},
+ {t:1,c:[[0,0],[1,0]]},
+ {t:2,c:[[0,0],[0,1],[0,2]]},
+ {t:2,c:[[0,0],[1,0],[2,0]]},
+ {t:2,c:[[0,0],[1,0],[1,1]]},
+ {t:2,c:[[0,1],[1,0],[1,1]]},
+ {t:2,c:[[0,0],[0,1],[1,0]]},
+ {t:2,c:[[0,0],[0,1],[1,1]]},
+ {t:2,c:[[0,0],[0,1],[1,0],[1,1]]},
+ {t:3,c:[[0,0],[0,1],[0,2],[0,3]]},
+ {t:3,c:[[0,0],[1,0],[2,0],[3,0]]},
+ {t:3,c:[[0,0],[1,0],[2,0],[2,1]]},
+ {t:3,c:[[0,1],[1,1],[2,0],[2,1]]},
+ {t:3,c:[[0,0],[0,1],[0,2],[1,1]]},
+ {t:3,c:[[0,1],[1,0],[1,1],[1,2]]},
+ {t:3,c:[[0,0],[0,1],[1,1],[1,2]]},
+ {t:3,c:[[0,1],[0,2],[1,0],[1,1]]},
+ {t:3,c:[[0,0],[0,1],[0,2],[0,3],[0,4]]},
+ {t:3,c:[[0,0],[1,0],[2,0],[3,0],[4,0]]},
+ {t:4,c:[[0,1],[1,0],[1,1],[1,2],[2,1]]},
+ {t:4,c:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]},
+ {t:4,c:[[0,0],[1,0],[2,0],[2,1],[2,2]]},
+ {t:4,c:[[0,0],[0,1],[0,2],[1,0],[2,0]]}
+];
+let WD=null;
+function wdTier(l){return l<=2?1:l<=5?2:l<=9?3:4;}
+function wdTarget(l){return Math.min(8,2+Math.floor(l/2));}
+function wdObstacles(l){return l<=4?0:Math.min(14,(l-4)*2);}
+function wdAllowed(l){const tt=wdTier(l);return WD_SHAPES.filter(s=>s.t<=tt);}
+function wdCanPlace(board,cells,r0,c0){for(const cc of cells){const r=r0+cc[0],c=c0+cc[1];if(r<0||r>8||c<0||c>8)return false;if(board[r*9+c])return false;}return true;}
+function wdAnyPlacement(board,cells){for(let r=0;r<9;r++)for(let c=0;c<9;c++)if(wdCanPlace(board,cells,r,c))return true;return false;}
+function wdBounds(cells){let mr=0,mc=0;for(const cc of cells){if(cc[0]>mr)mr=cc[0];if(cc[1]>mc)mc=cc[1];}return[mr+1,mc+1];}
+function wdNewPiece(allowed){const s=allowed[Math.floor(Math.random()*allowed.length)];return{c:s.c.map(x=>x.slice()),color:WD_PAL[Math.floor(Math.random()*WD_PAL.length)],used:false};}
+function wdNewTray(){
+  const allowed=wdAllowed(WD.level);let tray=null;
+  for(let tries=0;tries<24;tries++){
+    tray=[wdNewPiece(allowed),wdNewPiece(allowed),wdNewPiece(allowed)];
+    if(tray.some(p=>wdAnyPlacement(WD.board,p.c)))break;
+  }
+  WD.tray=tray;
+}
+function wdAddObstacles(n){let placed=0,guard=0;while(placed<n&&guard++<500){const i=Math.floor(Math.random()*81);if(!WD.board[i]){WD.board[i]="#c7a98d";placed++;}}}
+function wdInitLevel(){WD.board=new Array(81).fill(0);WD.cleared=0;WD.target=wdTarget(WD.level);wdAddObstacles(wdObstacles(WD.level));wdNewTray();}
+function wdClearLines(){
+  const full=new Set();let groups=0;
+  for(let r=0;r<9;r++){let f=true;for(let c=0;c<9;c++)if(!WD.board[r*9+c]){f=false;break;}if(f){groups++;for(let c=0;c<9;c++)full.add(r*9+c);}}
+  for(let c=0;c<9;c++){let f=true;for(let r=0;r<9;r++)if(!WD.board[r*9+c]){f=false;break;}if(f){groups++;for(let r=0;r<9;r++)full.add(r*9+c);}}
+  for(let br=0;br<3;br++)for(let bc=0;bc<3;bc++){let f=true;const cs=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++){const idx=(br*3+r)*9+(bc*3+c);cs.push(idx);if(!WD.board[idx])f=false;}if(f){groups++;cs.forEach(i=>full.add(i));}}
+  if(full.size)full.forEach(i=>WD.board[i]=0);
+  return groups;
+}
+function wdPlace(piece,r0,c0){
+  for(const cc of piece.c)WD.board[(r0+cc[0])*9+(c0+cc[1])]=piece.color;
+  piece.used=true;
+  awardXp("game_woodoku",4,true);grantActivityEnergy();renderHome();
+  const groups=wdClearLines();
+  if(groups>0){WD.cleared+=groups;buzz([30,40,30]);}else buzz(18);
+  if(WD.tray.every(p=>p.used))wdNewTray();
+  if(WD.cleared>=WD.target){wdLevelUp();return;}
+  wdRender();
+  if(!WD.tray.some(p=>!p.used&&wdAnyPlacement(WD.board,p.c)))wdGameOver();
+}
+function wdLevelUp(){
+  WD.level++; if(WD.level>(S.woodLevel||1)){S.woodLevel=WD.level;save();}
+  wdInitLevel(); wdRender(); wdToast(t("wdLevelUp").replace("{n}",WD.level)); buzz([40,60,40]);
+}
+function wdToast(msg){const wrap=$("mini-content").querySelector(".wd-wrap");if(!wrap)return;const e=document.createElement("div");e.className="wd-toast";e.textContent=msg;wrap.appendChild(e);setTimeout(()=>{if(e.parentNode)e.remove();},1600);}
+function wdGameOver(){
+  const wrap=$("mini-content").querySelector(".wd-wrap");if(!wrap)return;
+  const over=document.createElement("div");over.className="wd-over";
+  over.innerHTML='<div class="rt-step" style="color:#fff;font-size:22px">'+t("wdBlocked")+'</div><button class="btn" style="max-width:240px" id="wd-restart">'+t("wdRestart")+'</button>';
+  wrap.appendChild(over);
+  over.querySelector("#wd-restart").onclick=()=>{over.remove();wdInitLevel();wdRender();};
+}
+function startWoodoku(){
+  openMini(t("act_woodoku"));
+  WD={board:new Array(81).fill(0),tray:[],level:Math.max(1,S.woodLevel||1),cleared:0,target:0,cell:24,drag:null};
+  wdInitLevel();
+  $("mini-content").innerHTML=
+    '<div class="wd-wrap">'+
+      '<div class="wd-hud"><span class="lvl"></span><span class="wd-prog"><i></i></span><span class="wd-tgt"></span></div>'+
+      '<div class="wd-board" id="wd-board"></div>'+
+      '<div class="wd-tray" id="wd-tray"></div>'+
+      '<div class="wd-msg">'+t("act_woodoku_d")+'</div>'+
+    '</div>';
+  wdRender();
+}
+function wdFillPieceGrid(el,piece,sz){
+  const b=wdBounds(piece.c),rows=b[0],cols=b[1];
+  el.style.gridTemplateColumns="repeat("+cols+","+sz+"px)";
+  const set={};piece.c.forEach(x=>set[x[0]+"_"+x[1]]=1);
+  el.innerHTML="";
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+    const d=document.createElement("div");d.className="wd-pcell";d.style.width=d.style.height=sz+"px";
+    if(set[r+"_"+c]){d.classList.add("on");d.style.background=piece.color;}else{d.style.visibility="hidden";}
+    el.appendChild(d);
+  }
+}
+function wdRender(){
+  const wrap=$("mini-content").querySelector(".wd-wrap");if(!wrap)return;
+  wrap.querySelector(".lvl").textContent=t("wdLevel")+" "+WD.level;
+  wrap.querySelector(".wd-tgt").textContent=WD.cleared+"/"+WD.target;
+  wrap.querySelector(".wd-prog i").style.width=Math.min(100,Math.round(WD.cleared/WD.target*100))+"%";
+  const b=$("wd-board");b.innerHTML="";
+  for(let r=0;r<9;r++)for(let c=0;c<9;c++){
+    const cell=document.createElement("div");
+    const box=(Math.floor(r/3)+Math.floor(c/3))%2;
+    cell.className="wd-cell "+(box?"b2":"b1");cell.dataset.r=r;cell.dataset.c=c;
+    const v=WD.board[r*9+c];
+    if(v){cell.classList.add("fill");cell.style.background=v;}
+    b.appendChild(cell);
+  }
+  const fc=b.firstChild;if(fc){const w=fc.getBoundingClientRect().width;if(w>0)WD.cell=w;}
+  const tr=$("wd-tray");tr.innerHTML="";
+  WD.tray.forEach((p,i)=>{
+    const pe=document.createElement("div");pe.className="wd-piece"+(p.used?" empty":"");pe.dataset.i=i;
+    if(!p.used)wdFillPieceGrid(pe,p,16);
+    tr.appendChild(pe);
+  });
+  wdBindDrag();
+}
+function wdBindDrag(){
+  $("wd-tray").querySelectorAll(".wd-piece").forEach(pe=>{
+    if(pe.classList.contains("empty"))return;
+    pe.addEventListener("pointerdown",e=>wdDragStart(e,parseInt(pe.dataset.i)));
+  });
+}
+function wdClearPreview(){const b=$("wd-board");if(!b)return;b.querySelectorAll(".prev-ok,.prev-bad").forEach(x=>x.classList.remove("prev-ok","prev-bad"));}
+function wdDragStart(e,i){
+  const piece=WD.tray[i];if(!piece||piece.used)return;
+  e.preventDefault();
+  const cell=WD.cell||24;
+  const ghost=document.createElement("div");ghost.className="wd-ghost";
+  wdFillPieceGrid(ghost,piece,cell);
+  document.body.appendChild(ghost);
+  WD.drag={i:i,piece:piece,ghost:ghost,cell:cell,origin:null};
+  const move=ev=>wdDragMove(ev);
+  const up=ev=>{wdDragEnd(ev);document.removeEventListener("pointermove",move);document.removeEventListener("pointerup",up);};
+  document.addEventListener("pointermove",move,{passive:false});
+  document.addEventListener("pointerup",up);
+  wdDragMove(e);
+}
+function wdDragMove(e){
+  const d=WD.drag;if(!d)return;
+  if(e.preventDefault)e.preventDefault();
+  const b=wdBounds(d.piece.c),cols=b[1];
+  const w=cols*d.cell;
+  const gx=e.clientX-w/2, gy=e.clientY-d.cell*b[0]-18;
+  d.ghost.style.left=gx+"px";d.ghost.style.top=gy+"px";
+  const px=gx+d.cell/2, py=gy+d.cell/2;
+  wdClearPreview();
+  const el=document.elementFromPoint(px,py);
+  if(el&&el.classList&&el.classList.contains("wd-cell")){
+    const r0=parseInt(el.dataset.r),c0=parseInt(el.dataset.c);
+    const ok=wdCanPlace(WD.board,d.piece.c,r0,c0);
+    d.origin={r:r0,c:c0,ok:ok};
+    const board=$("wd-board");
+    d.piece.c.forEach(cc=>{const rr=r0+cc[0],ccc=c0+cc[1];if(rr>=0&&rr<9&&ccc>=0&&ccc<9){const tgt=board.children[rr*9+ccc];if(tgt)tgt.classList.add(ok?"prev-ok":"prev-bad");}});
+  }else d.origin=null;
+}
+function wdDragEnd(e){
+  const d=WD.drag;if(!d)return;
+  wdClearPreview();
+  if(d.ghost&&d.ghost.parentNode)d.ghost.remove();
+  const o=d.origin;WD.drag=null;
+  if(o&&o.ok)wdPlace(d.piece,o.r,o.c);
+}
+
 function startMove(){
   openMini(t("act_move"));
   const c=$("mini-content");
@@ -1543,9 +1745,7 @@ if(!S.onboarded)openTut();
 maybeNotify();
 </script>
 <script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",function(){ navigator.serviceWorker.register("./sw.js").catch(function(){}); });
-}
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){});});}
 </script>
 </body>
 </html>
