@@ -193,7 +193,7 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
 .contact.sos a{background:var(--danger)}
 
 input,select,textarea{width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:16px;
-  padding:14px 15px;color:var(--text);font-size:15px;font-family:inherit;margin-top:6px}
+  padding:14px 15px;color:var(--text);font-size:16px;font-family:inherit;margin-top:6px}
 input::placeholder,textarea::placeholder{color:#c2afb8}
 input:focus,textarea:focus{outline:none;border-color:var(--accent)}
 label{font-size:13px;color:var(--muted);font-weight:600}
@@ -293,7 +293,7 @@ label{font-size:13px;color:var(--muted);font-weight:600}
   padding:env(safe-area-inset-top) 0 0}
 .mini.active{display:flex;animation:fade .4s ease}
 .mini .cv-top .mini-title{font-family:var(--font-d);font-weight:500;font-size:20px;color:#fdf3f8}
-.mini-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden;padding:20px}
+.mini-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;overflow-y:auto;overflow-x:hidden;padding:20px;-webkit-overflow-scrolling:touch}
 .mini-hint{color:#dcc4d6;font-size:14px;text-align:center;position:absolute;bottom:34px;left:0;right:0}
 .fb-circle{width:220px;height:220px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle,rgba(248,205,196,.28),rgba(191,168,230,.06) 70%);border:2px solid rgba(248,205,196,.5);
@@ -437,6 +437,13 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .nudge-txt{flex:1;font-size:13.5px;line-height:1.4}
 .nudge-act{background:var(--accent);color:#fff;border-radius:30px;padding:9px 14px;font-size:13px;font-weight:700;white-space:nowrap}
 .nudge-x{color:var(--muted);font-size:12.5px;padding:6px 4px;font-weight:600;white-space:nowrap;background:none}
+
+/* woodoku polish + gratitude */
+.wd-cell.clearing{animation:wd-clear .3s ease forwards;z-index:2}
+@keyframes wd-clear{0%{transform:scale(1)}40%{transform:scale(1.18);filter:brightness(1.5)}100%{transform:scale(0);opacity:0}}
+.wd-cell.prev-clear{box-shadow:inset 0 0 0 2px #f6e07a,0 0 9px rgba(246,224,122,.65)}
+.wd-piece.dead{opacity:.32;filter:grayscale(.6)}
+.gr-today{font-size:12.5px;color:var(--accent);font-weight:600;margin-top:10px;min-height:16px;text-align:center}
 </style>
 </head>
 <body>
@@ -552,6 +559,17 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
       <button class="btn ghost" id="jrn-save" style="margin-top:10px" data-t="save">Enregistrer</button>
     </div>
     <div id="jrn-list" style="margin-top:14px"></div>
+
+    <h2 style="margin-top:28px" data-t="grTitle">Gratitude</h2>
+    <p class="sub" data-t="grSub">Trois choses pour lesquelles tu es reconnaissant(e) aujourd'hui. Ça donne des points à ton compagnon.</p>
+    <div class="card" style="margin-top:12px">
+      <input id="gr1" data-tph="grPh1" placeholder="1. ...">
+      <input id="gr2" data-tph="grPh2" placeholder="2. ..." style="margin-top:8px">
+      <input id="gr3" data-tph="grPh3" placeholder="3. ..." style="margin-top:8px">
+      <button class="btn ghost" id="gr-save" data-t="save" style="margin-top:12px">Enregistrer</button>
+      <div class="gr-today" id="gr-today"></div>
+    </div>
+    <div id="gr-list" style="margin-top:14px"></div>
   </section>
 
   <!-- CONTACTS -->
@@ -786,6 +804,8 @@ const I18N = {
     nudgeDismiss:"Plus tard",
     jrnTitle:"Journal", jrnSub:"Vide ta tête. Une note par jour, ou autant que tu veux.",
     jrnPlaceholder:"Qu'est-ce qui te traverse aujourd'hui ?", jrnEmpty:"Aucune note pour l'instant.",
+    grTitle:"Gratitude", grSub:"Trois choses pour lesquelles tu es reconnaissant(e) aujourd'hui. Ça donne des points à ton compagnon.",
+    grPh1:"1. ...", grPh2:"2. ...", grPh3:"3. ...", grDone:"Noté pour aujourd'hui. Merci.", grEmpty:"Aucune gratitude notée.",
     boosts:["Tu es plus fort(e) que tu ne le penses.","Tu vas y arriver.","Une respiration à la fois.","Ce que tu ressens va passer.","Tu as déjà survécu à tous tes pires jours.","Sois doux(ce) avec toi aujourd'hui.","Ton calme est plus proche que tu ne crois.","Tu n'es pas tes pensées.","Chaque petit pas compte.","Tu mérites du repos.","Le courage, c'est avancer avec la peur.","Tu fais de ton mieux, et c'est assez.","Respire. Tu es là. Ça suffit.","Demain n'a pas besoin d'être réglé maintenant."],
     tutTitles:["Bienvenue dans Anchor","Le bouton","Ton compagnon","Tu le nourris","Note ta journée","Ton jardin","Prêt(e) ?"],
     tutBodies:[
@@ -878,6 +898,8 @@ const I18N = {
     nudgeDismiss:"Later",
     jrnTitle:"Journal", jrnSub:"Empty your head. One note a day, or as many as you like.",
     jrnPlaceholder:"What's on your mind today?", jrnEmpty:"No notes yet.",
+    grTitle:"Gratitude", grSub:"Three things you're grateful for today. It gives points to your companion.",
+    grPh1:"1. ...", grPh2:"2. ...", grPh3:"3. ...", grDone:"Saved for today. Thank you.", grEmpty:"No gratitude noted yet.",
     boosts:["You are stronger than you think.","You will get through this.","One breath at a time.","What you feel will pass.","You have survived all your worst days.","Be gentle with yourself today.","Your calm is closer than you think.","You are not your thoughts.","Every small step counts.","You deserve rest.","Courage is moving with the fear.","You are doing your best, and that is enough.","Breathe. You are here. That is enough.","Tomorrow doesn't need fixing right now."],
     tutTitles:["Welcome to Anchor","The button","Your companion","You feed it","Log your day","Your garden","Ready?"],
     tutBodies:[
@@ -911,7 +933,7 @@ const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
   xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
-  bond:0, careAward:{}, nudgeDay:null, reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
+  bond:0, careAward:{}, nudgeDay:null, gratitude:[], reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
   settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75},
   lastVisit:Date.now()
 };
@@ -1071,7 +1093,7 @@ function applyLang(){
   renderAll();
   if($("tutorial").classList.contains("active"))renderTut();
 }
-function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();renderNudge();}
+function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();renderGratitude();renderNudge();}
 function go(name){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   $("screen-"+name).classList.add("active");
@@ -1094,6 +1116,15 @@ $("jrn-save").onclick=()=>{
   S.journal=S.journal||[]; S.journal.push({ts:Date.now(),text:v});
   awardXp("journal",5,true); save(); $("jrn-input").value="";
   buzz(20); renderJournal(); renderHome();
+};
+$("gr-save").onclick=()=>{
+  const items=[$("gr1").value.trim(),$("gr2").value.trim(),$("gr3").value.trim()].filter(Boolean);
+  if(!items.length)return;
+  S.gratitude=S.gratitude||[]; S.gratitude.push({ts:Date.now(),items:items});
+  const got=awardXp("gratitude",6,true);
+  if(got)S.bond=Math.min(100,(S.bond||0)+3);
+  save(); $("gr1").value="";$("gr2").value="";$("gr3").value="";
+  buzz(24); renderGratitude(); renderHome();
 };
 $("sw-notif").onclick=()=>{
   if(!S.settings.notif){
@@ -1391,16 +1422,35 @@ function wdClearLines(){
   if(full.size)full.forEach(i=>WD.board[i]=0);
   return groups;
 }
-function wdPlace(piece,r0,c0){
-  for(const cc of piece.c)WD.board[(r0+cc[0])*9+(c0+cc[1])]=piece.color;
-  piece.used=true;
-  awardXp("game_woodoku",4,true);grantActivityEnergy();renderHome();
-  const groups=wdClearLines();
-  if(groups>0){WD.cleared+=groups;buzz([30,40,30]);}else buzz(18);
+function wdFindClears(board){
+  const full=new Set();let groups=0;
+  for(let r=0;r<9;r++){let f=true;for(let c=0;c<9;c++)if(!board[r*9+c]){f=false;break;}if(f){groups++;for(let c=0;c<9;c++)full.add(r*9+c);}}
+  for(let c=0;c<9;c++){let f=true;for(let r=0;r<9;r++)if(!board[r*9+c]){f=false;break;}if(f){groups++;for(let r=0;r<9;r++)full.add(r*9+c);}}
+  for(let br=0;br<3;br++)for(let bc=0;bc<3;bc++){let f=true;const cs=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++){const idx=(br*3+r)*9+(bc*3+c);cs.push(idx);if(!board[idx])f=false;}if(f){groups++;cs.forEach(i=>full.add(i));}}
+  return{set:full,groups:groups};
+}
+function wdAfterPlace(){
   if(WD.tray.every(p=>p.used))wdNewTray();
   if(WD.cleared>=WD.target){wdLevelUp();return;}
   wdRender();
   if(!WD.tray.some(p=>!p.used&&wdAnyPlacement(WD.board,p.c)))wdGameOver();
+}
+function wdPlace(piece,r0,c0){
+  for(const cc of piece.c)WD.board[(r0+cc[0])*9+(c0+cc[1])]=piece.color;
+  piece.used=true;
+  awardXp("game_woodoku",4,true);grantActivityEnergy();renderHome();
+  wdRender();
+  const res=wdFindClears(WD.board);
+  if(res.set.size){
+    buzz([30,40,30]);
+    const board=$("wd-board");
+    res.set.forEach(i=>{const el=board.children[i];if(el)el.classList.add("clearing");});
+    WD._busy=true;
+    miniTimers.push(setTimeout(()=>{
+      res.set.forEach(i=>WD.board[i]=0);
+      WD.cleared+=res.groups; WD._busy=false; wdAfterPlace();
+    },300));
+  } else { buzz(18); wdAfterPlace(); }
 }
 function wdLevelUp(){
   WD.level++; if(WD.level>(S.woodLevel||1)){S.woodLevel=WD.level;save();}
@@ -1455,7 +1505,8 @@ function wdRender(){
   const fc=b.firstChild;if(fc){const w=fc.getBoundingClientRect().width;if(w>0)WD.cell=w;}
   const tr=$("wd-tray");tr.innerHTML="";
   WD.tray.forEach((p,i)=>{
-    const pe=document.createElement("div");pe.className="wd-piece"+(p.used?" empty":"");pe.dataset.i=i;
+    const dead=!p.used&&!wdAnyPlacement(WD.board,p.c);
+    const pe=document.createElement("div");pe.className="wd-piece"+(p.used?" empty":"")+(dead?" dead":"");pe.dataset.i=i;
     if(!p.used)wdFillPieceGrid(pe,p,16);
     tr.appendChild(pe);
   });
@@ -1467,8 +1518,9 @@ function wdBindDrag(){
     pe.addEventListener("pointerdown",e=>wdDragStart(e,parseInt(pe.dataset.i)));
   });
 }
-function wdClearPreview(){const b=$("wd-board");if(!b)return;b.querySelectorAll(".prev-ok,.prev-bad").forEach(x=>x.classList.remove("prev-ok","prev-bad"));}
+function wdClearPreview(){const b=$("wd-board");if(!b)return;b.querySelectorAll(".prev-ok,.prev-bad,.prev-clear").forEach(x=>x.classList.remove("prev-ok","prev-bad","prev-clear"));}
 function wdDragStart(e,i){
+  if(WD._busy)return;
   const piece=WD.tray[i];if(!piece||piece.used)return;
   e.preventDefault();
   const cell=WD.cell||24;
@@ -1498,6 +1550,11 @@ function wdDragMove(e){
     d.origin={r:r0,c:c0,ok:ok};
     const board=$("wd-board");
     d.piece.c.forEach(cc=>{const rr=r0+cc[0],ccc=c0+cc[1];if(rr>=0&&rr<9&&ccc>=0&&ccc<9){const tgt=board.children[rr*9+ccc];if(tgt)tgt.classList.add(ok?"prev-ok":"prev-bad");}});
+    if(ok){
+      const tmp=WD.board.slice();
+      d.piece.c.forEach(cc=>{tmp[(r0+cc[0])*9+(c0+cc[1])]=d.piece.color;});
+      wdFindClears(tmp).set.forEach(i=>{const tg=board.children[i];if(tg)tg.classList.add("prev-clear");});
+    }
   }else d.origin=null;
 }
 function wdDragEnd(e){
@@ -1549,7 +1606,7 @@ function finishRoutine(){
   awardXp("game_move",4,true); grantActivityEnergy(); renderHome(); buzz([40,60,40]);
 }
 let miniTimers=[];
-function miniClear(){miniTimers.forEach(i=>{clearTimeout(i);clearInterval(i);});miniTimers=[];$("mini-content").innerHTML="";try{speechSynthesis.cancel();}catch(e){}}
+function miniClear(){miniTimers.forEach(i=>{clearTimeout(i);clearInterval(i);});miniTimers=[];document.querySelectorAll(".wd-ghost").forEach(g=>g.remove());if(typeof WD!=="undefined"&&WD)WD.drag=null;$("mini-content").innerHTML="";try{speechSynthesis.cancel();}catch(e){}}
 function openMini(title){miniClear();$("mini-title").textContent=title;$("mini").classList.add("active");}
 function closeMini(){miniClear();$("mini").classList.remove("active");}
 function startFreeBreath(){
@@ -1652,6 +1709,21 @@ function renderNudge(){
   el.appendChild(ic); el.appendChild(tx); el.appendChild(act); el.appendChild(x); host.appendChild(el);
 }
 
+function renderGratitude(){
+  const box=$("gr-list"); if(!box)return;
+  const today=(S.gratitude||[]).some(e=>dayKey(new Date(e.ts))===dayKey());
+  const td=$("gr-today"); if(td)td.textContent=today?t("grDone"):"";
+  box.innerHTML="";
+  if(!S.gratitude||!S.gratitude.length){const d=document.createElement("div");d.className="sub";d.style.opacity=".7";d.textContent=t("grEmpty");box.appendChild(d);return;}
+  S.gratitude.slice().reverse().slice(0,20).forEach(e=>{
+    const d=document.createElement("div");d.className="jrn-item";
+    const dt=new Date(e.ts);const ds=dt.toLocaleDateString(S.lang,{day:"2-digit",month:"short"});
+    const items=(e.items||[]).map(x=>"\u2022 "+x).join("\n");
+    const head=document.createElement("div");head.className="jrn-d";head.textContent=ds;
+    const body=document.createElement("div");body.className="jrn-t";body.textContent=items;
+    d.appendChild(head);d.appendChild(body);box.appendChild(d);
+  });
+}
 function renderBoost(){ var el=$("boost-text"); if(el)el.textContent=todaysBoost(); }
 function renderJournal(){
   const box=$("jrn-list"); if(!box)return; box.innerHTML="";
