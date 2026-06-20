@@ -103,16 +103,19 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
 
 .panic-zone{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:10px}
 .panic-btn{
-  width:clamp(168px,52vw,206px);height:clamp(168px,52vw,206px);border-radius:50%;
-  background:radial-gradient(circle at 50% 32%, #f6b3a8, #ec8276 72%);
-  box-shadow:0 0 0 0 rgba(236,130,118,.45),0 22px 46px rgba(236,130,118,.4);
-  color:#fff;font-family:var(--font-d);font-size:23px;font-weight:500;letter-spacing:.5px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  animation:breathe 4.8s ease-in-out infinite;
+  width:100%;min-height:74px;border-radius:38px;
+  background:radial-gradient(130% 200% at 28% 25%, #f6b3a8, #ec8276 78%);
+  box-shadow:0 0 0 0 rgba(236,130,118,.4),0 16px 36px rgba(236,130,118,.4);
+  color:#fff;display:flex;align-items:center;justify-content:center;gap:14px;
+  padding:12px 24px;animation:breathe 4.8s ease-in-out infinite;
 }
-.panic-btn small{font-family:var(--font);font-weight:600;font-size:13px;opacity:.92;letter-spacing:.3px}
+.pb-ic{font-size:30px;line-height:1}
+.pb-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1.12}
+.pb-txt b{font-family:var(--font-d);font-size:21px;font-weight:600;letter-spacing:.4px}
+.pb-txt small{font-family:var(--font);font-weight:600;font-size:12.5px;opacity:.92;letter-spacing:.2px}
+.panic-btn:active{transform:scale(.985)}
 .panic-btn:active{transform:scale(.96)}
-@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(236,130,118,.4),0 22px 46px rgba(236,130,118,.34)}50%{box-shadow:0 0 0 28px rgba(236,130,118,0),0 22px 46px rgba(236,130,118,.34)}}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(236,130,118,.42),0 16px 36px rgba(236,130,118,.34)}50%{box-shadow:0 0 0 14px rgba(236,130,118,0),0 16px 36px rgba(236,130,118,.34)}}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);backdrop-filter:blur(8px)}
 .btn{width:100%;min-height:var(--tap);border-radius:22px;background:var(--accent);color:#fff;
@@ -522,10 +525,9 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
     </div>
 
     <div class="panic-zone">
-      <p class="sub" style="text-align:center" data-t="homeHint">Une crise commence ? Appuie. Je reste avec toi.</p>
       <button class="panic-btn" id="panic-open">
-        <span data-t="panicNow">JE PANIQUE</span>
-        <small data-t="panicSub">Appuie pour de l'aide</small>
+        <span class="pb-ic">🛟</span>
+        <span class="pb-txt"><b data-t="panicNow">JE PANIQUE</b><small data-t="panicSub">Appuie pour de l'aide</small></span>
       </button>
     </div>
   </section>
