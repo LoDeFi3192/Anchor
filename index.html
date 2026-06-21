@@ -480,6 +480,46 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
   /* iOS-only: avoid rubber-band white flash behind fixed nav */
   body{background-attachment:scroll}
 }
+
+/* ===== Night module ===== */
+.night-banner{background:linear-gradient(135deg,#3a3358,#2a2444);color:#ece7f6;border-radius:18px;padding:14px 16px;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 8px 22px rgba(40,30,70,.25)}
+.night-banner span{font-size:14px;line-height:1.4}
+.nb-actions{display:flex;gap:8px}
+.nb-actions button{flex:1;padding:11px;border-radius:13px;background:rgba(255,255,255,.16);color:#fff;font-weight:600;font-size:13px}
+.nb-actions .nb-dismiss{background:transparent;color:#bdb4d6;flex:0 0 auto;padding:11px 14px}
+.night{position:fixed;inset:0;z-index:120;display:none;flex-direction:column;align-items:center;
+  background:radial-gradient(140% 100% at 50% 12%, #2a2342, #14101f 70%, #0d0a14);
+  color:#e9e2f2;text-align:center;gap:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top) + 18px) max(20px,env(safe-area-inset-right)) calc(env(safe-area-inset-bottom) + 24px) max(20px,env(safe-area-inset-left))}
+.night.show{display:flex;animation:fade .5s ease}
+.night-x{position:absolute;top:calc(env(safe-area-inset-top) + 10px);right:14px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);color:#e9e2f2;font-size:17px;border:1px solid rgba(255,255,255,.12)}
+.night-top{margin-top:14px}
+.night-moon{font-size:38px;filter:drop-shadow(0 0 18px rgba(180,160,230,.5));animation:float 6s ease-in-out infinite}
+.night-reassure{font-family:var(--font-d);font-size:18px;opacity:.92;margin-top:10px;max-width:300px;line-height:1.3}
+.night-stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:226px;width:100%}
+.pacer{width:clamp(150px,52vw,206px);height:clamp(150px,52vw,206px);border-radius:50%;
+  background:radial-gradient(circle at 50% 38%, rgba(150,130,210,.55), rgba(90,75,150,.22));
+  box-shadow:0 0 60px rgba(150,130,220,.35),inset 0 0 30px rgba(200,190,240,.2);
+  display:flex;align-items:center;justify-content:center;transform:scale(.84);transition:transform 4s ease-in-out}
+.pacer span{font-family:var(--font-d);font-size:19px;color:#f0ecf8;letter-spacing:.5px}
+.shuf{display:flex;flex-direction:column;align-items:center;gap:18px}
+.shuf-word{font-family:var(--font-d);font-size:34px;color:#efeaf8;min-height:44px;opacity:0;transition:opacity .8s ease}
+.shuf-word.show{opacity:1}
+.shuf-hint{font-size:13px;opacity:.6;max-width:240px;line-height:1.4}
+.night-modes{display:flex;gap:10px}
+.night-modes button{padding:10px 18px;border-radius:20px;background:rgba(255,255,255,.07);color:#d8d0ea;font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.1)}
+.night-modes button.on{background:rgba(150,130,220,.3);color:#fff;border-color:rgba(180,160,240,.5)}
+.night-opts{display:flex;gap:10px}
+.nopt{padding:9px 16px;border-radius:18px;background:rgba(255,255,255,.05);color:#c9c0e0;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.08)}
+.nopt.on{background:rgba(150,130,220,.28);color:#fff}
+.night-timer{display:flex;align-items:center;gap:8px;font-size:12.5px;opacity:.85;flex-wrap:wrap;justify-content:center}
+.night-timer button{min-width:40px;height:34px;border-radius:12px;background:rgba(255,255,255,.05);color:#c9c0e0;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,.08)}
+.night-timer button.on{background:rgba(150,130,220,.3);color:#fff}
+.night-dim-msg{display:none}
+.night.dimmed{background:#070509;gap:0}
+.night.dimmed .night-x{opacity:.45}
+.night.dimmed .night-top,.night.dimmed .night-stage,.night.dimmed .night-modes,.night.dimmed .night-opts,.night.dimmed .night-timer{display:none}
+.night.dimmed .night-dim-msg{display:flex;flex:1;align-items:center;justify-content:center;font-family:var(--font-d);font-size:22px;color:#5a5070;cursor:pointer}
 </style>
 </head>
 <body>
@@ -492,10 +532,12 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
           <button data-lang="fr" class="on">FR</button>
           <button data-lang="en">EN</button>
         </div>
+        <button class="hdr-gear" id="open-night" aria-label="Mode Nuit">🌙</button>
         <button class="hdr-gear" id="open-settings" aria-label="Réglages">⚙️</button>
       </div>
     </div>
     <div class="boost" id="boost"><span class="boost-ic">💛</span><span class="boost-text" id="boost-text"></span></div>
+    <div class="night-banner" id="night-banner" style="display:none"></div>
     <div id="nudge"></div>
 
     <div class="companion-wrap">
@@ -660,6 +702,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
     <button class="btn ghost" id="reset" style="margin-top:24px" data-t="setReset">Réinitialiser les données</button>
     <p class="note" data-t="setPrivacy">Toutes tes données restent sur cet appareil. Rien n'est envoyé. Aucun compte. Aucune pub.</p>
   </section>
+  <div class="night" id="night"></div>
   <nav class="nav">
     <button data-go="home" class="on"><span class="ic">⚓</span><span data-t="navHome">Accueil</span></button>
     <button data-go="mood"><span class="ic">🌈</span><span data-t="navMood">Humeur</span></button>
@@ -766,6 +809,10 @@ const I18N = {
     panicNow:"JE PANIQUE", panicSub:"Appuie pour de l'aide",
     energy:"Énergie", stage:"Évolution",
     navHome:"Accueil",navGarden:"Jardin",navDash:"Suivi",navContacts:"Contacts",navSettings:"Réglages",
+    nightOpen:"Mode Nuit", nightBanner:"Il se fait tard. On essaie le mode Nuit ?", nightLater:"Plus tard",
+    nightReassure:"Je veille. Tu peux lâcher.", nightBreath:"Respiration", nightShuffle:"Défilement",
+    nightSound:"Son", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
+    nightGoodnight:"Bonne nuit", nInhale:"Inspire", nHold:"Retiens", nExhale:"Expire",
     gardenTitle:"Ton jardin", gardenSub:"Chaque épisode traversé fait pousser quelque chose. C'est ta récupération, rendue visible.",
     gardenEmpty:"Ton jardin est encore nu. Termine une session pour y planter ta première lueur.",
     memTitle:"Mémoires", memSub:"Ce que tu as déjà surmonté. À relire quand c'est dur.",
@@ -860,6 +907,10 @@ const I18N = {
     panicNow:"I'M PANICKING", panicSub:"Tap for help",
     energy:"Energy", stage:"Growth",
     navHome:"Home",navGarden:"Garden",navDash:"Track",navContacts:"Contacts",navSettings:"Settings",
+    nightOpen:"Night mode", nightBanner:"It's getting late. Try Night mode?", nightLater:"Later",
+    nightReassure:"I'm here. You can let go.", nightBreath:"Breathing", nightShuffle:"Word drift",
+    nightSound:"Sound", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
+    nightGoodnight:"Good night", nInhale:"Breathe in", nHold:"Hold", nExhale:"Breathe out",
     gardenTitle:"Your garden", gardenSub:"Every episode you get through grows something. Your recovery, made visible.",
     gardenEmpty:"Your garden is still bare. Finish a session to plant your first glow.",
     memTitle:"Memories", memSub:"What you've already overcome. Reread it when it's hard.",
@@ -970,8 +1021,8 @@ const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
   xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
-  bond:0, careAward:{}, nudgeDay:null, gratitude:[], reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
-  settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75},
+  bond:0, careAward:{}, nudgeDay:null, nightPromptDay:null, gratitude:[], reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
+  settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75, night:{sound:false,prompt:true,hour:22,timer:15,soft:false}},
   lastVisit:Date.now()
 };
 let S=load();
@@ -1130,7 +1181,7 @@ function applyLang(){
   renderAll();
   if($("tutorial").classList.contains("active"))renderTut();
 }
-function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();renderGratitude();renderNudge();}
+function renderAll(){renderHome();renderHomeMood();renderMood();renderGarden();renderDash();renderContacts();renderSettings();renderBoost();renderJournal();renderGratitude();renderNudge();renderNightPrompt();}
 let lastTab="home";
 function go(name){
   if(name!=="settings")lastTab=name;
@@ -1765,6 +1816,119 @@ function renderGratitude(){
     d.appendChild(head);d.appendChild(body);box.appendChild(d);
   });
 }
+const NIGHT={on:false,mode:"breath",t:[],sleep:null,ac:null,noise:null,gain:null,soft:false};
+const NIGHT_WORDS=["rivière","coussin","pomme","lampe","feuille","sable","tasse","nuage","laine","galet","miel","fenêtre","jardin","plume","bougie","vague","mousse","pain","horloge","châle","sentier","mésange","noisette","brume","ruisseau","velours","abricot","lanterne","cabane","prairie","flocon","écorce","lavande","biscuit","oreiller","fougère","étang","mandarine","tricot","colline","barque","théière","marron","pivoine","sablier","hamac","mûre","brindille","édredon"];
+function nightCfg(){S.settings.night=S.settings.night||{sound:false,prompt:true,hour:22,timer:15,soft:false};return S.settings.night;}
+function renderNightPrompt(){
+  const b=$("night-banner"); if(!b)return;
+  const cfg=nightCfg();
+  const h=new Date().getHours();
+  const show=cfg.prompt&&h>=cfg.hour&&S.nightPromptDay!==dayKey()&&!NIGHT.on;
+  if(!show){b.style.display="none";return;}
+  b.style.display="block";
+  b.innerHTML='<span>'+t("nightBanner")+'</span><div class="nb-actions"><button id="nb-go">'+t("nightOpen")+'</button><button id="nb-x" class="nb-dismiss">'+t("nightLater")+'</button></div>';
+  $("nb-go").onclick=openNight;
+  $("nb-x").onclick=()=>{S.nightPromptDay=dayKey();save();renderNightPrompt();};
+}
+function buildNightUI(){
+  nightCfg();
+  $("night").innerHTML=
+    '<button class="night-x" id="nightX" aria-label="Fermer">✕</button>'
+   +'<div class="night-top"><div class="night-moon">🌙</div><div class="night-reassure">'+t("nightReassure")+'</div></div>'
+   +'<div class="night-stage" id="nightStage"></div>'
+   +'<div class="night-modes"><button data-md="breath" class="on">'+t("nightBreath")+'</button><button data-md="shuffle">'+t("nightShuffle")+'</button></div>'
+   +'<div class="night-opts"><button id="nightSound" class="nopt">'+t("nightSound")+'</button><button id="nightSoft" class="nopt">'+t("nightSoft")+'</button></div>'
+   +'<div class="night-timer"><span>'+t("nightOff")+'</span><button data-min="10">10</button><button data-min="15">15</button><button data-min="20">20</button><button data-min="0">∞</button></div>'
+   +'<div class="night-dim-msg" id="nightDimMsg">'+t("nightGoodnight")+' 🌙</div>';
+  $("nightX").onclick=closeNight;
+  $("nightDimMsg").onclick=closeNight;
+  document.querySelectorAll(".night-modes button").forEach(b=>b.onclick=()=>setNightMode(b.dataset.md));
+  $("nightSound").onclick=()=>toggleNoise();
+  $("nightSoft").onclick=()=>{const c=nightCfg();c.soft=!c.soft;NIGHT.soft=c.soft;save();$("nightSoft").classList.toggle("on",c.soft);if(NIGHT.mode==="breath")setNightMode("breath");};
+  document.querySelectorAll(".night-timer button").forEach(b=>b.onclick=()=>{nightCfg().timer=parseInt(b.dataset.min,10);save();document.querySelectorAll(".night-timer button").forEach(x=>x.classList.toggle("on",x===b));armSleepTimer();});
+  const cfg=nightCfg();
+  NIGHT.soft=!!cfg.soft;
+  $("nightSoft").classList.toggle("on",NIGHT.soft);
+  $("nightSound").classList.toggle("on",!!NIGHT.noise);
+  document.querySelectorAll(".night-timer button").forEach(x=>x.classList.toggle("on",parseInt(x.dataset.min,10)===(cfg.timer||0)));
+  setNightMode("breath");
+}
+function setNightMode(md){
+  NIGHT.mode=md;
+  document.querySelectorAll(".night-modes button").forEach(b=>b.classList.toggle("on",b.dataset.md===md));
+  const st=$("nightStage"); if(!st)return;
+  NIGHT.t.forEach(clearTimeout); NIGHT.t=[];
+  if(md==="breath"){st.innerHTML='<div class="pacer" id="pacer"><span id="pacerTxt"></span></div>';pacerLoop();}
+  else{st.innerHTML='<div class="shuf"><div class="shuf-word" id="shufWord"></div><div class="shuf-hint">'+t("nightShuffleHint")+'</div></div>';shuffleLoop();}
+}
+function pacerLoop(){
+  if(!NIGHT.on||NIGHT.mode!=="breath")return;
+  const seq=NIGHT.soft?[["nInhale",4000,1.16],["nExhale",6000,0.84]]:[["nInhale",4000,1.16],["nHold",7000,1.16],["nExhale",8000,0.84]];
+  let i=0;
+  function step(){
+    if(!NIGHT.on||NIGHT.mode!=="breath")return;
+    const ph=seq[i%seq.length];
+    const c=$("pacer"); if(c){c.style.transition="transform "+(ph[1]/1000)+"s ease-in-out";c.style.transform="scale("+ph[2]+")";}
+    const tx=$("pacerTxt"); if(tx)tx.textContent=t(ph[0]);
+    i++; NIGHT.t.push(setTimeout(step,ph[1]));
+  }
+  step();
+}
+function shuffleLoop(){
+  if(!NIGHT.on||NIGHT.mode!=="shuffle")return;
+  const el=$("shufWord");
+  if(el){const w=NIGHT_WORDS[Math.floor(Math.random()*NIGHT_WORDS.length)];el.textContent=w;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
+  NIGHT.t.push(setTimeout(shuffleLoop,6000));
+}
+function startNoise(){
+  try{
+    NIGHT.ac=new (window.AudioContext||window.webkitAudioContext)();
+    const n=2*NIGHT.ac.sampleRate, buf=NIGHT.ac.createBuffer(1,n,NIGHT.ac.sampleRate), out=buf.getChannelData(0);
+    let last=0;
+    for(let i=0;i<n;i++){const white=Math.random()*2-1;out[i]=(last+0.02*white)/1.02;last=out[i];out[i]*=3.5;}
+    const src=NIGHT.ac.createBufferSource();src.buffer=buf;src.loop=true;
+    const g=NIGHT.ac.createGain();g.gain.value=0.06;
+    src.connect(g);g.connect(NIGHT.ac.destination);src.start();
+    NIGHT.noise=src;NIGHT.gain=g;
+  }catch(e){NIGHT.noise=null;}
+}
+function stopNoise(){try{if(NIGHT.noise)NIGHT.noise.stop();}catch(e){}try{if(NIGHT.ac)NIGHT.ac.close();}catch(e){}NIGHT.noise=null;NIGHT.ac=null;}
+function toggleNoise(force){
+  const want=(typeof force==="boolean")?force:!NIGHT.noise;
+  if(want){if(!NIGHT.noise)startNoise();nightCfg().sound=true;}
+  else{stopNoise();nightCfg().sound=false;}
+  save();
+  const b=$("nightSound"); if(b)b.classList.toggle("on",!!NIGHT.noise);
+}
+function armSleepTimer(){
+  clearTimeout(NIGHT.sleep);
+  const m=nightCfg().timer;
+  if(!m)return;
+  NIGHT.sleep=setTimeout(nightDim,m*60000);
+}
+function nightDim(){
+  NIGHT.mode="off"; NIGHT.t.forEach(clearTimeout); NIGHT.t=[];
+  stopNoise();
+  const n=$("night"); if(n)n.classList.add("dimmed");
+}
+function openNight(){
+  if(NIGHT.on)return;
+  nightCfg(); NIGHT.on=true; NIGHT.t=[];
+  buildNightUI();
+  const n=$("night"); n.classList.remove("dimmed"); n.classList.add("show");
+  document.querySelector(".nav").style.display="none";
+  armSleepTimer();
+  if(nightCfg().sound)toggleNoise(true);
+  S.nightPromptDay=dayKey(); save(); renderNightPrompt();
+  buzz(12);
+}
+function closeNight(){
+  NIGHT.on=false; NIGHT.mode="off";
+  NIGHT.t.forEach(clearTimeout); NIGHT.t=[]; clearTimeout(NIGHT.sleep);
+  stopNoise();
+  const n=$("night"); if(n)n.classList.remove("show","dimmed");
+  document.querySelector(".nav").style.display="flex";
+}
 function renderBoost(){ var el=$("boost-text"); if(el)el.textContent=todaysBoost(); }
 function renderJournal(){
   const box=$("jrn-list"); if(!box)return; box.innerHTML="";
@@ -1935,6 +2099,7 @@ function closePanic(){
   renderAll(); go("home");
 }
 $("panic-open").onclick=openPanic;
+$("open-night").onclick=openNight;
 $("reality-next").onclick=startBreath;
 $("breath-done").onclick=startGround;
 $("sense-next").onclick=()=>{
