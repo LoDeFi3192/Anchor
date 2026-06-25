@@ -28,6 +28,7 @@
   --warm:#f1c19a;         /* peach */
   --danger:#c4544a;       /* gentle coral */
   --glow:#ffdad4;         /* blush glow */
+  --bgblob1:#fde7ec; --bgblob2:#efe6fb; --bgblob3:#fdeede;
   --ink:#44140f;          /* warm dark ink on accents */
   --shadow:0 12px 28px rgba(80,40,40,0.14);
   --shadow-sm:0 2px 8px rgba(80,40,40,0.10);
@@ -49,9 +50,9 @@ html,body{height:100%}
 body{
   margin:0;font-family:var(--font);color:var(--text);
   background:
-    radial-gradient(90% 60% at 15% 0%, #fde7ec 0%, transparent 55%),
-    radial-gradient(80% 60% at 95% 25%, #efe6fb 0%, transparent 55%),
-    radial-gradient(90% 70% at 50% 110%, #fdeede 0%, transparent 60%),
+    radial-gradient(90% 60% at 15% 0%, var(--bgblob1) 0%, transparent 55%),
+    radial-gradient(80% 60% at 95% 25%, var(--bgblob2) 0%, transparent 55%),
+    radial-gradient(90% 70% at 50% 110%, var(--bgblob3) 0%, transparent 60%),
     var(--bg);
   background-attachment:fixed;
   overflow-x:hidden;-webkit-font-smoothing:antialiased;user-select:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;
@@ -520,6 +521,19 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .night.dimmed .night-x{opacity:.45}
 .night.dimmed .night-top,.night.dimmed .night-stage,.night.dimmed .night-modes,.night.dimmed .night-opts,.night.dimmed .night-timer{display:none}
 .night.dimmed .night-dim-msg{display:flex;flex:1;align-items:center;justify-content:center;font-family:var(--font-d);font-size:22px;color:#5a5070;cursor:pointer}
+
+/* themes + night meditation */
+.theme-picker{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 4px}
+.swatch{width:46px;height:46px;border-radius:50%;border:3px solid transparent;box-shadow:var(--shadow-sm);padding:0;cursor:pointer}
+.swatch.on{border-color:var(--text)}
+.lang button{padding:6px 11px;font-size:12px}
+.hdr-right{gap:6px}
+.night-modes{flex-wrap:wrap;justify-content:center}
+.night-modes button{padding:9px 15px;font-size:13px}
+.medit{display:flex;flex-direction:column;align-items:center;gap:24px}
+.pacer-med{width:clamp(120px,40vw,168px);height:clamp(120px,40vw,168px)}
+.med-line{font-family:var(--font-d);font-size:21px;line-height:1.45;max-width:300px;color:#efeaf8;opacity:0;transition:opacity 1.1s ease;min-height:84px;display:flex;align-items:center;justify-content:center}
+.med-line.show{opacity:1}
 </style>
 </head>
 <body>
@@ -531,6 +545,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
         <div class="lang">
           <button data-lang="fr" class="on">FR</button>
           <button data-lang="en">EN</button>
+          <button data-lang="es">ES</button>
         </div>
         <button class="hdr-gear" id="open-night" aria-label="Mode Nuit">🌙</button>
         <button class="hdr-gear" id="open-settings" aria-label="Réglages">⚙️</button>
@@ -677,6 +692,10 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
     </div>
     <h2 data-t="setBreath">Respiration</h2>
     <div class="chips" id="breath-picker"></div>
+    <h2 style="margin-top:22px" data-t="setAppearance">Apparence</h2>
+    <label data-t="setTheme">Thème</label>
+    <div class="theme-picker" id="theme-picker"></div>
+
     <h2 style="margin-top:22px" data-t="setPrefs">Préférences</h2>
     <div class="toggle"><span data-t="setVoice">Voix guide</span><div class="sw" id="sw-voice"><i></i></div></div>
     <div id="voice-controls" style="margin:10px 0 6px">
@@ -813,6 +832,8 @@ const I18N = {
     nightReassure:"Je veille. Tu peux lâcher.", nightBreath:"Respiration", nightShuffle:"Défilement",
     nightSound:"Son", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
     nightGoodnight:"Bonne nuit", nInhale:"Inspire", nHold:"Retiens", nExhale:"Expire",
+    nightMedit:"Méditation", medHint:"Laisse les phrases te guider. Sans effort.", setTheme:"Thème", setAppearance:"Apparence",
+    medSteps:["Installe-toi. Laisse le poids de ton corps s'enfoncer dans le lit.","Respire doucement. L'expiration, un peu plus longue que l'inspiration.","Relâche ton visage. Le front, les mâchoires, autour des yeux.","Laisse tes épaules descendre. Tes bras deviennent lourds.","Sens ta poitrine et ton ventre se soulever, sans rien forcer.","Relâche tes jambes. Tes pieds. Tout le bas du corps se pose.","Il n'y a rien à faire maintenant. Juste être là, au chaud.","Laisse chaque expiration t'emmener un peu plus loin vers le sommeil."],
     gardenTitle:"Ton jardin", gardenSub:"Chaque épisode traversé fait pousser quelque chose. C'est ta récupération, rendue visible.",
     gardenEmpty:"Ton jardin est encore nu. Termine une session pour y planter ta première lueur.",
     memTitle:"Mémoires", memSub:"Ce que tu as déjà surmonté. À relire quand c'est dur.",
@@ -911,6 +932,8 @@ const I18N = {
     nightReassure:"I'm here. You can let go.", nightBreath:"Breathing", nightShuffle:"Word drift",
     nightSound:"Sound", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
     nightGoodnight:"Good night", nInhale:"Breathe in", nHold:"Hold", nExhale:"Breathe out",
+    nightMedit:"Meditation", medHint:"Let the phrases guide you. No effort.", setTheme:"Theme", setAppearance:"Appearance",
+    medSteps:["Settle in. Let the weight of your body sink into the bed.","Breathe gently. Make the out-breath a little longer than the in-breath.","Soften your face. Forehead, jaw, around the eyes.","Let your shoulders drop. Your arms grow heavy.","Feel your chest and belly rise, without forcing anything.","Release your legs. Your feet. The whole lower body settles.","There is nothing to do now. Just being here, warm.","Let each out-breath carry you a little further toward sleep."],
     gardenTitle:"Your garden", gardenSub:"Every episode you get through grows something. Your recovery, made visible.",
     gardenEmpty:"Your garden is still bare. Finish a session to plant your first glow.",
     memTitle:"Memories", memSub:"What you've already overcome. Reread it when it's hard.",
@@ -999,15 +1022,115 @@ const I18N = {
       "Every attack you get through plants something. Over time you build a sanctuary. Visible proof you are moving forward.",
       "Everything takes less than two taps. I will stay with you. Let's go."
     ]
+  },
+  es:{
+    homeHint:"¿Empieza una crisis? Toca. Me quedo contigo.",
+    panicNow:"TENGO PÁNICO", panicSub:"Toca para recibir ayuda",
+    energy:"Energía", stage:"Evolución",
+    navHome:"Inicio",navGarden:"Jardín",navDash:"Seguimiento",navContacts:"Contactos",navSettings:"Ajustes",
+    nightOpen:"Modo Noche", nightBanner:"Se hace tarde. ¿Probamos el Modo Noche?", nightLater:"Más tarde",
+    nightReassure:"Estoy aquí. Puedes soltar.", nightBreath:"Respiración", nightShuffle:"Palabras",
+    nightSound:"Sonido", nightSoft:"Más suave", nightOff:"Apagado", nightShuffleHint:"Imagina esta palabra, sin esfuerzo.",
+    nightGoodnight:"Buenas noches", nInhale:"Inspira", nHold:"Retén", nExhale:"Espira",
+    nightMedit:"Meditación", medHint:"Deja que las frases te guíen. Sin esfuerzo.", setTheme:"Tema", setAppearance:"Apariencia",
+    medSteps:["Acomódate. Deja que el peso de tu cuerpo se hunda en la cama.","Respira despacio. Que la espiración dure un poco más que la inspiración.","Afloja la cara. La frente, la mandíbula, alrededor de los ojos.","Deja caer los hombros. Tus brazos se vuelven pesados.","Siente cómo suben el pecho y el vientre, sin forzar nada.","Suelta las piernas. Los pies. Toda la parte baja se posa.","No hay nada que hacer ahora. Solo estar aquí, en calor.","Deja que cada espiración te lleve un poco más hacia el sueño."],
+    gardenTitle:"Tu jardín", gardenSub:"Cada episodio que superas hace crecer algo. Tu recuperación, hecha visible.",
+    gardenEmpty:"Tu jardín aún está vacío. Termina una sesión para plantar tu primera luz.",
+    memTitle:"Recuerdos", memSub:"Lo que ya has superado. Reléelo cuando sea difícil.",
+    memAdd:"Añade un logro o una nota de ánimo", save:"Guardar",
+    dashTitle:"Tu seguimiento", dashSub:"Hechos, no juicios. El pánico tiene una duración. Siempre termina.",
+    dEpisodes:"Episodios", dAvg:"Duración media", dLast:"Último", dResil:"Resiliencia",
+    dMilestones:"Hitos", dHistory:"Historial",
+    contactsTitle:"Contactos seguros", contactsSub:"Una persona, un apoyo. Toca para llamar.",
+    cName:"Nombre", cNum:"Número", cAdd:"Añadir",
+    contactsNote:"Anchor no es un servicio de emergencia. Si hay peligro inmediato, llama al 112 (UE) o al 911.",
+    setTitle:"Ajustes", setCompanion:"Tu compañero", setCname:"Su nombre",
+    setBreath:"Respiración", setPrefs:"Preferencias",
+    setVoice:"Voz guía", setHaptic:"Vibración", setMotion:"Reducir animaciones",
+    setVoicePick:"Elegir la voz", setVoiceRate:"Ritmo", setVoiceTest:"Probar la voz",
+    voiceSample:"Estás a salvo. Respira conmigo, despacio.",
+    rates:["Calmado","Lento","Muy lento"],
+    setReset:"Restablecer los datos",
+    setPrivacy:"Todos tus datos se quedan en este dispositivo. No se envía nada. Sin cuenta. Sin anuncios.",
+    pmExit:"Estoy mejor", pmStart:"Respiremos juntos", pmFollow:"Sigue el círculo. Nada más que hacer.",
+    pmGround:"Pasar al anclaje", pmDone:"Hecho", pmReturn:"Volver a la calma",
+    inhale:"Inspira", hold:"Retén", exhale:"Espira", pause:"Pausa",
+    realityTitles:["Estás a salvo.","Esto va a pasar.","Es una reacción de pánico, no un peligro.","Tu cuerpo hace ruido. No estás en peligro."],
+    realityLines:["Tu cuerpo reacciona con fuerza, pero aquí no hay una amenaza real.","Una crisis dura unos minutos. No más. Siempre baja.","Ya has pasado por esto. Puedes hacerlo otra vez, ahora.","Apoya los pies en el suelo. Siente el contacto. Estás aquí."],
+    senses:[
+      {n:5,w:"cosas que ves",h:"Mira alrededor. Nómbralas, en voz baja o en tu mente."},
+      {n:4,w:"cosas que puedes tocar",h:"Tócalas de verdad. La textura, la temperatura."},
+      {n:3,w:"sonidos que oyes",h:"Incluso los más leves. Escucha."},
+      {n:2,w:"cosas que hueles",h:"Inspira despacio por la nariz."},
+      {n:1,w:"cosa que saboreas",h:"O imagina un sabor familiar y reconfortante."}
+    ],
+    recapLines:["Duración: {d}. Fue pánico, no peligro. Y ya terminó.","Episodio {n} superado. Cada vez, demuestras que puedes.","Has vuelto a la calma. Anótalo. Tu cuerpo lo aprende."],
+    cmsgEnergyLow:["Te espero, con calma. Cuando quieras.","Sin presión. Aquí estoy cuando vuelvas."],
+    cmsgNormal:["Me alegra verte. ¿Respiramos un poco?","Estoy orgulloso del esfuerzo que haces.","Te estás cuidando. Eso cuenta."],
+    cmsgAfter:["Lo hicimos juntos. Bien hecho.","¿Ves? Ahora sabes hacerlo."],
+    sleepy:"Estaba dormitando. Me alegra que estés aquí.",
+    stageNames:["Huevo","Despertar","Crecimiento","Pleno","Radiante"],
+    milestones:[
+      {n:1,ic:"🌱",t:"Primera sesión completada"},
+      {n:3,ic:"🌿",t:"3 episodios superados"},
+      {n:7,ic:"🌳",t:"Te anclaste 7 veces"},
+      {n:15,ic:"✨",t:"15 recuperaciones"},
+      {n:30,ic:"🏔️",t:"30 crisis superadas"}
+    ],
+    proud:"Estoy orgulloso del esfuerzo que has hecho hoy.",
+    memBefore:"Ya has pasado por esto. {n} veces.",
+    navMood:"Ánimo", moodTitle:"Tu ánimo",
+    moodSub:"Registra tu día con un toque. Solo un color. Toca un día pasado para corregirlo.",
+    moodTodayQ:"¿Cómo te sientes hoy?",
+    moodStatsT:"Resumen", mood7:"Últimos 7 días", moodLogged:"Días registrados",
+    moodToday:"Hoy: ",
+    moodNames:["Día malo","Difícil","Regular","Bien","Muy bien"],
+    tutSkip:"Saltar", tutNext:"Siguiente", tutStart:"Empezar", tutReplay:"Ver el tutorial",
+    setReroll:"Sortear un nuevo compañero", tapHint:"(tócame)",
+    cvActs:"Actividades", cvClose:"Cerrar", miniClose:"Terminar",
+    act_breathe:"Respiración libre", act_breathe_d:"Respira a tu ritmo, sin crisis.",
+    act_bubbles:"Burbujas antiestrés", act_bubbles_d:"Revienta las burbujas, con calma.",
+    act_stars:"Cielo de estrellas", act_stars_d:"Coloca estrellas. Sin meta, solo calma.",
+    act_move:"Movimiento suave", act_move_d:"Estiramientos y movilidad para soltar la tensión.",
+    act_woodoku:"Bloques zen", act_woodoku_d:"Desliza bloques, limpia líneas. Vacía la mente.",
+    wdLevel:"Nivel", wdRestart:"Reiniciar", wdLevelUp:"Nivel {n}", wdBlocked:"No queda sitio. No pasa nada, reiniciamos.",
+    actNeed:"pts", fbSub:"Sigue el círculo, a tu ritmo.",
+    bubHint:"Toca las burbujas para reventarlas.",
+    starHint:"Toca el cielo para encender estrellas.",
+    setNotif:"Impulso diario", setNotifNote:"Un mensaje de ánimo. Fiable solo con la app abierta (sin servidor push).",
+    careTitle:"Cuídalo", bondLabel:"Vínculo",
+    carePet:"Acariciar", careFeed:"Alimentar", carePlay:"Jugar",
+    careMsgPet:"Ronronea de felicidad.", careMsgFeed:"Ñam. ¡Gracias!", careMsgPlay:"Le encanta jugar contigo.",
+    remTitle:"Recordatorios", remOn:"Activar recordatorios", remMood:"Registrar mi ánimo", remRelax:"Hacer una relajación", remJournal:"Escribir en el diario", remTime:"Hora preferida",
+    remNote:"Recordatorios suaves al abrir la app. Notificación del sistema según disponibilidad (sin servidor push, sin aviso con la app cerrada).",
+    nudgeMood:"Aún no has registrado tu ánimo hoy.", nudgeMoodBtn:"Registrar",
+    nudgeRelax:"¿Y si te tomas un momento para relajarte?", nudgeRelaxBtn:"Relajarse",
+    nudgeJournal:"¿Quieres vaciar la mente en el diario?", nudgeJournalBtn:"Escribir",
+    nudgeDismiss:"Más tarde",
+    jrnTitle:"Diario", jrnSub:"Vacía la mente. Una nota al día, o las que quieras.",
+    jrnPlaceholder:"¿Qué te ronda hoy?", jrnEmpty:"Aún no hay notas.",
+    grTitle:"Gratitud", grSub:"Tres cosas por las que estás agradecido(a) hoy. Da puntos a tu compañero.",
+    grPh1:"1. ...", grPh2:"2. ...", grPh3:"3. ...", grDone:"Anotado por hoy. Gracias.", grEmpty:"Aún no hay gratitud anotada.",
+    boosts:["Eres más fuerte de lo que crees.","Vas a superar esto.","Una respiración cada vez.","Lo que sientes va a pasar.","Has sobrevivido a todos tus peores días.","Sé amable contigo hoy.","Tu calma está más cerca de lo que crees.","No eres tus pensamientos.","Cada pequeño paso cuenta.","Mereces descansar.","El valor es avanzar con el miedo.","Lo haces lo mejor que puedes, y es suficiente.","Respira. Estás aquí. Es suficiente.","Mañana no hace falta resolverlo ahora."],
+    tutTitles:["Bienvenido(a) a Anchor","El botón","Tu compañero","Tú lo alimentas","Registra tu día","Tu jardín","¿Listo(a)?"],
+    tutBodies:[
+      "Tu ancla cuando sube la ansiedad. Aquí todo es simple. Una acción cada vez.",
+      "¿Empieza una crisis? Toca el botón rojo grande. Te guío paso a paso: respiración, anclaje, vuelta a la calma. En 2 a 10 minutos.",
+      "Una pequeña criatura vive contigo. Crece cuando te cuidas, no cuando te conectas. Tu resiliencia la hace evolucionar.",
+      "Respirar, anclarte, registrar tu ánimo: cada acto sano le da energía. Si te ausentas, nunca muere. Dormita y te espera. Sin castigos.",
+      "Un color al día, con un solo toque. El calendario revela tus tendencias, sin juicios.",
+      "Cada crisis superada planta algo. Con el tiempo, construyes un santuario. La prueba visible de que avanzas.",
+      "Todo se hace en menos de dos toques. Me quedo contigo. Vamos."
+    ]
   }
 };
 const COMPANIONS = {
-  spirit:{name:{fr:"Lueur",en:"Glow"}, stages:["🥚","🔅","✨","🌟","💫"]},
-  fox:{name:{fr:"Renart",en:"Foxy"}, stages:["🥚","🦊","🦊","🦊","🦊"]},
-  cat:{name:{fr:"Minou",en:"Whiskers"}, stages:["🥚","🐱","🐈","🐈","🐈‍⬛"]},
-  dragon:{name:{fr:"Braise",en:"Ember"}, stages:["🥚","🐉","🐉","🐲","🐲"]},
-  forest:{name:{fr:"Sylve",en:"Sylph"}, stages:["🥚","🌱","🌿","🪴","🌳"]},
-  robot:{name:{fr:"Bolt",en:"Bolt"}, stages:["🥚","🤖","🤖","🤖","🛸"]}
+  spirit:{name:{fr:"Lueur",en:"Glow",es:"Destello"}, stages:["🥚","🔅","✨","🌟","💫"]},
+  fox:{name:{fr:"Renart",en:"Foxy",es:"Zorro"}, stages:["🥚","🦊","🦊","🦊","🦊"]},
+  cat:{name:{fr:"Minou",en:"Whiskers",es:"Michi"}, stages:["🥚","🐱","🐈","🐈","🐈‍⬛"]},
+  dragon:{name:{fr:"Braise",en:"Ember",es:"Brasa"}, stages:["🥚","🐉","🐉","🐲","🐲"]},
+  forest:{name:{fr:"Sylve",en:"Sylph",es:"Silvano"}, stages:["🥚","🌱","🌿","🪴","🌳"]},
+  robot:{name:{fr:"Bolt",en:"Bolt",es:"Bolt"}, stages:["🥚","🤖","🤖","🤖","🛸"]}
 };
 const COMPANION_LABELS={spirit:"Orbe",fox:"Renard",cat:"Chat",dragon:"Dragon",forest:"Forêt",robot:"Robot"};
 const PLANTS=["🌷","🌸","🌼","🌻","🪻","🌹","🪷","🌲","🪔","💎","🍄","🌾"];
@@ -1021,7 +1144,7 @@ const DEFAULT={
   lang:"fr", companion:"spirit", cname:null, energy:60, sessions:0,
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
   xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
-  bond:0, careAward:{}, nudgeDay:null, nightPromptDay:null, gratitude:[], reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
+  bond:0, careAward:{}, nudgeDay:null, nightPromptDay:null, theme:"aurore", gratitude:[], reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
   settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75, night:{sound:false,prompt:true,hour:22,timer:15,soft:false}},
   lastVisit:Date.now()
 };
@@ -1149,6 +1272,7 @@ function renderContacts(){
 function renderSettings(){
   renderCompanionCard($("companion-card"));
   $("set-cname").value=companionName();
+  renderThemePicker();
   const bp=$("breath-picker"); bp.innerHTML="";
   Object.keys(BREATHING).forEach(k=>{
     const b=document.createElement("button");
@@ -1172,6 +1296,7 @@ function renderSettings(){
 function setSw(id,on){$(id).classList.toggle("on",!!on);}
 function applyLang(){
   document.documentElement.lang=S.lang;
+  applyTheme(S.theme||"aurore");
   document.querySelectorAll("[data-t]").forEach(el=>{
     const k=el.getAttribute("data-t"); const v=t(k);
     if(typeof v==="string") el.textContent=v;
@@ -1836,7 +1961,7 @@ function buildNightUI(){
     '<button class="night-x" id="nightX" aria-label="Fermer">✕</button>'
    +'<div class="night-top"><div class="night-moon">🌙</div><div class="night-reassure">'+t("nightReassure")+'</div></div>'
    +'<div class="night-stage" id="nightStage"></div>'
-   +'<div class="night-modes"><button data-md="breath" class="on">'+t("nightBreath")+'</button><button data-md="shuffle">'+t("nightShuffle")+'</button></div>'
+   +'<div class="night-modes"><button data-md="breath" class="on">'+t("nightBreath")+'</button><button data-md="medit">'+t("nightMedit")+'</button><button data-md="shuffle">'+t("nightShuffle")+'</button></div>'
    +'<div class="night-opts"><button id="nightSound" class="nopt">'+t("nightSound")+'</button><button id="nightSoft" class="nopt">'+t("nightSoft")+'</button></div>'
    +'<div class="night-timer"><span>'+t("nightOff")+'</span><button data-min="10">10</button><button data-min="15">15</button><button data-min="20">20</button><button data-min="0">∞</button></div>'
    +'<div class="night-dim-msg" id="nightDimMsg">'+t("nightGoodnight")+' 🌙</div>';
@@ -1858,7 +1983,9 @@ function setNightMode(md){
   document.querySelectorAll(".night-modes button").forEach(b=>b.classList.toggle("on",b.dataset.md===md));
   const st=$("nightStage"); if(!st)return;
   NIGHT.t.forEach(clearTimeout); NIGHT.t=[];
+  try{speechSynthesis.cancel();}catch(e){}
   if(md==="breath"){st.innerHTML='<div class="pacer" id="pacer"><span id="pacerTxt"></span></div>';pacerLoop();}
+  else if(md==="medit"){st.innerHTML='<div class="medit"><div class="pacer pacer-med" id="pacer"><span></span></div><div class="med-line" id="medLine"></div></div>';meditLoop();}
   else{st.innerHTML='<div class="shuf"><div class="shuf-word" id="shufWord"></div><div class="shuf-hint">'+t("nightShuffleHint")+'</div></div>';shuffleLoop();}
 }
 function pacerLoop(){
@@ -1879,6 +2006,21 @@ function shuffleLoop(){
   const el=$("shufWord");
   if(el){const w=NIGHT_WORDS[Math.floor(Math.random()*NIGHT_WORDS.length)];el.textContent=w;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");}
   NIGHT.t.push(setTimeout(shuffleLoop,6000));
+}
+function meditLoop(){
+  if(!NIGHT.on||NIGHT.mode!=="medit")return;
+  const steps=t("medSteps")||[]; let i=0;
+  (function breathe(){
+    if(!NIGHT.on||NIGHT.mode!=="medit")return;
+    const c=$("pacer"); if(c){NIGHT._mu=!NIGHT._mu;c.style.transition="transform 5.5s ease-in-out";c.style.transform="scale("+(NIGHT._mu?1.12:0.86)+")";}
+    NIGHT.t.push(setTimeout(breathe,5500));
+  })();
+  (function line(){
+    if(!NIGHT.on||NIGHT.mode!=="medit")return;
+    const el=$("medLine");
+    if(el){const tx=steps[i%steps.length];el.textContent=tx;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");if(S.settings.voice){try{speak(tx);}catch(e){}}}
+    i++; NIGHT.t.push(setTimeout(line,13000));
+  })();
 }
 function startNoise(){
   try{
@@ -1908,6 +2050,7 @@ function armSleepTimer(){
 }
 function nightDim(){
   NIGHT.mode="off"; NIGHT.t.forEach(clearTimeout); NIGHT.t=[];
+  try{speechSynthesis.cancel();}catch(e){}
   stopNoise();
   const n=$("night"); if(n)n.classList.add("dimmed");
 }
@@ -1925,9 +2068,42 @@ function openNight(){
 function closeNight(){
   NIGHT.on=false; NIGHT.mode="off";
   NIGHT.t.forEach(clearTimeout); NIGHT.t=[]; clearTimeout(NIGHT.sleep);
+  try{speechSynthesis.cancel();}catch(e){}
   stopNoise();
   const n=$("night"); if(n)n.classList.remove("show","dimmed");
   document.querySelector(".nav").style.display="flex";
+}
+const PALETTES={
+  aurore:{bg:"#fff8f6",bg2:"#fceae6",surface:"#faece8",surface2:"#f5e3de",line:"#e9d6d1",text:"#3f2d2a",muted:"#8c7570",accent:"#c25b4e",accent2:"#6b5d97",warm:"#f1c19a",glow:"#ffdad4",ink:"#44140f",blob1:"#fde7ec",blob2:"#efe6fb",blob3:"#fdeede",sc2:"#efddee",tc:"#fdf5f2"},
+  ocean:{bg:"#f5fafc",bg2:"#e6f1f6",surface:"#eaf3f7",surface2:"#dcebf1",line:"#cfe0e8",text:"#23323b",muted:"#5f7682",accent:"#2f7d99",accent2:"#3f8f86",warm:"#bfe3df",glow:"#cfeaf3",ink:"#06222c",blob1:"#dcf0f7",blob2:"#e0eefb",blob3:"#dff2ee",sc2:"#d8ebe8",tc:"#f1f8fb"},
+  foret:{bg:"#f6faf4",bg2:"#e8f2e6",surface:"#ecf4e9",surface2:"#dfeeda",line:"#d2e3cc",text:"#283326",muted:"#647562",accent:"#4f8a55",accent2:"#7c8a3f",warm:"#d8e6b0",glow:"#d6eccf",ink:"#0e2410",blob1:"#e2f3da",blob2:"#eaf3df",blob3:"#e0f0e6",sc2:"#dfead2",tc:"#f3f8f1"},
+  lavande:{bg:"#faf7fc",bg2:"#efe8f6",surface:"#f1eaf8",surface2:"#e6dcf1",line:"#ddd0ea",text:"#2f2838",muted:"#6f6580",accent:"#7a59b0",accent2:"#9a5ba8",warm:"#e3cdee",glow:"#e7daf6",ink:"#220a36",blob1:"#ece0f8",blob2:"#f0e2f3",blob3:"#e6e0fb",sc2:"#e6dcf1",tc:"#f6f1fb"},
+  sable:{bg:"#fbf8f3",bg2:"#f2eadd",surface:"#f4ecdf",surface2:"#ebe0cf",line:"#e0d3bd",text:"#3a3127",muted:"#857862",accent:"#b07d33",accent2:"#9c7b4a",warm:"#f0d9a8",glow:"#f6e6c4",ink:"#3a2606",blob1:"#f6ecd6",blob2:"#f1ead9",blob3:"#f7eed9",sc2:"#ece0cc",tc:"#f8f3ea"},
+  rose:{bg:"#fdf6fa",bg2:"#f8e7f1",surface:"#f9eaf3",surface2:"#f1dbe9",line:"#ebccdd",text:"#3a2632",muted:"#856475",accent:"#c2548a",accent2:"#a05bb0",warm:"#f3c9de",glow:"#fbd9ec",ink:"#3a0a26",blob1:"#fce0ef",blob2:"#f5e0f3",blob3:"#fce0e8",sc2:"#f1dbe9",tc:"#fbf2f7"}
+};
+function applyTheme(id){
+  const P=PALETTES[id]||PALETTES.aurore; const r=document.documentElement.style; const set=(k,v)=>r.setProperty(k,v);
+  set("--bg",P.bg);set("--bg-2",P.bg2);set("--surface",P.surface);set("--surface-2",P.surface2);
+  set("--line",P.line);set("--text",P.text);set("--muted",P.muted);
+  set("--accent",P.accent);set("--accent-2",P.accent2);set("--warm",P.warm);set("--glow",P.glow);set("--ink",P.ink);
+  set("--bgblob1",P.blob1);set("--bgblob2",P.blob2);set("--bgblob3",P.blob3);
+  set("--m3-primary",P.accent);set("--m3-primary-container",P.glow);set("--m3-on-primary-container",P.ink);
+  set("--m3-secondary-container",P.sc2);set("--m3-tertiary-container",P.warm);
+  set("--m3-surface-container",P.surface);set("--m3-surface-container-high",P.surface2);set("--m3-surface-container-highest",P.surface2);
+  set("--m3-outline",P.muted);set("--m3-outline-variant",P.line);
+  const meta=document.querySelector('meta[name="theme-color"]'); if(meta)meta.setAttribute("content",P.tc);
+}
+function renderThemePicker(){
+  const box=$("theme-picker"); if(!box)return; box.innerHTML="";
+  Object.keys(PALETTES).forEach(id=>{
+    const P=PALETTES[id];
+    const b=document.createElement("button");
+    b.className="swatch"+(((S.theme||"aurore")===id)?" on":"");
+    b.style.background="linear-gradient(135deg,"+P.accent+" 0 50%,"+P.surface+" 50% 100%)";
+    b.setAttribute("aria-label",id);
+    b.onclick=()=>{S.theme=id;save();applyTheme(id);renderThemePicker();};
+    box.appendChild(b);
+  });
 }
 function renderBoost(){ var el=$("boost-text"); if(el)el.textContent=todaysBoost(); }
 function renderJournal(){
@@ -2131,7 +2307,7 @@ $("sw-voice").onclick=()=>{S.settings.voice=!S.settings.voice;save();renderSetti
 $("sw-haptic").onclick=()=>{S.settings.haptic=!S.settings.haptic;save();renderSettings();};
 $("sw-motion").onclick=()=>{S.settings.motion=!S.settings.motion;save();renderSettings();};
 $("reset").onclick=()=>{
-  const msg=S.lang==="fr"?"Tout effacer ? Action irréversible.":"Erase everything? This cannot be undone.";
+  const msg=S.lang==="fr"?"Tout effacer ? Action irréversible.":S.lang==="es"?"¿Borrar todo? Esta acción es irreversible.":"Erase everything? This cannot be undone.";
   if(confirm(msg)){localStorage.removeItem(KEY);S=load();applyLang();go("home");}
 };
 if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{_voiceCache=null; if(document.getElementById("voice-select"))renderVoiceUI();};speechSynthesis.getVoices();}
