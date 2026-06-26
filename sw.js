@@ -1,5 +1,5 @@
 /* Anchor service worker — offline app shell + runtime font cache */
-const VERSION = "anchor-v12";
+const VERSION = "anchor-glass-v1";
 const SHELL = [
   "./",
   "./index.html",
@@ -59,4 +59,23 @@ self.addEventListener("fetch", (e) => {
       )
     );
   }
+});
+
+/* Tapping a notification focuses an existing window or opens the app */
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  e.waitUntil((async () => {
+    const all = await clients.matchAll({ type: "window", includeUncontrolled: true });
+    for (const c of all) { if ("focus" in c) return c.focus(); }
+    if (clients.openWindow) return clients.openWindow("./");
+  })());
+});
+
+/* Push support (no server today, but ready if you add one later) */
+self.addEventListener("push", (e) => {
+  let data = { title: "Anchor", body: "" };
+  try { if (e.data) data = e.data.json(); } catch (_) {}
+  e.waitUntil(self.registration.showNotification(data.title || "Anchor", {
+    body: data.body || "", icon: "./icon-192.png", badge: "./icon-192.png"
+  }));
 });
