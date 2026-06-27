@@ -1,11 +1,8 @@
 /* Anchor service worker — offline app shell + runtime font cache */
-const VERSION = "anchor-v3-v1";
+const VERSION = "anchor-v3-solo-1";
 const SHELL = [
   "./",
   "./index.html",
-  "./styles/base.css",
-  "./styles/v3.css",
-  "./scripts/app.js",
   "./manifest.webmanifest",
   "./icon-192.png",
   "./icon-512.png",
