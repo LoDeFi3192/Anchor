@@ -83,13 +83,13 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
 
 .companion-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:10px 0 20px}
 .companion{width:clamp(132px,38vw,160px);height:clamp(132px,38vw,160px);display:flex;align-items:center;justify-content:center;position:relative}
-.companion .aura{position:absolute;inset:0;border-radius:50%;
+.companion .aura{position:absolute;inset:0;border-radius:50%;will-change:transform,opacity;transform:translateZ(0);
   background:radial-gradient(circle,var(--glow) 0%,rgba(191,168,230,.25) 45%,transparent 70%);opacity:.7;
   animation:pulse 4.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(.88);opacity:.45}50%{transform:scale(1.18);opacity:.75}}
-.creature{font-size:clamp(58px,16vw,78px);animation:float 5.5s ease-in-out infinite;z-index:1;filter:drop-shadow(0 10px 22px rgba(180,110,130,.3))}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-11px)}}
-.companion.sleepy .creature{filter:grayscale(.25) drop-shadow(0 5px 12px rgba(180,110,130,.25));opacity:.82}
+@keyframes pulse{0%,100%{transform:scale(.88) translateZ(0);opacity:.45}50%{transform:scale(1.18) translateZ(0);opacity:.75}}
+.creature{font-size:clamp(58px,16vw,78px);animation:float 5.5s ease-in-out infinite;z-index:1;text-shadow:0 10px 22px rgba(180,110,130,.3);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-11px,0)}}
+.companion.sleepy .creature{animation:none;filter:grayscale(.25);text-shadow:0 5px 12px rgba(180,110,130,.25);opacity:.82}
 .companion-name{font-family:var(--font-d);font-weight:500;font-size:20px}
 .companion-msg{color:var(--muted);font-size:14px;text-align:center;max-width:290px;min-height:18px;line-height:1.5}
 
@@ -253,7 +253,7 @@ label{font-size:13px;color:var(--muted);font-weight:600}
 .tut-card{width:100%;max-width:380px;background:var(--surface-2);border:1px solid var(--line);border-radius:34px;
   padding:40px 26px 26px;box-shadow:var(--shadow);text-align:center;display:flex;flex-direction:column;align-items:center;position:relative}
 .tut-skip{position:absolute;top:16px;right:18px;font-size:13px;color:var(--muted);font-weight:600;padding:6px 8px}
-.tut-icon{font-size:66px;animation:float 5s ease-in-out infinite;margin-bottom:8px;filter:drop-shadow(0 8px 18px rgba(180,110,130,.28))}
+.tut-icon{font-size:66px;animation:float 5s ease-in-out infinite;margin-bottom:8px;text-shadow:0 8px 18px rgba(180,110,130,.28);will-change:transform}
 .tut-title{font-family:var(--font-d);font-size:25px;font-weight:500;line-height:1.2}
 .tut-body{color:var(--muted);font-size:15px;line-height:1.6;margin-top:10px;min-height:108px}
 .tut-dots{display:flex;gap:7px;margin:6px 0 20px}
@@ -495,7 +495,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .night.show{display:flex;animation:fade .5s ease}
 .night-x{position:absolute;top:calc(env(safe-area-inset-top) + 10px);right:14px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);color:#e9e2f2;font-size:17px;border:1px solid rgba(255,255,255,.12)}
 .night-top{margin-top:14px}
-.night-moon{font-size:38px;filter:drop-shadow(0 0 18px rgba(180,160,230,.5));animation:float 6s ease-in-out infinite}
+.night-moon{font-size:38px;text-shadow:0 0 18px rgba(180,160,230,.55);animation:float 6s ease-in-out infinite;will-change:transform}
 .night-reassure{font-family:var(--font-d);font-size:18px;opacity:.92;margin-top:10px;max-width:300px;line-height:1.3}
 .night-stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:226px;width:100%}
 .pacer{width:clamp(150px,52vw,206px);height:clamp(150px,52vw,206px);border-radius:50%;
@@ -580,8 +580,8 @@ input,select,textarea{
 /* Bottom nav: stronger glass bar */
 .nav{
   background:var(--glass-bg)!important;
-  -webkit-backdrop-filter:blur(26px) saturate(1.8);
-  backdrop-filter:blur(26px) saturate(1.8);
+  -webkit-backdrop-filter:blur(16px) saturate(1.6);
+  backdrop-filter:blur(16px) saturate(1.6);
   border-top:1px solid var(--glass-brd)!important;
   box-shadow:0 -8px 34px rgba(60,40,55,.14),inset 0 1px 0 var(--glass-hi)!important;
 }
@@ -591,12 +591,12 @@ input,select,textarea{
 /* Frosted full-screen scrims (companion + mini overlays) */
 .companion-view,.mini{
   background:color-mix(in srgb, var(--bg) 55%, transparent)!important;
-  -webkit-backdrop-filter:blur(28px) saturate(1.6);
-  backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);
+  backdrop-filter:blur(18px) saturate(1.5);
 }
 .mini-content{background:transparent!important}
 /* Liquid panic pill: keep the coral, add a glossy specular sheen */
-.panic-btn{position:relative;overflow:hidden}
+.panic-btn{position:relative;overflow:hidden;transform:translateZ(0);will-change:transform}
 .panic-btn .pb-ic,.panic-btn .pb-txt{position:relative;z-index:2}
 .panic-btn::after{content:"";position:absolute;left:0;right:0;top:0;height:60%;border-radius:38px 38px 50% 50%/38px 38px 22px 22px;
   background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,0));pointer-events:none;z-index:1}
@@ -622,7 +622,7 @@ input,select,textarea{
 }
 
 /* ===== LIQUID GLASS v2 — deeper frost, brighter rims, floating bar ===== */
-:root{ --glass-bg:rgba(255,255,255,.40); --glass-bg-strong:rgba(255,255,255,.55); --glass-brd:rgba(255,255,255,.72); --glass-hi:rgba(255,255,255,.92); --glass-blur:26px; }
+:root{ --glass-bg:rgba(255,255,255,.40); --glass-bg-strong:rgba(255,255,255,.55); --glass-brd:rgba(255,255,255,.72); --glass-hi:rgba(255,255,255,.92); --glass-blur:16px; }
 .card,.meta,.boost{position:relative;overflow:hidden}
 .card,.meta{
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.9);
@@ -631,15 +631,15 @@ input,select,textarea{
 }
 /* specular sheen sweeping the top-left of each glass panel */
 .card::before,.meta::before,.boost::before{
-  content:"";position:absolute;top:0;left:0;right:0;height:55%;pointer-events:none;
-  background:linear-gradient(160deg, rgba(255,255,255,.55), rgba(255,255,255,.06) 60%, transparent 80%);
-  mix-blend-mode:screen;
+  content:"";position:absolute;top:0;left:0;right:0;height:52%;pointer-events:none;z-index:0;
+  background:linear-gradient(160deg, rgba(255,255,255,.40), rgba(255,255,255,.04) 62%, transparent 82%);
 }
+.card>*,.meta>*,.boost>*{position:relative;z-index:1}
 /* Floating glass tab bar */
 .nav{
   background:var(--glass-bg-strong)!important;
-  -webkit-backdrop-filter:blur(30px) saturate(1.9);
-  backdrop-filter:blur(30px) saturate(1.9);
+  -webkit-backdrop-filter:blur(18px) saturate(1.7);
+  backdrop-filter:blur(18px) saturate(1.7);
   border:1px solid var(--glass-brd)!important;
   box-shadow:0 18px 44px rgba(40,28,46,.26), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px rgba(255,255,255,.16)!important;
 }
@@ -726,12 +726,7 @@ button,.btn,.chip,.seg button{font-family:var(--font)}
 }
 /* hairline top edge light */
 .card::before,.meta::before{height:52%}
-/* very fine grain so the glass reads as a physical surface */
-.card::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  opacity:.05;mix-blend-mode:overlay;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+/* (noise overlay removed: caused compositing shimmer on mobile) */
 .nav{box-shadow:var(--e3), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px rgba(255,255,255,.14) !important}
 
 /* ---- Apple-style segmented control (appearance) ---- */
@@ -769,7 +764,7 @@ html[data-appearance="dark"] body{
 html[data-appearance="dark"] input,
 html[data-appearance="dark"] select,
 html[data-appearance="dark"] textarea{background:rgba(255,255,255,.06) !important;color:var(--text)}
-html[data-appearance="dark"] .card::after{opacity:.08;mix-blend-mode:soft-light}
+
 html[data-appearance="dark"] .boost-ic,
 html[data-appearance="dark"] .swatch{filter:saturate(1.05)}
 
