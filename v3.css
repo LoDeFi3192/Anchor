@@ -1,0 +1,123 @@
+/* =====================================================================
+   Anchor V3 — Design layer (loaded AFTER base.css, overrides it)
+   Apple-grade foundation: SF system type, 8pt tokens, refined Liquid
+   Glass, real Light / Dark / Auto appearance, original SVG iconography.
+   ===================================================================== */
+
+/* ---- Design tokens : type / spacing / radius / elevation / motion ---- */
+:root{
+  /* Typography — system stack renders as SF Pro on Apple, free + licit */
+  --font-d:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+
+  /* 8pt spacing scale */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s7:32px; --s8:40px; --s9:48px;
+
+  /* Radius scale */
+  --r-sm:12px; --r-md:18px; --r-lg:24px; --r-xl:30px; --r-pill:999px;
+
+  /* Elevation scale (ambient + key light) */
+  --e1:0 1px 2px rgba(30,20,30,.06), 0 4px 12px rgba(30,20,30,.06);
+  --e2:0 2px 6px rgba(30,20,30,.08), 0 10px 28px rgba(30,20,30,.10);
+  --e3:0 6px 16px rgba(30,20,30,.10), 0 18px 44px rgba(30,20,30,.16);
+
+  /* Motion — spring-like emphasized curves */
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --ease-emph:cubic-bezier(.2,.0,0,1);
+  --ease-standard:cubic-bezier(.4,0,.2,1);
+  --dur-1:.18s; --dur-2:.32s; --dur-3:.5s;
+}
+
+/* ---- Typography ramp (SF metrics: tight tracking on display sizes) ---- */
+body{font-family:var(--font);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1{font-family:var(--font-d);font-weight:700;letter-spacing:-.022em;line-height:1.08}
+h2{font-family:var(--font-d);font-weight:600;letter-spacing:-.016em}
+.brand{font-family:var(--font-d);font-weight:700;letter-spacing:-.02em}
+.sub{letter-spacing:-.006em}
+.val{font-family:var(--font-d);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.boost-text{letter-spacing:-.006em}
+.panic-btn .pb-txt b{font-family:var(--font-d);font-weight:700;letter-spacing:.02em}
+button,.btn,.chip,.seg button{font-family:var(--font)}
+
+/* ---- Iconography (original SVG, currentColor) ---- */
+.ic-svg{width:24px;height:24px;display:block;color:inherit}
+.nav .ic{display:flex;align-items:center;justify-content:center;height:25px;font-size:0}
+.nav .ic .ic-svg{width:25px;height:25px}
+.nav button.on .ic{transform:translateY(-1px)}
+.hdr-gear{color:var(--text)}
+.hdr-gear .ic-svg{width:21px;height:21px}
+.hdr-back{color:var(--text)}
+.hdr-back .ic-svg{width:26px;height:26px}
+.pb-ic{display:flex;align-items:center;justify-content:center}
+.pb-ic .ic-svg{width:30px;height:30px;color:#fff}
+
+/* ---- Refined Liquid Glass : edge lighting, depth, fine noise ---- */
+.card,.meta{
+  box-shadow:
+    var(--e2),
+    inset 0 1px 0 var(--glass-hi),
+    inset 0 0 0 1px rgba(255,255,255,.16),
+    inset 0 -18px 30px rgba(255,255,255,.08) !important;
+}
+/* hairline top edge light */
+.card::before,.meta::before{height:52%}
+/* very fine grain so the glass reads as a physical surface */
+.card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.nav{box-shadow:var(--e3), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px rgba(255,255,255,.14) !important}
+
+/* ---- Apple-style segmented control (appearance) ---- */
+.seg{display:inline-flex;background:var(--glass-bg);border:1px solid var(--glass-brd);
+  border-radius:var(--r-sm);padding:3px;gap:2px;-webkit-backdrop-filter:blur(16px) saturate(1.6);
+  backdrop-filter:blur(16px) saturate(1.6);box-shadow:inset 0 1px 0 var(--glass-hi)}
+.seg button{padding:7px 16px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);
+  transition:color var(--dur-1) var(--ease-standard)}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:var(--e1)}
+
+/* =====================================================================
+   APPEARANCE — Dark mode (manual or Auto via prefers-color-scheme).
+   Accent stays from the chosen Material You theme; surfaces flip.
+   ===================================================================== */
+html[data-appearance="dark"]{
+  --text:#f3f3f7 !important; --muted:#9b9ba6 !important; --ink:#f3f3f7 !important;
+  --bg:#0b0b10 !important; --bg-2:#15151c !important;
+  --surface:rgba(34,34,44,.62) !important; --surface-2:rgba(44,44,56,.62) !important;
+  --line:rgba(255,255,255,.12) !important;
+  --glass-bg:rgba(40,40,52,.44) !important; --glass-bg-strong:rgba(48,48,62,.60) !important;
+  --glass-brd:rgba(255,255,255,.16) !important; --glass-hi:rgba(255,255,255,.20) !important;
+  --m3-surface-container:rgba(34,34,44,.62) !important;
+  --m3-surface-container-high:rgba(44,44,56,.62) !important;
+  --m3-surface-container-highest:rgba(52,52,66,.62) !important;
+  --m3-outline:#8a8a96 !important; --m3-outline-variant:rgba(255,255,255,.12) !important;
+  --m3-on-secondary-container:#f3f3f7 !important;
+}
+html[data-appearance="dark"] body{
+  background:
+    radial-gradient(70% 52% at 12% 2%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 60%),
+    radial-gradient(60% 50% at 92% 16%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 60%),
+    radial-gradient(90% 60% at 50% 112%, color-mix(in srgb, var(--warm) 18%, transparent), transparent 64%),
+    #07070b !important;
+}
+html[data-appearance="dark"] input,
+html[data-appearance="dark"] select,
+html[data-appearance="dark"] textarea{background:rgba(255,255,255,.06) !important;color:var(--text)}
+html[data-appearance="dark"] .card::after{opacity:.08;mix-blend-mode:soft-light}
+html[data-appearance="dark"] .boost-ic,
+html[data-appearance="dark"] .swatch{filter:saturate(1.05)}
+
+/* High-contrast support */
+@media (prefers-contrast:more){
+  :root{--line:rgba(0,0,0,.4);--muted:#5a5560}
+  .glass-brd,.card,.meta,.nav{border-color:rgba(0,0,0,.35) !important}
+}
+
+/* Touch targets ≥ 44px where it matters */
+.nav button,.hdr-gear,.hdr-back,.seg button,.lang button{min-height:44px}
+
+/* Respect reduced motion (base already covers, reinforce new pieces) */
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001s !important;transition-duration:.04s !important}
+}
