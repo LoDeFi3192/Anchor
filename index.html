@@ -11,6 +11,9 @@
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <title>Anchor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#fff8f6;
@@ -83,11 +86,11 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
 
 .companion-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;margin:10px 0 20px}
 .companion{width:clamp(132px,38vw,160px);height:clamp(132px,38vw,160px);display:flex;align-items:center;justify-content:center;position:relative}
-.companion .aura{position:absolute;inset:0;border-radius:50%;will-change:transform,opacity;transform:translateZ(0);
+.companion .aura{position:absolute;inset:0;border-radius:50%;will-change:opacity;
   background:radial-gradient(circle,var(--glow) 0%,rgba(191,168,230,.25) 45%,transparent 70%);opacity:.7;
   animation:pulse 4.5s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(.88) translateZ(0);opacity:.45}50%{transform:scale(1.18) translateZ(0);opacity:.75}}
-.creature{font-size:clamp(58px,16vw,78px);animation:float 5.5s ease-in-out infinite;z-index:1;text-shadow:0 10px 22px rgba(180,110,130,.3);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.72}}
+.creature{font-size:clamp(58px,16vw,78px);z-index:1;text-shadow:0 10px 22px rgba(180,110,130,.3)}
 @keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-11px,0)}}
 .companion.sleepy .creature{animation:none;filter:grayscale(.25);text-shadow:0 5px 12px rgba(180,110,130,.25);opacity:.82}
 .companion-name{font-family:var(--font-d);font-weight:500;font-size:20px}
@@ -106,7 +109,7 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
   background:radial-gradient(130% 200% at 28% 25%, #f6b3a8, #ec8276 78%);
   box-shadow:0 0 0 0 rgba(236,130,118,.4),0 16px 36px rgba(236,130,118,.4);
   color:#fff;display:flex;align-items:center;justify-content:center;gap:14px;
-  padding:12px 24px;animation:breathe 4.8s ease-in-out infinite;
+  padding:12px 24px;
 }
 .pb-ic{font-size:30px;line-height:1}
 .pb-txt{display:flex;flex-direction:column;align-items:flex-start;line-height:1.12}
@@ -174,7 +177,7 @@ h2{font-family:var(--font-d);font-size:21px;font-weight:500;margin:0 0 12px}
 .pm-actions{width:100%;max-width:360px;display:flex;flex-direction:column;gap:10px;margin-top:6px}
 
 .recap{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
-.recap .reward{font-size:64px;animation:float 4.5s ease-in-out infinite}
+.recap .reward{font-size:64px}
 
 .garden{min-height:250px;border-radius:var(--radius);position:relative;overflow:hidden;
   background:linear-gradient(180deg,#fbe3e9 0%,#f4e2f5 55%,#e7f0e4 100%);border:1px solid var(--line);padding:16px;box-shadow:var(--shadow-sm)}
@@ -253,7 +256,7 @@ label{font-size:13px;color:var(--muted);font-weight:600}
 .tut-card{width:100%;max-width:380px;background:var(--surface-2);border:1px solid var(--line);border-radius:34px;
   padding:40px 26px 26px;box-shadow:var(--shadow);text-align:center;display:flex;flex-direction:column;align-items:center;position:relative}
 .tut-skip{position:absolute;top:16px;right:18px;font-size:13px;color:var(--muted);font-weight:600;padding:6px 8px}
-.tut-icon{font-size:66px;animation:float 5s ease-in-out infinite;margin-bottom:8px;text-shadow:0 8px 18px rgba(180,110,130,.28);will-change:transform}
+.tut-icon{font-size:66px;margin-bottom:8px;text-shadow:0 8px 18px rgba(180,110,130,.28)}
 .tut-title{font-family:var(--font-d);font-size:25px;font-weight:500;line-height:1.2}
 .tut-body{color:var(--muted);font-size:15px;line-height:1.6;margin-top:10px;min-height:108px}
 .tut-dots{display:flex;gap:7px;margin:6px 0 20px}
@@ -336,7 +339,7 @@ label{font-size:13px;color:var(--muted);font-weight:600}
 .rt-instr{font-size:17px;color:#f0c8d6;max-width:330px;line-height:1.5}
 .rt-count{font-variant-numeric:tabular-nums;font-size:34px;font-weight:700;color:#f6b3a8;margin-top:4px}
 .rt-done{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
-.rt-done-ic{font-size:60px;animation:float 4s ease-in-out infinite}
+.rt-done-ic{font-size:60px}
 
 /* ===== Material You 3 overrides + motion ===== */
 .brand .dot{box-shadow:0 0 16px var(--glow)}
@@ -495,7 +498,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .night.show{display:flex;animation:fade .5s ease}
 .night-x{position:absolute;top:calc(env(safe-area-inset-top) + 10px);right:14px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.08);color:#e9e2f2;font-size:17px;border:1px solid rgba(255,255,255,.12)}
 .night-top{margin-top:14px}
-.night-moon{font-size:38px;text-shadow:0 0 18px rgba(180,160,230,.55);animation:float 6s ease-in-out infinite;will-change:transform}
+.night-moon{font-size:38px;text-shadow:0 0 18px rgba(180,160,230,.55)}
 .night-reassure{font-family:var(--font-d);font-size:18px;opacity:.92;margin-top:10px;max-width:300px;line-height:1.3}
 .night-stage{flex:1;display:flex;align-items:center;justify-content:center;min-height:226px;width:100%}
 .pacer{width:clamp(150px,52vw,206px);height:clamp(150px,52vw,206px);border-radius:50%;
@@ -524,8 +527,8 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 
 /* themes + night meditation */
 .theme-picker{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 4px}
-.swatch{width:46px;height:46px;border-radius:50%;border:3px solid transparent;box-shadow:var(--shadow-sm);padding:0;cursor:pointer}
-.swatch.on{border-color:var(--text)}
+.swatch{width:44px;height:44px;border-radius:50%;border:none;padding:0;cursor:pointer;box-shadow:0 2px 9px rgba(40,28,46,.18), inset 0 1px 0 rgba(255,255,255,.5);transition:transform .18s var(--ease-spring)}
+.swatch.on{box-shadow:0 0 0 3px var(--surface),0 0 0 5.5px var(--accent),0 3px 10px rgba(40,28,46,.2);transform:scale(1.06)}
 .lang button{padding:6px 11px;font-size:12px}
 .hdr-right{gap:6px}
 .night-modes{flex-wrap:wrap;justify-content:center}
@@ -556,7 +559,7 @@ body{
   background-attachment:fixed;
 }
 /* Core frosted panels */
-.card,.meta,.boost,.chip,.btn.ghost,.lang,.hdr-gear,.hdr-back,.swatch,.contact a,.tut-card,.rt-card,.evo,.pick{
+.card,.meta,.boost,.chip,.btn.ghost,.lang,.hdr-gear,.hdr-back,.contact a,.tut-card,.rt-card,.evo,.pick{
   background:var(--glass-bg)!important;
   -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.7);
   backdrop-filter:blur(var(--glass-blur)) saturate(1.7);
@@ -611,7 +614,7 @@ input,select,textarea{
 .card:active,.chip:active,.btn.ghost:active{transform:translateY(1px)}
 /* Graceful fallback if the device cannot blur: fall back to solid surfaces */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .card,.meta,.boost,.chip,.btn.ghost,.lang,.hdr-gear,.hdr-back,.swatch,.nav,.contact a,.companion-view,.mini{
+  .card,.meta,.boost,.chip,.btn.ghost,.lang,.hdr-gear,.hdr-back,.nav,.contact a,.companion-view,.mini{
     background:var(--surface)!important;
   }
   body{background:
@@ -672,8 +675,8 @@ input,select,textarea{
 /* ---- Design tokens : type / spacing / radius / elevation / motion ---- */
 :root{
   /* Typography — system stack renders as SF Pro on Apple, free + licit */
-  --font-d:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
-  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+  --font-d:"Bricolage Grotesque",system-ui,-apple-system,sans-serif;
+  --font:"Ubuntu",-apple-system,system-ui,"Segoe UI",sans-serif;
 
   /* 8pt spacing scale */
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s7:32px; --s8:40px; --s9:48px;
@@ -694,12 +697,12 @@ input,select,textarea{
 }
 
 /* ---- Typography ramp (SF metrics: tight tracking on display sizes) ---- */
-body{font-family:var(--font);letter-spacing:-.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-h1{font-family:var(--font-d);font-weight:700;letter-spacing:-.022em;line-height:1.08}
-h2{font-family:var(--font-d);font-weight:600;letter-spacing:-.016em}
-.brand{font-family:var(--font-d);font-weight:700;letter-spacing:-.02em}
+body{font-family:var(--font);letter-spacing:-.005em;-webkit-font-smoothing:antialiased;text-rendering:optimizeSpeed}
+h1{font-family:var(--font-d);font-weight:700;letter-spacing:-.008em;line-height:1.08}
+h2{font-family:var(--font-d);font-weight:600;letter-spacing:-.006em}
+.brand{font-family:var(--font-d);font-weight:700;letter-spacing:-.008em}
 .sub{letter-spacing:-.006em}
-.val{font-family:var(--font-d);font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.val{font-family:var(--font-d);font-weight:700;letter-spacing:-.008em;font-variant-numeric:tabular-nums}
 .boost-text{letter-spacing:-.006em}
 .panic-btn .pb-txt b{font-family:var(--font-d);font-weight:700;letter-spacing:.02em}
 button,.btn,.chip,.seg button{font-family:var(--font)}
@@ -781,6 +784,64 @@ html[data-appearance="dark"] .swatch{filter:saturate(1.05)}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001s !important;transition-duration:.04s !important}
 }
+
+/* ============================================================
+   FINAL Android stabilization — kill live backdrop-blur.
+   On Android the GPU re-rasterizes backdrop-filter every frame
+   while anything animates, which makes both the glass panels
+   AND the text on them vibrate. Remove blur, compensate with a
+   richer translucent surface + edge light. Stable, still premium.
+   ============================================================ */
+*{ -webkit-backdrop-filter:none !important; backdrop-filter:none !important; }
+
+:root{ --glass-bg:rgba(255,255,255,.66); --glass-bg-strong:rgba(255,255,255,.80); }
+.card,.meta{ background:linear-gradient(168deg, rgba(255,255,255,.84), rgba(255,255,255,.66)) !important; }
+.boost{ background:linear-gradient(168deg, rgba(255,255,255,.76), rgba(255,255,255,.58)) !important; }
+.nav{ background:rgba(255,250,250,.90) !important; }
+.chip,.pick,.seg,.btn.ghost,.hdr-gear,.hdr-back,.lang{ background:rgba(255,255,255,.74) !important; }
+
+html[data-appearance="dark"]{ --glass-bg:rgba(48,48,60,.86); --glass-bg-strong:rgba(54,54,68,.92); }
+html[data-appearance="dark"] .card,
+html[data-appearance="dark"] .meta{ background:linear-gradient(168deg, rgba(50,50,62,.92), rgba(38,38,50,.84)) !important; }
+html[data-appearance="dark"] .boost{ background:linear-gradient(168deg, rgba(46,46,58,.88), rgba(34,34,46,.80)) !important; }
+html[data-appearance="dark"] .nav{ background:rgba(24,24,34,.93) !important; }
+html[data-appearance="dark"] .chip,
+html[data-appearance="dark"] .pick,
+html[data-appearance="dark"] .seg,
+html[data-appearance="dark"] .btn.ghost,
+html[data-appearance="dark"] .hdr-gear,
+html[data-appearance="dark"] .hdr-back,
+html[data-appearance="dark"] .lang{ background:rgba(48,48,60,.86) !important; }
+
+/* Robust, stable type rendering on every platform */
+body{ font-family:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,sans-serif; text-rendering:optimizeSpeed; }
+h1,h2,.brand,.val{ font-family:-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,sans-serif; }
+
+/* ===================== V4 — Immersive Home ===================== */
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(58% 40% at 50% 30%, color-mix(in srgb, var(--glow) 72%, transparent), transparent 70%),
+    radial-gradient(72% 52% at 10% 2%, color-mix(in srgb, var(--accent) 15%, transparent), transparent 60%),
+    radial-gradient(72% 52% at 92% 12%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent 62%);}
+html[data-appearance="dark"] .ambient{
+  background:
+    radial-gradient(56% 38% at 50% 28%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 70%),
+    radial-gradient(72% 52% at 8% 0%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%),
+    radial-gradient(72% 52% at 94% 12%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 62%);}
+
+.home-greet{font-family:var(--font-d);font-weight:600;font-size:clamp(26px,7vw,32px);
+  letter-spacing:-.02em;text-align:center;margin:16px 0 2px;color:var(--text);line-height:1.12}
+.home-greet .sub{display:block;font-family:var(--font);font-weight:400;font-size:13px;
+  letter-spacing:0;color:var(--muted);margin-top:4px}
+
+.companion-wrap{margin:20px 0 28px!important;gap:12px!important}
+.companion{width:clamp(150px,46vw,188px)!important;height:clamp(150px,46vw,188px)!important}
+.companion::after{content:"";position:absolute;inset:-16%;border-radius:50%;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle, color-mix(in srgb,var(--glow) 62%,transparent) 0%, transparent 60%);opacity:.7}
+.creature{font-size:clamp(70px,19vw,92px)!important}
+.companion-name{font-size:23px!important;font-weight:600!important}
+.companion-msg{font-size:15px!important;max-width:300px!important}
+.meta-row{margin-top:4px}
 </style>
 </head>
 <body>
@@ -798,6 +859,7 @@ html[data-appearance="dark"] .swatch{filter:saturate(1.05)}
 
 <div class="app">
   <section class="screen active" id="screen-home">
+    <div class="ambient" aria-hidden="true"></div>
     <div class="topbar">
       <div class="brand"><span class="dot"></span>Anchor</div>
       <div class="hdr-right">
@@ -813,6 +875,7 @@ html[data-appearance="dark"] .swatch{filter:saturate(1.05)}
     <div class="boost" id="boost"><span class="boost-ic">💛</span><span class="boost-text" id="boost-text"></span></div>
     <div class="night-banner" id="night-banner" style="display:none"></div>
     <div id="nudge"></div>
+    <div class="home-greet" id="home-greet"></div>
 
     <div class="companion-wrap">
       <div class="companion" id="home-companion">
@@ -1450,6 +1513,19 @@ function stageProgress(){
 }
 function creatureGlyph(){return COMPANIONS[S.companion].stages[stageIndex()];}
 function companionName(){return S.cname||COMPANIONS[S.companion].name[S.lang];}
+function renderGreeting(){
+  const el=$("home-greet"); if(!el)return;
+  const h=new Date().getHours();
+  const G=({fr:["Bonne nuit","Bonjour","Bon après-midi","Bonsoir"],
+            en:["Good night","Good morning","Good afternoon","Good evening"],
+            es:["Buenas noches","Buenos días","Buenas tardes","Buenas noches"]})[S.lang]
+          ||["Good night","Good morning","Good afternoon","Good evening"];
+  const i = h<5?0 : h<12?1 : h<18?2 : 3;
+  const loc=({fr:"fr-FR",en:"en-US",es:"es-ES"})[S.lang]||"en-US";
+  let date=""; try{ date=new Date().toLocaleDateString(loc,{weekday:"long",day:"numeric",month:"long"}); }catch(e){}
+  date=date?date.charAt(0).toUpperCase()+date.slice(1):"";
+  el.innerHTML=G[i]+(date?'<span class="sub">'+date+'</span>':"");
+}
 function renderHome(){
   $("home-creature").textContent=creatureGlyph();
   $("pm-creature").textContent=creatureGlyph();
@@ -1465,6 +1541,7 @@ function renderHome(){
   $("energy-bar").style.width=S.energy+"%";
   $("m-stage").textContent=t("stageNames")[stageIndex()];
   $("stage-bar").style.width=stageProgress()+"%";
+  renderGreeting();
 }
 function renderGarden(){
   const p=$("plants"); p.innerHTML="";
@@ -2369,7 +2446,7 @@ function renderThemePicker(){
     const P=PALETTES[id];
     const b=document.createElement("button");
     b.className="swatch"+(((S.theme||"aurore")===id)?" on":"");
-    b.style.background="linear-gradient(135deg,"+P.accent+" 0 50%,"+P.surface+" 50% 100%)";
+    b.style.setProperty("background","linear-gradient(140deg,"+P.accent+" 0%,"+P.accent2+" 100%)","important");
     b.setAttribute("aria-label",id);
     b.onclick=()=>{S.theme=id;save();applyTheme(id);renderThemePicker();};
     box.appendChild(b);
