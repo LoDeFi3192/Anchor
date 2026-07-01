@@ -592,11 +592,6 @@ input,select,textarea{
 .hdr-gear,.hdr-back{position:relative;overflow:hidden}
 .hdr-gear::after,.hdr-back::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(150deg,rgba(255,255,255,.6),rgba(255,255,255,0) 55%);pointer-events:none}
 /* Frosted full-screen scrims (companion + mini overlays) */
-.companion-view,.mini{
-  background:color-mix(in srgb, var(--bg) 55%, transparent)!important;
-  -webkit-backdrop-filter:blur(18px) saturate(1.5);
-  backdrop-filter:blur(18px) saturate(1.5);
-}
 .mini-content{background:transparent!important}
 /* Liquid panic pill: keep the coral, add a glossy specular sheen */
 .panic-btn{position:relative;overflow:hidden;transform:translateZ(0);will-change:transform}
@@ -899,6 +894,20 @@ html[data-appearance="dark"] .ambient{
 .coach-entry .ce-tx{display:flex;flex-direction:column;gap:1px}
 .coach-entry .ce-tx b{font-family:var(--font-d);font-weight:600;font-size:15.5px;color:var(--text)}
 .coach-entry .ce-tx small{font-size:12.5px;color:var(--muted)}
+
+/* Fix: full-screen companion/mini views must be opaque (no live blur on Android) */
+.companion-view{
+  background:
+   radial-gradient(92% 60% at 14% 0%, color-mix(in srgb,var(--accent) 13%,transparent), transparent 55%),
+   radial-gradient(84% 60% at 96% 22%, color-mix(in srgb,var(--accent-2) 11%,transparent), transparent 55%),
+   var(--bg) !important;
+}
+html[data-appearance="dark"] .companion-view{
+  background:
+   radial-gradient(92% 60% at 14% 0%, color-mix(in srgb,var(--accent) 26%,transparent), transparent 55%),
+   radial-gradient(84% 60% at 96% 22%, color-mix(in srgb,var(--accent-2) 20%,transparent), transparent 55%),
+   #0d0b14 !important;
+}
 </style>
 </head>
 <body>
