@@ -522,7 +522,7 @@ input,select,textarea{border-radius:16px;background:var(--m3-surface-container-h
 .night-dim-msg{display:none}
 .night.dimmed{background:#070509;gap:0}
 .night.dimmed .night-x{opacity:.45}
-.night.dimmed .night-top,.night.dimmed .night-stage,.night.dimmed .night-modes,.night.dimmed .night-opts,.night.dimmed .night-timer{display:none}
+.night.dimmed .night-top,.night.dimmed .night-stage,.night.dimmed .night-modes,.night.dimmed .night-opts,.night.dimmed .night-sounds,.night.dimmed .night-timer{display:none}
 .night.dimmed .night-dim-msg{display:flex;flex:1;align-items:center;justify-content:center;font-family:var(--font-d);font-size:22px;color:#5a5070;cursor:pointer}
 
 /* themes + night meditation */
@@ -842,6 +842,63 @@ html[data-appearance="dark"] .ambient{
 .companion-name{font-size:23px!important;font-weight:600!important}
 .companion-msg{font-size:15px!important;max-width:300px!important}
 .meta-row{margin-top:4px}
+
+/* Night soundscape picker + volume */
+.night-sounds{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:340px}
+.night-sounds .scape{padding:8px 14px;border-radius:16px;background:rgba(255,255,255,.05);color:#c9c0e0;font-size:12.5px;font-weight:600;border:1px solid rgba(255,255,255,.08)}
+.night-sounds .scape.on{background:rgba(150,130,220,.32);color:#fff;border-color:rgba(180,160,240,.5)}
+.night-vol{display:inline-flex;gap:4px;margin-left:8px;vertical-align:middle}
+.night-vol .vbtn{width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.05);color:#c9c0e0;font-size:11px;border:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;line-height:1}
+.night-vol .vbtn.on{background:rgba(150,130,220,.3);color:#fff}
+
+/* ===================== Relaxation Coach (V5) ===================== */
+.coach{position:fixed;inset:0;z-index:70;display:none;flex-direction:column;background:radial-gradient(80% 60% at 50% 12%, #2a2350, #171430 60%, #0e0c1f);color:#ece7fb}
+.coach.show{display:flex;animation:fade .5s ease}
+.coach-head{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) 18px 8px}
+.coach-title{font-family:var(--font-d);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.coach-x,.coach-voicebtn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);color:#ece7fb;display:flex;align-items:center;justify-content:center;font-size:15px;border:1px solid rgba(255,255,255,.1)}
+.coach-voicebtn .ic-svg{width:19px;height:19px}
+.coach-voicebtn.on{background:rgba(150,130,220,.35);color:#fff}
+.coach-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:14px 22px calc(24px + env(safe-area-inset-bottom));text-align:center}
+.coach-body.scroll{justify-content:flex-start;overflow-y:auto}
+.coach-welcome{font-family:var(--font-d);font-size:19px;font-weight:500;color:#d9d1f5}
+.coach-q{font-size:16px;color:#cfc7ec;max-width:320px}
+.coach-q.sm{font-size:13.5px;opacity:.85;margin-bottom:2px}
+.feel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:340px}
+.feel{padding:14px;border-radius:16px;background:rgba(255,255,255,.06);color:#e6e0f8;font-size:14.5px;font-weight:600;border:1px solid rgba(255,255,255,.1)}
+.feel.on{background:rgba(150,130,220,.34);color:#fff;border-color:rgba(180,160,240,.6)}
+.intens-wrap{width:100%;max-width:320px;display:flex;flex-direction:column;gap:6px}
+.intens{width:100%;accent-color:#9b83e0;height:26px}
+.intens-lbls{display:flex;justify-content:space-between;font-size:11.5px;color:#a99fd0}
+.coach-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;margin-top:6px}
+.coach-btn{padding:14px;border-radius:16px;background:rgba(255,255,255,.08);color:#ece7fb;font-size:15px;font-weight:600;border:1px solid rgba(255,255,255,.12)}
+.coach-btn.primary{background:linear-gradient(180deg,#8a6fd6,#6f56b8);color:#fff;border:none}
+.coach-btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.16);color:#c9c0e8}
+.sess-cat{font-family:var(--font-d);font-weight:600;font-size:15px;color:#efeaff;align-self:flex-start;margin:16px 0 4px}
+.sess-sub{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:#a99fd0;align-self:flex-start;margin:12px 0 3px}
+.sess-list{display:flex;flex-direction:column;gap:8px;width:100%}
+.sess{text-align:left;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:3px}
+.sess-n{font-weight:600;font-size:15px;color:#f2eeff}
+.sess-d{font-size:12.5px;color:#b9b0dc;line-height:1.35}
+.coach-player{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;flex:1;width:100%}
+.coach-orb{width:190px;height:190px;border-radius:50%;transform:scale(1);background:radial-gradient(circle at 50% 42%, rgba(190,170,240,.9), rgba(140,115,215,.45) 55%, transparent 72%);box-shadow:0 0 60px rgba(150,120,230,.4);will-change:transform}
+.coach-orb.lit{box-shadow:0 0 90px rgba(180,150,255,.6)}
+.coach-orb.done{width:120px;height:120px;animation:pulse 5s ease-in-out infinite}
+.coach-line{font-family:var(--font-d);font-size:22px;font-weight:500;color:#f0ebff;min-height:30px;max-width:320px;opacity:0;transition:opacity .5s ease}
+.coach-line.show{opacity:1}
+.coach-progwrap{width:min(320px,80%);height:4px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.coach-progwrap i{display:block;height:100%;width:0;background:rgba(180,160,240,.85);transition:width .5s ease}
+.coach-ctrls{display:flex;gap:12px}
+.coach-ctrls .coach-btn{min-width:118px}
+.coach-done{display:flex;flex-direction:column;align-items:center;gap:16px}
+.coach-done-t{font-family:var(--font-d);font-size:24px;font-weight:600;color:#f2eeff}
+.coach-done-s{font-size:15px;color:#c2b9e2;max-width:280px}
+.coach-entry{display:flex;align-items:center;gap:14px;width:100%;padding:15px 18px;border-radius:22px;background:linear-gradient(135deg, color-mix(in srgb,var(--accent-2) 20%,var(--surface)), var(--surface));border:1px solid var(--line);box-shadow:var(--e1);text-align:left}
+.coach-entry .ce-ic{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--accent-2) 24%,transparent);color:var(--accent-2)}
+.coach-entry .ce-ic .ic-svg{width:24px;height:24px}
+.coach-entry .ce-tx{display:flex;flex-direction:column;gap:1px}
+.coach-entry .ce-tx b{font-family:var(--font-d);font-weight:600;font-size:15.5px;color:var(--text)}
+.coach-entry .ce-tx small{font-size:12.5px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -855,6 +912,8 @@ html[data-appearance="dark"] .ambient{
 <symbol id="ic-gear" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M19.5 7H20M4 17h4M14.5 17H20"/><circle cx="15.5" cy="7" r="2.4"/><circle cx="10.5" cy="17" r="2.4"/></g></symbol>
 <symbol id="ic-back" viewBox="0 0 24 24"><path d="M14.5 5 8 12l6.5 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="ic-life" viewBox="0 0 24 24"><path d="M12 3.4 5 6v5c0 4.6 3 7.9 7 9.6 4-1.7 7-5 7-9.6V6Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9.1c-1-1.3-3.1-.8-3.1 1 0 1.5 1.7 2.6 3.1 3.7 1.4-1.1 3.1-2.2 3.1-3.7 0-1.8-2.1-2.3-3.1-1Z" fill="currentColor"/></symbol>
+<symbol id="ic-coach" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.5c-1.9 0-3.4-1.6-3.4-3.6C10.5 8.9 12 10.5 12 12.5Z"/><path d="M12 12.5c1.9 0 3.4-1.6 3.4-3.6C13.5 8.9 12 10.5 12 12.5Z"/><path d="M12 12.5c0-2 .8-3.6 0-5.5-.8 1.9 0 3.5 0 5.5Z"/><path d="M4.5 12.8c2.6 3 12.4 3 15 0"/></g></symbol>
+<symbol id="ic-sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h3l5 4V5L7 9H4Z"/><path d="M16 9.5a3.5 3.5 0 0 1 0 5M18.6 7a7 7 0 0 1 0 10"/></g></symbol>
 </svg>
 
 <div class="app">
@@ -902,6 +961,11 @@ html[data-appearance="dark"] .ambient{
       <div class="mood-home-q" data-t="moodTodayQ">Comment te sens-tu aujourd'hui ?</div>
       <div class="mood-scale" id="home-mood-scale"></div>
     </div>
+
+    <button class="coach-entry" id="coach-open">
+      <span class="ce-ic"><svg class="ic-svg" aria-hidden="true"><use href="#ic-coach"/></svg></span>
+      <span class="ce-tx"><b data-t="coachEntry">Séances de relaxation</b><small data-t="coachEntrySub">Respire, calme-toi, dors mieux</small></span>
+    </button>
 
     <div class="panic-zone">
       <button class="panic-btn" id="panic-open">
@@ -1145,6 +1209,7 @@ html[data-appearance="dark"] .ambient{
   </div>
 </div>
 
+<div id="coach" class="coach"></div>
 <script>
 "use strict";
 const I18N = {
@@ -1155,7 +1220,7 @@ const I18N = {
     navHome:"Accueil",navGarden:"Jardin",navDash:"Suivi",navContacts:"Contacts",navSettings:"Réglages",
     nightOpen:"Mode Nuit", nightBanner:"Il se fait tard. On essaie le mode Nuit ?", nightLater:"Plus tard",
     nightReassure:"Je veille. Tu peux lâcher.", nightBreath:"Respiration", nightShuffle:"Défilement",
-    nightSound:"Son", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
+    nightSound:"Son", scapeOff:"Silence", scapeBrown:"Bruit brun", scapePink:"Bruit rose", scapeRain:"Pluie", scapeOcean:"Océan", scapeWind:"Vent", scapeDrone:"Nappe", coachEntry:"Séances de relaxation", coachEntrySub:"Respire, calme-toi, dors mieux", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
     nightGoodnight:"Bonne nuit", nInhale:"Inspire", nHold:"Retiens", nExhale:"Expire",
     nightMedit:"Méditation", medHint:"Laisse les phrases te guider. Sans effort.", setTheme:"Thème", setAppearance:"Apparence",
     medSteps:["Installe-toi. Laisse le poids de ton corps s'enfoncer dans le lit.","Respire doucement. L'expiration, un peu plus longue que l'inspiration.","Relâche ton visage. Le front, les mâchoires, autour des yeux.","Laisse tes épaules descendre. Tes bras deviennent lourds.","Sens ta poitrine et ton ventre se soulever, sans rien forcer.","Relâche tes jambes. Tes pieds. Tout le bas du corps se pose.","Il n'y a rien à faire maintenant. Juste être là, au chaud.","Laisse chaque expiration t'emmener un peu plus loin vers le sommeil."],
@@ -1255,7 +1320,7 @@ const I18N = {
     navHome:"Home",navGarden:"Garden",navDash:"Track",navContacts:"Contacts",navSettings:"Settings",
     nightOpen:"Night mode", nightBanner:"It's getting late. Try Night mode?", nightLater:"Later",
     nightReassure:"I'm here. You can let go.", nightBreath:"Breathing", nightShuffle:"Word drift",
-    nightSound:"Sound", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
+    nightSound:"Sound", scapeOff:"Silence", scapeBrown:"Brown noise", scapePink:"Pink noise", scapeRain:"Rain", scapeOcean:"Ocean", scapeWind:"Wind", scapeDrone:"Drone", coachEntry:"Relaxation sessions", coachEntrySub:"Breathe, calm down, sleep better", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
     nightGoodnight:"Good night", nInhale:"Breathe in", nHold:"Hold", nExhale:"Breathe out",
     nightMedit:"Meditation", medHint:"Let the phrases guide you. No effort.", setTheme:"Theme", setAppearance:"Appearance",
     medSteps:["Settle in. Let the weight of your body sink into the bed.","Breathe gently. Make the out-breath a little longer than the in-breath.","Soften your face. Forehead, jaw, around the eyes.","Let your shoulders drop. Your arms grow heavy.","Feel your chest and belly rise, without forcing anything.","Release your legs. Your feet. The whole lower body settles.","There is nothing to do now. Just being here, warm.","Let each out-breath carry you a little further toward sleep."],
@@ -1355,7 +1420,7 @@ const I18N = {
     navHome:"Inicio",navGarden:"Jardín",navDash:"Seguimiento",navContacts:"Contactos",navSettings:"Ajustes",
     nightOpen:"Modo Noche", nightBanner:"Se hace tarde. ¿Probamos el Modo Noche?", nightLater:"Más tarde",
     nightReassure:"Estoy aquí. Puedes soltar.", nightBreath:"Respiración", nightShuffle:"Palabras",
-    nightSound:"Sonido", nightSoft:"Más suave", nightOff:"Apagado", nightShuffleHint:"Imagina esta palabra, sin esfuerzo.",
+    nightSound:"Sonido", scapeOff:"Silencio", scapeBrown:"Ruido marrón", scapePink:"Ruido rosa", scapeRain:"Lluvia", scapeOcean:"Océano", scapeWind:"Viento", scapeDrone:"Capa", coachEntry:"Sesiones de relajación", coachEntrySub:"Respira, cálmate, duerme mejor", nightSoft:"Más suave", nightOff:"Apagado", nightShuffleHint:"Imagina esta palabra, sin esfuerzo.",
     nightGoodnight:"Buenas noches", nInhale:"Inspira", nHold:"Retén", nExhale:"Espira",
     nightMedit:"Meditación", medHint:"Deja que las frases te guíen. Sin esfuerzo.", setTheme:"Tema", setAppearance:"Apariencia",
     medSteps:["Acomódate. Deja que el peso de tu cuerpo se hunda en la cama.","Respira despacio. Que la espiración dure un poco más que la inspiración.","Afloja la cara. La frente, la mandíbula, alrededor de los ojos.","Deja caer los hombros. Tus brazos se vuelven pesados.","Siente cómo suben el pecho y el vientre, sin forzar nada.","Suelta las piernas. Los pies. Toda la parte baja se posa.","No hay nada que hacer ahora. Solo estar aquí, en calor.","Deja que cada espiración te lleve un poco más hacia el sueño."],
@@ -2288,9 +2353,10 @@ function renderGratitude(){
     d.appendChild(head);d.appendChild(body);box.appendChild(d);
   });
 }
-const NIGHT={on:false,mode:"breath",t:[],sleep:null,ac:null,noise:null,gain:null,soft:false};
+const NIGHT={on:false,mode:"breath",t:[],sleep:null,ac:null,master:null,nodes:[],noise:null,gain:null,soft:false,scape:"off",vol:2};
+const SCAPES=[["off","scapeOff"],["brown","scapeBrown"],["pink","scapePink"],["rain","scapeRain"],["ocean","scapeOcean"],["wind","scapeWind"],["drone","scapeDrone"]];
 const NIGHT_WORDS=["rivière","coussin","pomme","lampe","feuille","sable","tasse","nuage","laine","galet","miel","fenêtre","jardin","plume","bougie","vague","mousse","pain","horloge","châle","sentier","mésange","noisette","brume","ruisseau","velours","abricot","lanterne","cabane","prairie","flocon","écorce","lavande","biscuit","oreiller","fougère","étang","mandarine","tricot","colline","barque","théière","marron","pivoine","sablier","hamac","mûre","brindille","édredon"];
-function nightCfg(){S.settings.night=S.settings.night||{sound:false,prompt:true,hour:22,timer:15,soft:false};return S.settings.night;}
+function nightCfg(){S.settings.night=S.settings.night||{sound:false,prompt:true,hour:22,timer:15,soft:false,scape:"off",vol:2};return S.settings.night;}
 function renderNightPrompt(){
   const b=$("night-banner"); if(!b)return;
   const cfg=nightCfg();
@@ -2309,19 +2375,20 @@ function buildNightUI(){
    +'<div class="night-top"><div class="night-moon">🌙</div><div class="night-reassure">'+t("nightReassure")+'</div></div>'
    +'<div class="night-stage" id="nightStage"></div>'
    +'<div class="night-modes"><button data-md="breath" class="on">'+t("nightBreath")+'</button><button data-md="medit">'+t("nightMedit")+'</button><button data-md="shuffle">'+t("nightShuffle")+'</button></div>'
-   +'<div class="night-opts"><button id="nightSound" class="nopt">'+t("nightSound")+'</button><button id="nightSoft" class="nopt">'+t("nightSoft")+'</button></div>'
+   +'<div class="night-sounds" id="nightSounds"></div>'
+   +'<div class="night-opts"><button id="nightSoft" class="nopt">'+t("nightSoft")+'</button><span class="night-vol"><button class="vbtn" data-vol="1" aria-label="Volume bas">▁</button><button class="vbtn" data-vol="2" aria-label="Volume moyen">▄</button><button class="vbtn" data-vol="3" aria-label="Volume haut">█</button></span></div>'
    +'<div class="night-timer"><span>'+t("nightOff")+'</span><button data-min="10">10</button><button data-min="15">15</button><button data-min="20">20</button><button data-min="0">∞</button></div>'
    +'<div class="night-dim-msg" id="nightDimMsg">'+t("nightGoodnight")+' 🌙</div>';
   $("nightX").onclick=closeNight;
   $("nightDimMsg").onclick=closeNight;
   document.querySelectorAll(".night-modes button").forEach(b=>b.onclick=()=>setNightMode(b.dataset.md));
-  $("nightSound").onclick=()=>toggleNoise();
+  document.querySelectorAll(".night-vol .vbtn").forEach(b=>b.onclick=()=>setNightVol(parseInt(b.dataset.vol,10)));
   $("nightSoft").onclick=()=>{const c=nightCfg();c.soft=!c.soft;NIGHT.soft=c.soft;save();$("nightSoft").classList.toggle("on",c.soft);if(NIGHT.mode==="breath")setNightMode("breath");};
   document.querySelectorAll(".night-timer button").forEach(b=>b.onclick=()=>{nightCfg().timer=parseInt(b.dataset.min,10);save();document.querySelectorAll(".night-timer button").forEach(x=>x.classList.toggle("on",x===b));armSleepTimer();});
   const cfg=nightCfg();
   NIGHT.soft=!!cfg.soft;
   $("nightSoft").classList.toggle("on",NIGHT.soft);
-  $("nightSound").classList.toggle("on",!!NIGHT.noise);
+  NIGHT.vol=cfg.vol||2; renderNightSounds();
   document.querySelectorAll(".night-timer button").forEach(x=>x.classList.toggle("on",parseInt(x.dataset.min,10)===(cfg.timer||0)));
   setNightMode("breath");
 }
@@ -2369,25 +2436,71 @@ function meditLoop(){
     i++; NIGHT.t.push(setTimeout(line,13000));
   })();
 }
-function startNoise(){
-  try{
+/* ---------- Night soundscape engine (all synthesized, offline) ---------- */
+function volLevel(v){ return v===1?0.05 : v===3?0.18 : 0.10; }
+function ensureAudio(){
+  if(!NIGHT.ac){
     NIGHT.ac=new (window.AudioContext||window.webkitAudioContext)();
-    const n=2*NIGHT.ac.sampleRate, buf=NIGHT.ac.createBuffer(1,n,NIGHT.ac.sampleRate), out=buf.getChannelData(0);
-    let last=0;
-    for(let i=0;i<n;i++){const white=Math.random()*2-1;out[i]=(last+0.02*white)/1.02;last=out[i];out[i]*=3.5;}
-    const src=NIGHT.ac.createBufferSource();src.buffer=buf;src.loop=true;
-    const g=NIGHT.ac.createGain();g.gain.value=0.06;
-    src.connect(g);g.connect(NIGHT.ac.destination);src.start();
-    NIGHT.noise=src;NIGHT.gain=g;
-  }catch(e){NIGHT.noise=null;}
+    NIGHT.master=NIGHT.ac.createGain();
+    NIGHT.master.gain.value=volLevel(NIGHT.vol||nightCfg().vol||2);
+    NIGHT.master.connect(NIGHT.ac.destination);
+  }
+  try{ if(NIGHT.ac.state==="suspended") NIGHT.ac.resume(); }catch(e){}
 }
-function stopNoise(){try{if(NIGHT.noise)NIGHT.noise.stop();}catch(e){}try{if(NIGHT.ac)NIGHT.ac.close();}catch(e){}NIGHT.noise=null;NIGHT.ac=null;}
-function toggleNoise(force){
-  const want=(typeof force==="boolean")?force:!NIGHT.noise;
-  if(want){if(!NIGHT.noise)startNoise();nightCfg().sound=true;}
-  else{stopNoise();nightCfg().sound=false;}
-  save();
-  const b=$("nightSound"); if(b)b.classList.toggle("on",!!NIGHT.noise);
+function noiseBuffer(kind){
+  const ac=NIGHT.ac, n=Math.floor(ac.sampleRate*3), buf=ac.createBuffer(1,n,ac.sampleRate), d=buf.getChannelData(0);
+  if(kind==="brown"){ let last=0; for(let i=0;i<n;i++){const w=Math.random()*2-1; d[i]=(last+0.02*w)/1.02; last=d[i]; d[i]*=3.5;} }
+  else if(kind==="pink"){ let b0=0,b1=0,b2=0; for(let i=0;i<n;i++){const w=Math.random()*2-1; b0=0.99765*b0+w*0.0990460; b1=0.96300*b1+w*0.2965164; b2=0.57000*b2+w*1.0526913; d[i]=(b0+b1+b2+w*0.1848)*0.15;} }
+  else { for(let i=0;i<n;i++) d[i]=Math.random()*2-1; }
+  return buf;
+}
+function srcLoop(buf){ const sc=NIGHT.ac.createBufferSource(); sc.buffer=buf; sc.loop=true; return sc; }
+function lfo(freq,depth,target){ const o=NIGHT.ac.createOscillator();o.type="sine";o.frequency.value=freq; const g=NIGHT.ac.createGain();g.gain.value=depth; o.connect(g);g.connect(target);o.start(); NIGHT.nodes.push(o,g); }
+function stopScape(){
+  NIGHT.nodes.forEach(nd=>{ try{nd.stop&&nd.stop();}catch(e){} try{nd.disconnect&&nd.disconnect();}catch(e){} });
+  NIGHT.nodes=[]; NIGHT.scape="off";
+}
+function startScape(id){
+  stopScape();
+  nightCfg().scape=id; NIGHT.scape=id;
+  if(id==="off"){ nightCfg().sound=false; save(); renderNightSounds(); return; }
+  try{
+    ensureAudio(); const ac=NIGHT.ac, M=NIGHT.master;
+    if(id==="brown"||id==="pink"){
+      const sc=srcLoop(noiseBuffer(id)); const g=ac.createGain(); g.gain.value=(id==="brown"?0.9:0.8);
+      sc.connect(g); g.connect(M); sc.start(); NIGHT.nodes.push(sc,g);
+    } else if(id==="rain"){
+      const sc=srcLoop(noiseBuffer("white")); const hp=ac.createBiquadFilter();hp.type="highpass";hp.frequency.value=900;
+      const lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=7000; const g=ac.createGain();g.gain.value=0.42;
+      sc.connect(hp);hp.connect(lp);lp.connect(g);g.connect(M); sc.start(); NIGHT.nodes.push(sc,hp,lp,g); lfo(0.15,0.1,g.gain);
+    } else if(id==="ocean"){
+      const sc=srcLoop(noiseBuffer("brown")); const lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=500;
+      const g=ac.createGain();g.gain.value=0.5; sc.connect(lp);lp.connect(g);g.connect(M); sc.start(); NIGHT.nodes.push(sc,lp,g); lfo(0.08,0.42,g.gain);
+    } else if(id==="wind"){
+      const sc=srcLoop(noiseBuffer("white")); const bp=ac.createBiquadFilter();bp.type="bandpass";bp.frequency.value=500;bp.Q.value=0.7;
+      const g=ac.createGain();g.gain.value=0.5; sc.connect(bp);bp.connect(g);g.connect(M); sc.start(); NIGHT.nodes.push(sc,bp,g); lfo(0.06,300,bp.frequency); lfo(0.09,0.16,g.gain);
+    } else if(id==="drone"){
+      const lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=650; lp.connect(M); NIGHT.nodes.push(lp);
+      [[110,"triangle",0.14],[110.5,"triangle",0.14],[164.81,"sine",0.10]].forEach(function(o){ const osc=ac.createOscillator();osc.type=o[1];osc.frequency.value=o[0]; const og=ac.createGain();og.gain.value=o[2]; osc.connect(og);og.connect(lp);osc.start(); NIGHT.nodes.push(osc,og); });
+    }
+    nightCfg().sound=true; save(); renderNightSounds();
+  }catch(e){ NIGHT.nodes=[]; }
+}
+function setNightVol(v){
+  NIGHT.vol=v; nightCfg().vol=v;
+  if(NIGHT.master&&NIGHT.ac){ try{NIGHT.master.gain.setTargetAtTime(volLevel(v),NIGHT.ac.currentTime,0.2);}catch(e){NIGHT.master.gain.value=volLevel(v);} }
+  save(); renderNightSounds();
+}
+function fadeAudioOut(){
+  if(NIGHT.master&&NIGHT.ac){ try{NIGHT.master.gain.setTargetAtTime(0.0001,NIGHT.ac.currentTime,1.2);}catch(e){} setTimeout(stopScape,4000); }
+  else stopScape();
+}
+function renderNightSounds(){
+  const box=$("nightSounds"); if(!box)return;
+  const cur=nightCfg().scape||"off";
+  box.innerHTML=SCAPES.map(function(sp){return '<button class="scape'+(sp[0]===cur?" on":"")+'" data-scape="'+sp[0]+'">'+t(sp[1])+'</button>';}).join("");
+  box.querySelectorAll("button").forEach(function(b){ b.onclick=function(){ startScape(b.dataset.scape); }; });
+  document.querySelectorAll(".night-vol .vbtn").forEach(function(x){ x.classList.toggle("on",parseInt(x.dataset.vol,10)===(nightCfg().vol||2)); });
 }
 function armSleepTimer(){
   clearTimeout(NIGHT.sleep);
@@ -2398,7 +2511,7 @@ function armSleepTimer(){
 function nightDim(){
   NIGHT.mode="off"; NIGHT.t.forEach(clearTimeout); NIGHT.t=[];
   try{speechSynthesis.cancel();}catch(e){}
-  stopNoise();
+  fadeAudioOut();
   const n=$("night"); if(n)n.classList.add("dimmed");
 }
 function openNight(){
@@ -2408,7 +2521,7 @@ function openNight(){
   const n=$("night"); n.classList.remove("dimmed"); n.classList.add("show");
   document.querySelector(".nav").classList.add("is-hidden");
   armSleepTimer();
-  if(nightCfg().sound)toggleNoise(true);
+  if(nightCfg().sound && (nightCfg().scape||"off")!=="off") startScape(nightCfg().scape);
   S.nightPromptDay=dayKey(); save(); renderNightPrompt();
   buzz(12);
 }
@@ -2416,7 +2529,7 @@ function closeNight(){
   NIGHT.on=false; NIGHT.mode="off";
   NIGHT.t.forEach(clearTimeout); NIGHT.t=[]; clearTimeout(NIGHT.sleep);
   try{speechSynthesis.cancel();}catch(e){}
-  stopNoise();
+  stopScape(); try{if(NIGHT.ac)NIGHT.ac.close();}catch(e){} NIGHT.ac=null; NIGHT.master=null;
   const n=$("night"); if(n)n.classList.remove("show","dimmed");
   document.querySelector(".nav").classList.remove("is-hidden");
 }
@@ -2716,6 +2829,360 @@ function renderAppearance(){
   });
 }
 if(window.matchMedia){ try{ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{ if((S.appearance||"auto")==="auto")applyAppearance(); }); }catch(e){} }
+
+
+/* =====================================================================
+   RELAXATION COACH (V5) — voice-guided, self-report check-in,
+   adaptive pace, full session library. All synthesized/scripted,
+   offline, no files. Shares scope with the app ($ , S , save , buzz).
+   ===================================================================== */
+const COACH={on:false,voice:true,pace:"normal",feeling:null,intens:3,
+  steps:[],i:0,timer:null,paused:false,t0:0,remain:0,started:0};
+
+const CX={
+ fr:{
+  title:"Séances", welcome:"Prends un instant. Je suis là.",
+  checkQ:"Comment te sens-tu, là, maintenant ?",
+  feelings:[["tense","Tendu·e"],["anx","Anxieux·se"],["restless","Agité·e"],["sad","Triste"],["tired","Fatigué·e"],["ok","Ça va"]],
+  intensQ:"À quel point ?", low:"Un peu", high:"Beaucoup",
+  see:"Voir mes séances", skip:"Passer",
+  recFor:"Pour toi, maintenant", all:"Toutes les séances",
+  cats:{quick:"Express",breath:"Respiration",calm:"Apaisement",sleep:"Sommeil"},
+  start:"Commencer", pause:"Pause", resume:"Reprendre", stop:"Terminer",
+  voice:"Voix", back:"Retour",
+  doneT:"C'est fini.", doneS:"Reste encore un moment si tu veux.",
+  in:"Inspire", out:"Expire", hold:"Retiens", holdEmpty:"Poumons vides",
+  settle:"Installe-toi confortablement.", nothing:"Rien à réussir. Juste être là.",
+  closeEyes:"Ferme les yeux si tu le souhaites.",
+  body:["tes pieds","tes mollets","tes cuisses","ton ventre","tes mains","tes bras","tes épaules","ta nuque","ton visage"],
+  muscles:["tes poings","tes bras","tes épaules","ton visage","ton ventre","tes jambes","tes pieds"],
+  scanIntro:"On va parcourir ton corps, doucement.",
+  scanLine:"Porte ton attention sur", scanRelease:"Relâche. Laisse aller.",
+  pmrIntro:"On va relâcher les tensions, une zone après l'autre.",
+  pmrTense:"Contracte", pmrHold:"Tiens…", pmrRelease:"Et relâche. Sens la différence.",
+  sighIntro:"On va faire retomber la pression.", sighIn:"Inspire par le nez.", sighIn2:"Encore un peu d'air.", sighOut:"Souffle lentement par la bouche.",
+  ground:"Nomme, en silence, trois choses que tu entends.",
+  vizLines:["Imagine un endroit où tu te sens en sécurité.","Ce peut être réel ou inventé.","Regarde autour de toi. Les couleurs. La lumière.","Écoute les sons de cet endroit.","Sens la température sur ta peau.","Tu es en sécurité ici.","Personne ne te demande rien.","Ce lieu est à toi. Tu peux y revenir."],
+  mindLines:["Pose ton attention sur ta respiration.","Sans la changer. Juste la sentir.","L'air qui entre. L'air qui sort.","Ton esprit va partir. C'est normal.","Quand tu t'en aperçois, reviens au souffle. Sans te juger.","Encore. L'air qui entre. L'air qui sort."],
+  sleepLines:["La journée est finie. Tu peux la déposer.","Rien à régler maintenant.","Ton corps devient lourd, et c'est bien.","Chaque expiration t'enfonce un peu plus dans le matelas.","Laisse ta respiration ralentir d'elle-même."],
+  sleepMore:"Pour continuer dans le noir, ouvre le Mode Nuit.",
+  descs:{express2:"Deux minutes pour faire retomber la pression.",express5:"Cinq minutes de cohérence, pour te recentrer.",express10:"Dix minutes pour un calme profond.",
+    coherence:"Le rythme 5-5. La référence anti-stress.",breath478:"4-7-8. Idéal avant de dormir.",breathBox:"Respiration carrée. Recentrage rapide.",breath46:"Expire long. Le système nerveux ralentit.",
+    anxiety:"Soupir physiologique et ancrage. Pour une montée d'anxiété.",bodyscan:"Relâcher le corps, zone par zone.",pmr:"Contracter puis relâcher chaque muscle.",viz:"Un lieu sûr, rien qu'à toi.",mindful:"Revenir au souffle, encore et encore.",sleep:"Préparer le corps au sommeil."},
+  names:{express2:"Express 2 min",express5:"Express 5 min",express10:"Express 10 min",
+    coherence:"Cohérence cardiaque",breath478:"Respiration 4-7-8",breathBox:"Respiration carrée",breath46:"Souffle apaisant",
+    anxiety:"Réduire l'anxiété",bodyscan:"Body scan",pmr:"Relaxation musculaire",viz:"Visualisation",mindful:"Pleine conscience",sleep:"Préparation au sommeil"}
+ },
+ en:{
+  title:"Sessions", welcome:"Take a moment. I'm here.",
+  checkQ:"How do you feel, right now?",
+  feelings:[["tense","Tense"],["anx","Anxious"],["restless","Restless"],["sad","Down"],["tired","Tired"],["ok","Okay"]],
+  intensQ:"How much?", low:"A little", high:"A lot",
+  see:"See my sessions", skip:"Skip",
+  recFor:"For you, right now", all:"All sessions",
+  cats:{quick:"Express",breath:"Breathing",calm:"Calm",sleep:"Sleep"},
+  start:"Begin", pause:"Pause", resume:"Resume", stop:"End",
+  voice:"Voice", back:"Back",
+  doneT:"That's it.", doneS:"Stay a little longer if you like.",
+  in:"Breathe in", out:"Breathe out", hold:"Hold", holdEmpty:"Empty",
+  settle:"Settle in comfortably.", nothing:"Nothing to achieve. Just be here.",
+  closeEyes:"Close your eyes if you'd like.",
+  body:["your feet","your calves","your thighs","your belly","your hands","your arms","your shoulders","your neck","your face"],
+  muscles:["your fists","your arms","your shoulders","your face","your belly","your legs","your feet"],
+  scanIntro:"We'll move through your body, gently.",
+  scanLine:"Bring your attention to", scanRelease:"Release. Let it go.",
+  pmrIntro:"We'll release tension, one area at a time.",
+  pmrTense:"Tense", pmrHold:"Hold…", pmrRelease:"And release. Feel the difference.",
+  sighIntro:"Let's bring the pressure down.", sighIn:"Breathe in through your nose.", sighIn2:"A little more air.", sighOut:"Breathe out slowly through your mouth.",
+  ground:"Silently name three things you can hear.",
+  vizLines:["Picture a place where you feel safe.","Real or imagined.","Look around. The colours. The light.","Listen to the sounds of this place.","Feel the temperature on your skin.","You are safe here.","Nothing is asked of you.","This place is yours. You can always return."],
+  mindLines:["Rest your attention on your breath.","Without changing it. Just feeling it.","Air coming in. Air going out.","Your mind will wander. That's normal.","When you notice, come back to the breath. No judgement.","Again. Air in. Air out."],
+  sleepLines:["The day is done. You can set it down.","Nothing to fix now.","Your body grows heavy, and that's good.","Each exhale sinks you deeper into the bed.","Let your breath slow on its own."],
+  sleepMore:"To continue in the dark, open Night mode.",
+  descs:{express2:"Two minutes to bring the pressure down.",express5:"Five minutes of coherence, to re-center.",express10:"Ten minutes for a deep calm.",
+    coherence:"The 5-5 rhythm. The anti-stress standard.",breath478:"4-7-8. Great before sleep.",breathBox:"Box breathing. Quick reset.",breath46:"Long exhale. The nervous system slows.",
+    anxiety:"Physiological sigh and grounding. For a spike of anxiety.",bodyscan:"Release the body, area by area.",pmr:"Tense then release each muscle.",viz:"A safe place, just for you.",mindful:"Come back to the breath, again and again.",sleep:"Prepare the body for sleep."},
+  names:{express2:"Express 2 min",express5:"Express 5 min",express10:"Express 10 min",
+    coherence:"Cardiac coherence",breath478:"4-7-8 breathing",breathBox:"Box breathing",breath46:"Calming breath",
+    anxiety:"Reduce anxiety",bodyscan:"Body scan",pmr:"Muscle relaxation",viz:"Visualization",mindful:"Mindfulness",sleep:"Sleep preparation"}
+ },
+ es:{
+  title:"Sesiones", welcome:"Tómate un momento. Estoy aquí.",
+  checkQ:"¿Cómo te sientes, ahora mismo?",
+  feelings:[["tense","Tenso·a"],["anx","Ansioso·a"],["restless","Inquieto·a"],["sad","Triste"],["tired","Cansado·a"],["ok","Bien"]],
+  intensQ:"¿Cuánto?", low:"Un poco", high:"Mucho",
+  see:"Ver mis sesiones", skip:"Saltar",
+  recFor:"Para ti, ahora", all:"Todas las sesiones",
+  cats:{quick:"Exprés",breath:"Respiración",calm:"Calma",sleep:"Sueño"},
+  start:"Empezar", pause:"Pausa", resume:"Seguir", stop:"Terminar",
+  voice:"Voz", back:"Volver",
+  doneT:"Ya está.", doneS:"Quédate un poco más si quieres.",
+  in:"Inspira", out:"Espira", hold:"Retén", holdEmpty:"Pulmones vacíos",
+  settle:"Ponte cómodo·a.", nothing:"Nada que lograr. Solo estar aquí.",
+  closeEyes:"Cierra los ojos si quieres.",
+  body:["tus pies","tus pantorrillas","tus muslos","tu vientre","tus manos","tus brazos","tus hombros","tu nuca","tu rostro"],
+  muscles:["tus puños","tus brazos","tus hombros","tu rostro","tu vientre","tus piernas","tus pies"],
+  scanIntro:"Recorreremos tu cuerpo, despacio.",
+  scanLine:"Lleva tu atención a", scanRelease:"Suelta. Déjalo ir.",
+  pmrIntro:"Vamos a soltar la tensión, zona por zona.",
+  pmrTense:"Tensa", pmrHold:"Mantén…", pmrRelease:"Y suelta. Siente la diferencia.",
+  sighIntro:"Vamos a bajar la presión.", sighIn:"Inspira por la nariz.", sighIn2:"Un poco más de aire.", sighOut:"Espira despacio por la boca.",
+  ground:"Nombra, en silencio, tres cosas que oyes.",
+  vizLines:["Imagina un lugar donde te sientes a salvo.","Real o inventado.","Mira alrededor. Los colores. La luz.","Escucha los sonidos de ese lugar.","Siente la temperatura en tu piel.","Aquí estás a salvo.","Nadie te pide nada.","Este lugar es tuyo. Puedes volver."],
+  mindLines:["Posa tu atención en la respiración.","Sin cambiarla. Solo sentirla.","El aire que entra. El aire que sale.","Tu mente se irá. Es normal.","Cuando lo notes, vuelve a la respiración. Sin juzgarte.","Otra vez. El aire entra. El aire sale."],
+  sleepLines:["El día terminó. Puedes soltarlo.","Nada que resolver ahora.","Tu cuerpo se vuelve pesado, y está bien.","Cada espiración te hunde más en la cama.","Deja que tu respiración baje sola."],
+  sleepMore:"Para seguir en la oscuridad, abre el Modo Noche.",
+  descs:{express2:"Dos minutos para bajar la presión.",express5:"Cinco minutos de coherencia, para centrarte.",express10:"Diez minutos de calma profunda.",
+    coherence:"El ritmo 5-5. La referencia anti-estrés.",breath478:"4-7-8. Ideal antes de dormir.",breathBox:"Respiración cuadrada. Reinicio rápido.",breath46:"Espira largo. El sistema nervioso baja.",
+    anxiety:"Suspiro fisiológico y anclaje. Para un pico de ansiedad.",bodyscan:"Soltar el cuerpo, zona por zona.",pmr:"Tensar y soltar cada músculo.",viz:"Un lugar seguro, solo tuyo.",mindful:"Volver a la respiración, una y otra vez.",sleep:"Preparar el cuerpo para dormir."},
+  names:{express2:"Exprés 2 min",express5:"Exprés 5 min",express10:"Exprés 10 min",
+    coherence:"Coherencia cardíaca",breath478:"Respiración 4-7-8",breathBox:"Respiración cuadrada",breath46:"Respiración calmante",
+    anxiety:"Reducir ansiedad",bodyscan:"Body scan",pmr:"Relajación muscular",viz:"Visualización",mindful:"Atención plena",sleep:"Preparación al sueño"}
+ }
+};
+function L(){ return CX[S.lang]||CX.fr; }
+const SESS_CATS={quick:["express2","express5","express10"],breath:["coherence","breath478","breathBox","breath46"],calm:["anxiety","bodyscan","pmr","viz","mindful"],sleep:["sleep"]};
+
+/* ---------- step helpers ---------- */
+function _st(t,ms,ph){ return {t:t||"",ms:ms,ph:ph||"still"}; }
+function _sil(ms){ return {t:"",ms:ms,ph:"still"}; }
+function _soft(){ return COACH.pace==="soft"; }
+
+/* breathing loop: phases=[{ph,ms,cue}] ; speak cue only first cueN cycles */
+function _breathe(phases,cycles,cueN){
+  const g=L(),steps=[];
+  for(let c=0;c<cycles;c++){
+    phases.forEach(p=>{
+      const say=(c<cueN&&p.cue)?g[p.cue]:"";
+      steps.push(_st(say,p.ms,p.ph));
+    });
+  }
+  return steps;
+}
+function _intro(lines){ const s=[]; lines.forEach(l=>{ s.push(_st(l,3200,"still")); s.push(_sil(900)); }); return s; }
+
+/* ---------- session builders ---------- */
+function buildCoherence(min){
+  const inMs=_soft()?5500:5000, outMs=_soft()?6000:5000;
+  const cycles=Math.max(3,Math.round(min*60000/(inMs+outMs)));
+  return _intro([L().settle,L().nothing]).concat(
+    _breathe([{ph:"in",ms:inMs,cue:"in"},{ph:"out",ms:outMs,cue:"out"}],cycles,3)
+  ).concat([_st(L().doneT,2600,"still")]);
+}
+function buildBreath(kind,min){
+  let phases;
+  if(kind==="breath478") phases=[{ph:"in",ms:4000,cue:"in"},{ph:"hold",ms:7000,cue:"hold"},{ph:"out",ms:8000,cue:"out"}];
+  else if(kind==="breathBox") phases=[{ph:"in",ms:4000,cue:"in"},{ph:"hold",ms:4000,cue:"hold"},{ph:"out",ms:4000,cue:"out"},{ph:"hold",ms:4000,cue:"holdEmpty"}];
+  else phases=[{ph:"in",ms:4000,cue:"in"},{ph:"out",ms:6000,cue:"out"}];
+  const per=phases.reduce((a,p)=>a+p.ms,0);
+  const cycles=Math.max(3,Math.round(min*60000/per));
+  return _intro([L().settle]).concat(_breathe(phases,cycles,2)).concat([_st(L().doneT,2600,"still")]);
+}
+function buildAnxiety(){
+  const g=L(),s=_intro([g.sighIntro,g.closeEyes]);
+  for(let i=0;i<5;i++){
+    s.push(_st(g.sighIn,2600,"in"));
+    s.push(_st(g.sighIn2,1200,"hold"));
+    s.push(_st(g.sighOut,7000,"out"));
+    s.push(_sil(700));
+  }
+  s.push(_st(g.ground,7000,"still"));
+  s.push(_sil(3000));
+  s.push(_st(g.doneT,2600,"still"));
+  return s;
+}
+function buildBodyScan(min){
+  const g=L(),parts=g.body,per=Math.max(7000,Math.floor(min*60000/parts.length));
+  const s=_intro([g.scanIntro,g.closeEyes]);
+  parts.forEach(p=>{ s.push(_st(g.scanLine+" "+p+".",Math.round(per*0.55),"still")); s.push(_st(g.scanRelease,Math.round(per*0.45),"out")); });
+  s.push(_st(g.doneT,2600,"still")); return s;
+}
+function buildPMR(){
+  const g=L(),s=_intro([g.pmrIntro]);
+  g.muscles.forEach(m=>{ s.push(_st(g.pmrTense+" "+m+".",4000,"in")); s.push(_st(g.pmrHold,2000,"hold")); s.push(_st(g.pmrRelease,6000,"out")); s.push(_sil(1800)); });
+  s.push(_st(g.doneT,2600,"still")); return s;
+}
+function buildScript(lines,ms){ const s=[]; lines.forEach(l=>{ s.push(_st(l,ms||6000,"still")); s.push(_sil(2200)); }); s.push(_st(L().doneT,2600,"still")); return s; }
+function buildViz(){ return _intro([L().settle,L().closeEyes]).concat(buildScript(L().vizLines,6500)); }
+function buildMindful(min){
+  const g=L(); let s=_intro([g.settle,g.closeEyes]);
+  g.mindLines.forEach((l,idx)=>{ s.push(_st(l,5200,"still")); s.push(_sil(1600));
+    if(idx%2===1){ s=s.concat(_breathe([{ph:"in",ms:4000,cue:""},{ph:"out",ms:6000,cue:""}],3,0)); } });
+  s.push(_st(g.doneT,2600,"still")); return s;
+}
+function buildSleep(){
+  const g=L(); let s=_intro([g.settle,g.nothing]);
+  g.sleepLines.forEach(l=>{ s.push(_st(l,5600,"still")); s.push(_sil(2000)); });
+  s=s.concat(_breathe([{ph:"in",ms:4000,cue:""},{ph:"out",ms:6500,cue:""}],6,0));
+  s.push(_st(g.sleepMore,4000,"still"));
+  return s;
+}
+function buildSession(id){
+  if(id==="express2") return buildAnxiety().concat(buildCoherence(1));
+  if(id==="express5") return buildCoherence(5);
+  if(id==="express10") return buildCoherence(10);
+  if(id==="coherence") return buildCoherence(5);
+  if(id==="breath478"||id==="breathBox"||id==="breath46") return buildBreath(id,4);
+  if(id==="anxiety") return buildAnxiety();
+  if(id==="bodyscan") return buildBodyScan(6);
+  if(id==="pmr") return buildPMR();
+  if(id==="viz") return buildViz();
+  if(id==="mindful") return buildMindful(5);
+  if(id==="sleep") return buildSleep();
+  return buildCoherence(5);
+}
+function recommend(){
+  const f=COACH.feeling;
+  if(f==="tense"||f==="anx"||f==="restless") return ["express2","anxiety","coherence","pmr"];
+  if(f==="sad") return ["viz","mindful","coherence","express5"];
+  if(f==="tired") return ["sleep","bodyscan","breath46","express5"];
+  return ["coherence","mindful","viz","express5"];
+}
+
+/* ---------- voice ---------- */
+function coachSay(text){
+  if(!COACH.voice||!text) return;
+  try{
+    if(!("speechSynthesis"in window))return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=({fr:"fr-FR",en:"en-US",es:"es-ES"})[S.lang]||"fr-FR";
+    u.rate=_soft()?0.78:0.85; u.pitch=1.0; u.volume=1;
+    const vs=(speechSynthesis.getVoices()||[]).filter(v=>v.lang&&v.lang.toLowerCase().slice(0,2)===S.lang);
+    if(vs.length){ const fem=vs.find(v=>/female|femme|amélie|amelie|audrey|marie|google|zira|mónica|monica|paulina/i.test(v.name)); u.voice=fem||vs[0]; }
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ---------- player ---------- */
+function coachOrb(ph,ms){
+  const o=$("coachOrb"); if(!o)return; const sec=Math.max(0.4,ms/1000);
+  if(ph==="in"){ o.style.transition="transform "+sec+"s cubic-bezier(.4,0,.2,1)"; o.style.transform="scale(1.22)"; o.classList.add("lit"); }
+  else if(ph==="out"){ o.style.transition="transform "+sec+"s cubic-bezier(.4,0,.2,1)"; o.style.transform="scale(.78)"; o.classList.remove("lit"); }
+  else if(ph==="hold"){ /* keep current scale */ }
+  else { o.style.transition="transform 1s ease"; o.style.transform="scale(1)"; o.classList.remove("lit"); }
+}
+function coachProgress(){
+  const b=$("coachProg"); if(!b)return;
+  const pct=COACH.steps.length?Math.round(COACH.i/COACH.steps.length*100):0;
+  b.style.width=pct+"%";
+}
+function coachStepRun(){
+  if(!COACH.on||COACH.paused) return;
+  if(COACH.i>=COACH.steps.length){ coachFinish(); return; }
+  const s=COACH.steps[COACH.i];
+  const line=$("coachLine"); if(line){ line.textContent=s.t||""; line.classList.remove("show"); void line.offsetWidth; line.classList.add("show"); }
+  coachOrb(s.ph,s.ms);
+  coachSay(s.t);
+  coachProgress();
+  COACH.t0=Date.now(); COACH.remain=s.ms;
+  COACH.timer=setTimeout(()=>{ COACH.i++; coachStepRun(); }, s.ms);
+}
+function coachPause(){
+  if(COACH.paused) return;
+  COACH.paused=true; clearTimeout(COACH.timer);
+  COACH.remain=Math.max(300,COACH.remain-(Date.now()-COACH.t0));
+  try{speechSynthesis.cancel();}catch(e){}
+  const o=$("coachOrb"); if(o){ o.style.transition="transform .6s ease"; }
+  const pb=$("coachPause"); if(pb) pb.textContent=L().resume;
+}
+function coachResume(){
+  if(!COACH.paused) return;
+  COACH.paused=false;
+  const pb=$("coachPause"); if(pb) pb.textContent=L().pause;
+  COACH.t0=Date.now();
+  COACH.timer=setTimeout(()=>{ COACH.i++; coachStepRun(); }, COACH.remain);
+}
+function coachFinish(){
+  const g=L();
+  clearTimeout(COACH.timer); try{speechSynthesis.cancel();}catch(e){}
+  const wrap=$("coachBody"); if(!wrap)return;
+  wrap.innerHTML='<div class="coach-done"><div class="coach-orb done" id="coachOrb"></div><div class="coach-done-t">'+g.doneT+'</div><div class="coach-done-s">'+g.doneS+'</div><button class="coach-btn primary" id="coachAgain">'+g.back+'</button></div>';
+  coachSay(g.doneT);
+  $("coachAgain").onclick=coachHub;
+  // log a session
+  S.coachLog=(S.coachLog||0)+1; save();
+  buzz(10);
+}
+function coachPlay(id){
+  COACH.pace=(COACH.intens>=4)?"soft":"normal";
+  COACH.steps=buildSession(id); COACH.i=0; COACH.paused=false; COACH.started=Date.now();
+  const g=L();
+  $("coachBody").innerHTML=
+    '<div class="coach-player">'
+   +'<div class="coach-orb" id="coachOrb"></div>'
+   +'<div class="coach-line show" id="coachLine"></div>'
+   +'<div class="coach-progwrap"><i id="coachProg"></i></div>'
+   +'<div class="coach-ctrls">'
+     +'<button class="coach-btn" id="coachPause">'+g.pause+'</button>'
+     +'<button class="coach-btn ghost" id="coachStop">'+g.stop+'</button>'
+   +'</div></div>';
+  $("coachPause").onclick=()=>{ COACH.paused?coachResume():coachPause(); };
+  $("coachStop").onclick=coachHub;
+  coachStepRun();
+}
+
+/* ---------- screens ---------- */
+function coachHead(title){
+  return '<div class="coach-head"><button class="coach-x" id="coachX" aria-label="Fermer">✕</button><div class="coach-title">'+title+'</div>'
+   +'<button class="coach-voicebtn'+(COACH.voice?' on':'')+'" id="coachVoice" aria-label="Voix"><svg class="ic-svg" aria-hidden="true"><use href="#ic-sound"/></svg></button></div>';
+}
+function coachCheckin(){
+  const g=L();
+  $("coach").innerHTML=coachHead(g.title)
+   +'<div class="coach-body" id="coachBody">'
+   +'<div class="coach-welcome">'+g.welcome+'</div>'
+   +'<div class="coach-q">'+g.checkQ+'</div>'
+   +'<div class="feel-grid" id="feelGrid">'+g.feelings.map(f=>'<button class="feel'+(COACH.feeling===f[0]?' on':'')+'" data-f="'+f[0]+'">'+f[1]+'</button>').join('')+'</div>'
+   +'<div class="intens-wrap"><div class="coach-q sm">'+g.intensQ+'</div><input type="range" min="1" max="5" value="'+COACH.intens+'" id="feelIntens" class="intens"><div class="intens-lbls"><span>'+g.low+'</span><span>'+g.high+'</span></div></div>'
+   +'<div class="coach-actions"><button class="coach-btn primary" id="feelGo">'+g.see+'</button><button class="coach-btn ghost" id="feelSkip">'+g.skip+'</button></div>'
+   +'</div>';
+  coachWire();
+  coachSay(g.welcome);
+  document.querySelectorAll("#feelGrid .feel").forEach(b=>b.onclick=()=>{ COACH.feeling=b.dataset.f; document.querySelectorAll("#feelGrid .feel").forEach(x=>x.classList.toggle("on",x===b)); });
+  $("feelIntens").oninput=e=>{ COACH.intens=parseInt(e.target.value,10); };
+  $("feelGo").onclick=coachHub;
+  $("feelSkip").onclick=()=>{ COACH.feeling=null; coachHub(); };
+}
+function sessCard(id){
+  const g=L();
+  return '<button class="sess" data-s="'+id+'"><span class="sess-n">'+g.names[id]+'</span><span class="sess-d">'+g.descs[id]+'</span></button>';
+}
+function coachHub(){
+  const g=L();
+  try{speechSynthesis.cancel();}catch(e){}
+  let html=coachHead(g.title)+'<div class="coach-body scroll" id="coachBody">';
+  if(COACH.feeling){ html+='<div class="sess-cat">'+g.recFor+'</div><div class="sess-list">'+recommend().map(sessCard).join('')+'</div>'; }
+  html+='<div class="sess-cat">'+g.all+'</div>';
+  Object.keys(SESS_CATS).forEach(cat=>{ html+='<div class="sess-sub">'+g.cats[cat]+'</div><div class="sess-list">'+SESS_CATS[cat].map(sessCard).join('')+'</div>'; });
+  html+='</div>';
+  $("coach").innerHTML=html;
+  coachWire();
+  document.querySelectorAll(".sess").forEach(b=>b.onclick=()=>coachPlay(b.dataset.s));
+}
+function coachWire(){
+  const x=$("coachX"); if(x)x.onclick=closeCoach;
+  const v=$("coachVoice"); if(v)v.onclick=()=>{ COACH.voice=!COACH.voice; S.coachVoice=COACH.voice; save(); v.classList.toggle("on",COACH.voice); if(!COACH.voice){try{speechSynthesis.cancel();}catch(e){}} };
+}
+function openCoach(){
+  if(COACH.on) return;
+  COACH.on=true;
+  if(typeof S.coachVoice==="boolean") COACH.voice=S.coachVoice;
+  try{ if("speechSynthesis"in window) speechSynthesis.getVoices(); }catch(e){}
+  const n=$("coach"); n.classList.add("show");
+  const nav=document.querySelector(".nav"); if(nav)nav.classList.add("is-hidden");
+  coachCheckin();
+  buzz(10);
+}
+function closeCoach(){
+  COACH.on=false; COACH.paused=false; clearTimeout(COACH.timer);
+  try{speechSynthesis.cancel();}catch(e){}
+  const n=$("coach"); if(n)n.classList.remove("show");
+  const nav=document.querySelector(".nav"); if(nav)nav.classList.remove("is-hidden");
+}
+if("speechSynthesis"in window){ try{ speechSynthesis.onvoiceschanged=function(){}; }catch(e){} }
+(function(){ var e=$("coach-open"); if(e) e.onclick=openCoach; })();
+
 </script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){});});}
