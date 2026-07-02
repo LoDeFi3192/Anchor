@@ -908,6 +908,11 @@ html[data-appearance="dark"] .companion-view{
    radial-gradient(84% 60% at 96% 22%, color-mix(in srgb,var(--accent-2) 20%,transparent), transparent 55%),
    #0d0b14 !important;
 }
+
+.coach-voice-row{display:flex;flex-direction:column;gap:8px;width:100%;max-width:320px;margin-top:2px}
+.coach-voice-row label{font-size:12.5px;color:#b9b0dc;align-self:flex-start}
+.coach-voice-row select{width:100%;padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.08);color:#ece7fb;border:1px solid rgba(255,255,255,.14);font-size:14.5px;-webkit-appearance:none;appearance:none}
+.coach-btn.sm{padding:11px;font-size:14px;min-width:0}
 </style>
 </head>
 <body>
@@ -1092,6 +1097,10 @@ html[data-appearance="dark"] .companion-view{
     <label data-t="setTheme" style="display:block;margin-top:14px">Thème</label>
     <div class="theme-picker" id="theme-picker"></div>
 
+    <h2 style="margin-top:22px" data-t="setInstallH">Application</h2>
+    <button class="btn" id="install-btn" data-t="installBtn" style="min-height:52px">Installer l'application</button>
+    <p class="note" id="install-note" style="margin-top:8px;text-align:left"></p>
+
     <h2 style="margin-top:22px" data-t="setPrefs">Préférences</h2>
     <div class="toggle"><span data-t="setVoice">Voix guide</span><div class="sw" id="sw-voice"><i></i></div></div>
     <div id="voice-controls" style="margin:10px 0 6px">
@@ -1099,6 +1108,9 @@ html[data-appearance="dark"] .companion-view{
       <select id="voice-select"></select>
       <label style="display:block;margin-top:12px" data-t="setVoiceRate">Rythme</label>
       <div class="chips" id="voice-rate" style="margin-top:6px"></div>
+      <label style="display:block;margin-top:12px" data-t="setVoicePitch">Tonalité</label>
+      <div class="chips" id="voice-pitch" style="margin-top:6px"></div>
+      <p class="note" data-t="voiceFewHint" style="margin-top:10px;text-align:left"></p>
       <button class="btn ghost" id="voice-test" data-t="setVoiceTest" style="margin-top:12px;min-height:50px">Tester la voix</button>
     </div>
     <div class="toggle"><span data-t="setHaptic">Vibrations</span><div class="sw" id="sw-haptic"><i></i></div></div>
@@ -1229,7 +1241,7 @@ const I18N = {
     navHome:"Accueil",navGarden:"Jardin",navDash:"Suivi",navContacts:"Contacts",navSettings:"Réglages",
     nightOpen:"Mode Nuit", nightBanner:"Il se fait tard. On essaie le mode Nuit ?", nightLater:"Plus tard",
     nightReassure:"Je veille. Tu peux lâcher.", nightBreath:"Respiration", nightShuffle:"Défilement",
-    nightSound:"Son", scapeOff:"Silence", scapeBrown:"Bruit brun", scapePink:"Bruit rose", scapeRain:"Pluie", scapeOcean:"Océan", scapeWind:"Vent", scapeDrone:"Nappe", coachEntry:"Séances de relaxation", coachEntrySub:"Respire, calme-toi, dors mieux", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
+    nightSound:"Son", scapeOff:"Silence", scapeBrown:"Bruit brun", scapePink:"Bruit rose", scapeRain:"Pluie", scapeOcean:"Océan", scapeWind:"Vent", scapeDrone:"Nappe", coachEntry:"Séances de relaxation", coachEntrySub:"Respire, calme-toi, dors mieux", setInstallH:"Application", installBtn:"Installer l'application", installIOSbtn:"Comment installer", installReady:"Installe Anchor comme une vraie app, avec sa propre icône.", installIOS:"Sur iPhone : bouton Partager, puis Sur l'écran d'accueil.", installIOSsteps:"1. Appuie sur Partager (carré fléché). 2. Fais défiler. 3. Sur l'écran d'accueil. 4. Ajouter.", installStandalone:"Anchor est déjà installée.", installOther:"Ouvre le menu du navigateur, puis Installer l'application.", nightSoft:"Plus doux", nightOff:"Extinction", nightShuffleHint:"Imagine ce mot, sans effort.",
     nightGoodnight:"Bonne nuit", nInhale:"Inspire", nHold:"Retiens", nExhale:"Expire",
     nightMedit:"Méditation", medHint:"Laisse les phrases te guider. Sans effort.", setTheme:"Thème", setAppearance:"Apparence",
     medSteps:["Installe-toi. Laisse le poids de ton corps s'enfoncer dans le lit.","Respire doucement. L'expiration, un peu plus longue que l'inspiration.","Relâche ton visage. Le front, les mâchoires, autour des yeux.","Laisse tes épaules descendre. Tes bras deviennent lourds.","Sens ta poitrine et ton ventre se soulever, sans rien forcer.","Relâche tes jambes. Tes pieds. Tout le bas du corps se pose.","Il n'y a rien à faire maintenant. Juste être là, au chaud.","Laisse chaque expiration t'emmener un peu plus loin vers le sommeil."],
@@ -1246,7 +1258,7 @@ const I18N = {
     setTitle:"Réglages", setCompanion:"Ton compagnon", setCname:"Son nom",
     setBreath:"Respiration", setPrefs:"Préférences",
     setVoice:"Voix guide", setHaptic:"Vibrations", setMotion:"Réduire les animations",
-    setVoicePick:"Choisir la voix", setVoiceRate:"Rythme", setVoiceTest:"Tester la voix",
+    setVoicePick:"Choisir la voix", setVoiceRate:"Rythme", setVoiceTest:"Tester la voix", setVoicePitch:"Tonalité", pitches:["Grave","Moyenne","Claire"], voiceFewHint:"Peu de voix ? Installe des voix premium dans les réglages du téléphone (Synthèse vocale), puis reviens ici.",
     voiceSample:"Tu es en sécurité. Respire avec moi, doucement.",
     rates:["Posé","Lent","Très lent"],
     setReset:"Réinitialiser les données",
@@ -1329,7 +1341,7 @@ const I18N = {
     navHome:"Home",navGarden:"Garden",navDash:"Track",navContacts:"Contacts",navSettings:"Settings",
     nightOpen:"Night mode", nightBanner:"It's getting late. Try Night mode?", nightLater:"Later",
     nightReassure:"I'm here. You can let go.", nightBreath:"Breathing", nightShuffle:"Word drift",
-    nightSound:"Sound", scapeOff:"Silence", scapeBrown:"Brown noise", scapePink:"Pink noise", scapeRain:"Rain", scapeOcean:"Ocean", scapeWind:"Wind", scapeDrone:"Drone", coachEntry:"Relaxation sessions", coachEntrySub:"Breathe, calm down, sleep better", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
+    nightSound:"Sound", scapeOff:"Silence", scapeBrown:"Brown noise", scapePink:"Pink noise", scapeRain:"Rain", scapeOcean:"Ocean", scapeWind:"Wind", scapeDrone:"Drone", coachEntry:"Relaxation sessions", coachEntrySub:"Breathe, calm down, sleep better", setInstallH:"App", installBtn:"Install the app", installIOSbtn:"How to install", installReady:"Install Anchor as a real app, with its own icon.", installIOS:"On iPhone: Share button, then Add to Home Screen.", installIOSsteps:"1. Tap Share (square with arrow). 2. Scroll. 3. Add to Home Screen. 4. Add.", installStandalone:"Anchor is already installed.", installOther:"Open the browser menu, then Install app.", nightSoft:"Gentler", nightOff:"Auto-off", nightShuffleHint:"Picture this word, no effort.",
     nightGoodnight:"Good night", nInhale:"Breathe in", nHold:"Hold", nExhale:"Breathe out",
     nightMedit:"Meditation", medHint:"Let the phrases guide you. No effort.", setTheme:"Theme", setAppearance:"Appearance",
     medSteps:["Settle in. Let the weight of your body sink into the bed.","Breathe gently. Make the out-breath a little longer than the in-breath.","Soften your face. Forehead, jaw, around the eyes.","Let your shoulders drop. Your arms grow heavy.","Feel your chest and belly rise, without forcing anything.","Release your legs. Your feet. The whole lower body settles.","There is nothing to do now. Just being here, warm.","Let each out-breath carry you a little further toward sleep."],
@@ -1346,7 +1358,7 @@ const I18N = {
     setTitle:"Settings", setCompanion:"Your companion", setCname:"Its name",
     setBreath:"Breathing", setPrefs:"Preferences",
     setVoice:"Guide voice", setHaptic:"Haptics", setMotion:"Reduce motion",
-    setVoicePick:"Choose voice", setVoiceRate:"Pace", setVoiceTest:"Test voice",
+    setVoicePick:"Choose voice", setVoiceRate:"Pace", setVoiceTest:"Test voice", setVoicePitch:"Tone", pitches:["Deep","Medium","Bright"], voiceFewHint:"Few voices? Install premium voices in your phone settings (Text-to-speech), then come back.",
     voiceSample:"You are safe. Breathe with me, slowly.",
     rates:["Steady","Slow","Very slow"],
     setReset:"Reset data",
@@ -1429,7 +1441,7 @@ const I18N = {
     navHome:"Inicio",navGarden:"Jardín",navDash:"Seguimiento",navContacts:"Contactos",navSettings:"Ajustes",
     nightOpen:"Modo Noche", nightBanner:"Se hace tarde. ¿Probamos el Modo Noche?", nightLater:"Más tarde",
     nightReassure:"Estoy aquí. Puedes soltar.", nightBreath:"Respiración", nightShuffle:"Palabras",
-    nightSound:"Sonido", scapeOff:"Silencio", scapeBrown:"Ruido marrón", scapePink:"Ruido rosa", scapeRain:"Lluvia", scapeOcean:"Océano", scapeWind:"Viento", scapeDrone:"Capa", coachEntry:"Sesiones de relajación", coachEntrySub:"Respira, cálmate, duerme mejor", nightSoft:"Más suave", nightOff:"Apagado", nightShuffleHint:"Imagina esta palabra, sin esfuerzo.",
+    nightSound:"Sonido", scapeOff:"Silencio", scapeBrown:"Ruido marrón", scapePink:"Ruido rosa", scapeRain:"Lluvia", scapeOcean:"Océano", scapeWind:"Viento", scapeDrone:"Capa", coachEntry:"Sesiones de relajación", coachEntrySub:"Respira, cálmate, duerme mejor", setInstallH:"Aplicación", installBtn:"Instalar la aplicación", installIOSbtn:"Cómo instalar", installReady:"Instala Anchor como una app real, con su propio icono.", installIOS:"En iPhone: botón Compartir, luego Añadir a pantalla de inicio.", installIOSsteps:"1. Pulsa Compartir (cuadro con flecha). 2. Desplaza. 3. Añadir a pantalla de inicio. 4. Añadir.", installStandalone:"Anchor ya está instalada.", installOther:"Abre el menú del navegador y luego Instalar aplicación.", nightSoft:"Más suave", nightOff:"Apagado", nightShuffleHint:"Imagina esta palabra, sin esfuerzo.",
     nightGoodnight:"Buenas noches", nInhale:"Inspira", nHold:"Retén", nExhale:"Espira",
     nightMedit:"Meditación", medHint:"Deja que las frases te guíen. Sin esfuerzo.", setTheme:"Tema", setAppearance:"Apariencia",
     medSteps:["Acomódate. Deja que el peso de tu cuerpo se hunda en la cama.","Respira despacio. Que la espiración dure un poco más que la inspiración.","Afloja la cara. La frente, la mandíbula, alrededor de los ojos.","Deja caer los hombros. Tus brazos se vuelven pesados.","Siente cómo suben el pecho y el vientre, sin forzar nada.","Suelta las piernas. Los pies. Toda la parte baja se posa.","No hay nada que hacer ahora. Solo estar aquí, en calor.","Deja que cada espiración te lleve un poco más hacia el sueño."],
@@ -1446,7 +1458,7 @@ const I18N = {
     setTitle:"Ajustes", setCompanion:"Tu compañero", setCname:"Su nombre",
     setBreath:"Respiración", setPrefs:"Preferencias",
     setVoice:"Voz guía", setHaptic:"Vibración", setMotion:"Reducir animaciones",
-    setVoicePick:"Elegir la voz", setVoiceRate:"Ritmo", setVoiceTest:"Probar la voz",
+    setVoicePick:"Elegir la voz", setVoiceRate:"Ritmo", setVoiceTest:"Probar la voz", setVoicePitch:"Tono", pitches:["Grave","Media","Clara"], voiceFewHint:"¿Pocas voces? Instala voces premium en los ajustes del teléfono (Texto a voz) y vuelve aquí.",
     voiceSample:"Estás a salvo. Respira conmigo, despacio.",
     rates:["Calmado","Lento","Muy lento"],
     setReset:"Restablecer los datos",
@@ -1544,7 +1556,7 @@ const DEFAULT={
   history:[], garden:[], memories:[], contacts:[], moods:{}, moodEnergyDay:null, onboarded:false, companionRandomized:false, actEnergyDay:null,
   xp:0, xpInit:false, xpAward:{}, journal:[], lastNotifDay:null, woodLevel:1,
   bond:0, careAward:{}, nudgeDay:null, nightPromptDay:null, theme:"aurore", appearance:"auto", gratitude:[], notifSent:{}, reminders:{on:false,mood:true,relax:true,journal:false,hour:20},
-  settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75, night:{sound:false,prompt:true,hour:22,timer:15,soft:false}},
+  settings:{breath:"box", voice:true, haptic:true, motion:false, notif:false, voiceName:null, voiceRate:0.75, voicePitch:0.95, night:{sound:false,prompt:true,hour:22,timer:15,soft:false}},
   lastVisit:Date.now()
 };
 let S=load();
@@ -1705,6 +1717,7 @@ function renderSettings(){
     const ti=$("rem-time"); if(ti)ti.value=String(S.reminders.hour||20).padStart(2,"0")+":00";
   }
   renderVoiceUI();
+  { const ib=$("install-btn"); if(ib)ib.onclick=doInstall; renderInstallUI(); }
   document.body.classList.toggle("reduce-motion",S.settings.motion);
 }
 function setSw(id,on){$(id).classList.toggle("on",!!on);}
@@ -1780,8 +1793,24 @@ $("voice-select").onchange=(e)=>{ S.settings.voiceName=e.target.value; _voiceCac
 $("voice-test").onclick=()=>{ if(!S.settings.voice){S.settings.voice=true;save();renderSettings();} speak(t("voiceSample")); };
 const FEMALE_VOICES={
   fr:["amélie","amelie","audrey","aurélie","aurelie","marie","virginie","julie","céline","celine","chantal","caroline","léa","lea","hortense","sandy","flo"],
-  en:["samantha","karen","victoria","tessa","moira","fiona","allison","ava","susan","serena","catherine","zira","jenny","aria","sonia","libby","emma","google uk english female","google us english"]
+  en:["samantha","karen","victoria","tessa","moira","fiona","allison","ava","susan","serena","catherine","zira","jenny","aria","sonia","libby","emma","google uk english female","google us english"],
+  es:["mónica","monica","paulina","marisol","helena","laura","lucia","angelica","google español"]
 };
+const MALE_VOICES={
+  fr:["thomas","nicolas","paul","daniel","mathieu","henri","rémi","remi","yannick"],
+  en:["daniel","alex","fred","george","arthur","aaron","rishi","guy","tom","oliver","james","mark","microsoft david","microsoft mark","google uk english male"],
+  es:["jorge","diego","carlos","juan","pablo","enrique","alvaro","álvaro","microsoft pablo"]
+};
+function voiceGender(v){
+  const nm=(v&&v.name||"").toLowerCase();
+  if(/\bfemale\b|femme|mujer|weiblich/.test(nm))return "f";
+  if(/\bmale\b|homme|hombre|\bman\b/.test(nm))return "m";
+  const f=(FEMALE_VOICES[S.lang]||[]).some(x=>nm.includes(x));
+  const m=(MALE_VOICES[S.lang]||[]).some(x=>nm.includes(x));
+  if(f&&!m)return "f"; if(m&&!f)return "m"; return "?";
+}
+function genderLabel(g){ const M={fr:{f:"Femme",m:"Homme","?":"Voix"},en:{f:"Female",m:"Male","?":"Voice"},es:{f:"Mujer",m:"Hombre","?":"Voz"}}; return (M[S.lang]||M.en)[g]; }
+function voiceOptionLabel(v){ const nm=(v.name||"").replace(/\s*\(.*?\)/g,"").trim()||v.name; return genderLabel(voiceGender(v))+" \u00b7 "+nm; }
 let _voiceCache=null,_voiceLang=null;
 function pickVoice(){
   if(!("speechSynthesis"in window))return null;
@@ -1808,7 +1837,7 @@ function speak(txt){
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(txt);
     u.lang=S.lang==="fr"?"fr-FR":"en-US";
-    u.rate=S.settings.voiceRate||0.75; u.pitch=1.08; u.volume=0.92;
+    u.rate=S.settings.voiceRate||0.75; u.pitch=S.settings.voicePitch||0.95; u.volume=0.95;
     let v=null;
     if(S.settings.voiceName){ v=(speechSynthesis.getVoices()||[]).find(x=>x.name===S.settings.voiceName)||null; }
     if(!v)v=pickVoice();
@@ -2631,6 +2660,7 @@ setInterval(notifTick, 30000);
 
 /* ---------- voice selector ---------- */
 const RATE_VALUES=[0.85,0.75,0.6];
+const PITCH_VALUES=[0.8,0.95,1.1];
 function renderVoiceUI(){
   const sel=$("voice-select"); if(!sel)return;
   const voices=("speechSynthesis"in window)?(speechSynthesis.getVoices()||[]):[];
@@ -2645,7 +2675,7 @@ function renderVoiceUI(){
   langV.sort((a,b)=>score(a)-score(b));
   sel.innerHTML="";
   if(!langV.length){const o=document.createElement("option");o.textContent=(S.lang==="fr"?"Aucune voix disponible":"No voice available");sel.appendChild(o);sel.disabled=true;}
-  else{ sel.disabled=false; langV.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=v.name.replace(/\s*\(.*?\)/g,"").trim()||v.name;sel.appendChild(o);}); }
+  else{ sel.disabled=false; langV.forEach(v=>{const o=document.createElement("option");o.value=v.name;o.textContent=voiceOptionLabel(v);sel.appendChild(o);}); }
   if(S.settings.voiceName)sel.value=S.settings.voiceName;
   const rc=$("voice-rate"); rc.innerHTML="";
   const labels=t("rates")||["A","B","C"];
@@ -2656,6 +2686,17 @@ function renderVoiceUI(){
     b.onclick=()=>{S.settings.voiceRate=rt;save();renderVoiceUI();speak(t("voiceSample"));};
     rc.appendChild(b);
   });
+  const pc=$("voice-pitch");
+  if(pc){ pc.innerHTML="";
+    const plabels=t("pitches")||["Grave","Moyenne","Claire"];
+    PITCH_VALUES.forEach((pv,i)=>{
+      const b=document.createElement("button");
+      b.className="chip"+(((S.settings.voicePitch||0.95)===pv)?" on":"");
+      b.textContent=plabels[i];
+      b.onclick=()=>{S.settings.voicePitch=pv;save();renderVoiceUI();speak(t("voiceSample"));};
+      pc.appendChild(b);
+    });
+  }
 }
 
 /* ---------- M3 ripple ---------- */
@@ -2804,7 +2845,7 @@ $("reset").onclick=()=>{
   const msg=S.lang==="fr"?"Tout effacer ? Action irréversible.":S.lang==="es"?"¿Borrar todo? Esta acción es irreversible.":"Erase everything? This cannot be undone.";
   if(confirm(msg)){localStorage.removeItem(KEY);S=load();applyLang();go("home");}
 };
-if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{_voiceCache=null; if(document.getElementById("voice-select"))renderVoiceUI();};speechSynthesis.getVoices();}
+if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{_voiceCache=null; if(document.getElementById("voice-select"))renderVoiceUI(); if(document.getElementById("coachVoiceSel"))renderCoachVoiceSel();};speechSynthesis.getVoices();}
 document.body.classList.toggle("reduce-motion",S.settings.motion);
 applyLang();
 go("home");
@@ -2859,7 +2900,7 @@ const CX={
   cats:{quick:"Express",breath:"Respiration",calm:"Apaisement",sleep:"Sommeil"},
   start:"Commencer", pause:"Pause", resume:"Reprendre", stop:"Terminer",
   voice:"Voix", back:"Retour",
-  doneT:"C'est fini.", doneS:"Reste encore un moment si tu veux.",
+  doneT:"C'est fini.", doneS:"Reste encore un moment si tu veux.", voicePick:"Voix du guide", voiceTest:"Écouter",
   in:"Inspire", out:"Expire", hold:"Retiens", holdEmpty:"Poumons vides",
   settle:"Installe-toi confortablement.", nothing:"Rien à réussir. Juste être là.",
   closeEyes:"Ferme les yeux si tu le souhaites.",
@@ -2892,7 +2933,7 @@ const CX={
   cats:{quick:"Express",breath:"Breathing",calm:"Calm",sleep:"Sleep"},
   start:"Begin", pause:"Pause", resume:"Resume", stop:"End",
   voice:"Voice", back:"Back",
-  doneT:"That's it.", doneS:"Stay a little longer if you like.",
+  doneT:"That's it.", doneS:"Stay a little longer if you like.", voicePick:"Guide voice", voiceTest:"Preview",
   in:"Breathe in", out:"Breathe out", hold:"Hold", holdEmpty:"Empty",
   settle:"Settle in comfortably.", nothing:"Nothing to achieve. Just be here.",
   closeEyes:"Close your eyes if you'd like.",
@@ -2925,7 +2966,7 @@ const CX={
   cats:{quick:"Exprés",breath:"Respiración",calm:"Calma",sleep:"Sueño"},
   start:"Empezar", pause:"Pausa", resume:"Seguir", stop:"Terminar",
   voice:"Voz", back:"Volver",
-  doneT:"Ya está.", doneS:"Quédate un poco más si quieres.",
+  doneT:"Ya está.", doneS:"Quédate un poco más si quieres.", voicePick:"Voz de la guía", voiceTest:"Escuchar",
   in:"Inspira", out:"Espira", hold:"Retén", holdEmpty:"Pulmones vacíos",
   settle:"Ponte cómodo·a.", nothing:"Nada que lograr. Solo estar aquí.",
   closeEyes:"Cierra los ojos si quieres.",
@@ -3049,6 +3090,15 @@ function recommend(){
 }
 
 /* ---------- voice ---------- */
+function langVoicesSorted(){
+  const voices=("speechSynthesis"in window)?(speechSynthesis.getVoices()||[]):[];
+  let langV=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(S.lang));
+  if(!langV.length)langV=voices.slice();
+  const prefs=(typeof FEMALE_VOICES!=="undefined"&&FEMALE_VOICES[S.lang])||[];
+  function sc(v){const nm=v.name.toLowerCase();return (prefs.some(pp=>nm.includes(pp))?-10:0)+(/enhanced|premium|natural|neural|siri/i.test(v.name)?-3:0);}
+  langV.sort((a,b)=>sc(a)-sc(b));
+  return langV;
+}
 function coachSay(text){
   if(!COACH.voice||!text) return;
   try{
@@ -3056,11 +3106,26 @@ function coachSay(text){
     speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance(text);
     u.lang=({fr:"fr-FR",en:"en-US",es:"es-ES"})[S.lang]||"fr-FR";
-    u.rate=_soft()?0.78:0.85; u.pitch=1.0; u.volume=1;
-    const vs=(speechSynthesis.getVoices()||[]).filter(v=>v.lang&&v.lang.toLowerCase().slice(0,2)===S.lang);
-    if(vs.length){ const fem=vs.find(v=>/female|femme|amélie|amelie|audrey|marie|google|zira|mónica|monica|paulina/i.test(v.name)); u.voice=fem||vs[0]; }
+    const base=S.settings.voiceRate||0.75;
+    u.rate=Math.max(0.6, _soft()?base-0.07:base);
+    u.pitch=S.settings.voicePitch||0.95; u.volume=1;
+    let v=null;
+    if(S.settings.voiceName){ v=(speechSynthesis.getVoices()||[]).find(x=>x.name===S.settings.voiceName)||null; }
+    if(!v && typeof pickVoice==="function"){ try{v=pickVoice();}catch(e){} }
+    if(!v){ const l=langVoicesSorted(); if(l.length)v=l[0]; }
+    if(v)u.voice=v;
     speechSynthesis.speak(u);
   }catch(e){}
+}
+function renderCoachVoiceSel(){
+  const sel=$("coachVoiceSel"); if(!sel)return;
+  const langV=langVoicesSorted();
+  sel.innerHTML="";
+  if(!langV.length){ const o=document.createElement("option"); o.textContent="—"; sel.appendChild(o); sel.disabled=true; return; }
+  sel.disabled=false;
+  langV.forEach(v=>{ const o=document.createElement("option"); o.value=v.name; o.textContent=voiceOptionLabel(v); sel.appendChild(o); });
+  if(S.settings.voiceName)sel.value=S.settings.voiceName;
+  sel.onchange=e=>{ S.settings.voiceName=e.target.value; save(); COACH.voice=true; coachSay(L().settle); };
 }
 
 /* ---------- player ---------- */
@@ -3144,10 +3209,13 @@ function coachCheckin(){
    +'<div class="coach-q">'+g.checkQ+'</div>'
    +'<div class="feel-grid" id="feelGrid">'+g.feelings.map(f=>'<button class="feel'+(COACH.feeling===f[0]?' on':'')+'" data-f="'+f[0]+'">'+f[1]+'</button>').join('')+'</div>'
    +'<div class="intens-wrap"><div class="coach-q sm">'+g.intensQ+'</div><input type="range" min="1" max="5" value="'+COACH.intens+'" id="feelIntens" class="intens"><div class="intens-lbls"><span>'+g.low+'</span><span>'+g.high+'</span></div></div>'
+   +'<div class="coach-voice-row"><label>'+g.voicePick+'</label><select id="coachVoiceSel"></select><button class="coach-btn ghost sm" id="coachVoiceTest">'+g.voiceTest+'</button></div>'
    +'<div class="coach-actions"><button class="coach-btn primary" id="feelGo">'+g.see+'</button><button class="coach-btn ghost" id="feelSkip">'+g.skip+'</button></div>'
    +'</div>';
   coachWire();
   coachSay(g.welcome);
+  renderCoachVoiceSel();
+  { const tb=$("coachVoiceTest"); if(tb) tb.onclick=()=>{ COACH.voice=true; const v=$("coachVoice"); if(v)v.classList.add("on"); S.coachVoice=true; save(); coachSay(L().settle); }; }
   document.querySelectorAll("#feelGrid .feel").forEach(b=>b.onclick=()=>{ COACH.feeling=b.dataset.f; document.querySelectorAll("#feelGrid .feel").forEach(x=>x.classList.toggle("on",x===b)); });
   $("feelIntens").oninput=e=>{ COACH.intens=parseInt(e.target.value,10); };
   $("feelGo").onclick=coachHub;
@@ -3191,6 +3259,25 @@ function closeCoach(){
 }
 if("speechSynthesis"in window){ try{ speechSynthesis.onvoiceschanged=function(){}; }catch(e){} }
 (function(){ var e=$("coach-open"); if(e) e.onclick=openCoach; })();
+
+
+/* ---------------- PWA install ---------------- */
+var deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferredPrompt=e; try{renderInstallUI();}catch(_){} });
+window.addEventListener("appinstalled",function(){ deferredPrompt=null; try{renderInstallUI();}catch(_){} });
+function isStandalone(){ return (window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true; }
+function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent||"")||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1); }
+function renderInstallUI(){
+  const btn=$("install-btn"), note=$("install-note"); if(!btn||!note)return;
+  if(isStandalone()){ btn.style.display="none"; note.textContent=t("installStandalone"); return; }
+  if(deferredPrompt){ btn.style.display=""; btn.textContent=t("installBtn"); note.textContent=t("installReady"); return; }
+  if(isIOS()){ btn.style.display=""; btn.textContent=t("installIOSbtn"); note.textContent=t("installIOS"); return; }
+  btn.style.display="none"; note.textContent=t("installOther");
+}
+async function doInstall(){
+  if(deferredPrompt){ try{ deferredPrompt.prompt(); await deferredPrompt.userChoice; }catch(e){} deferredPrompt=null; renderInstallUI(); return; }
+  if(isIOS()){ const nt=$("install-note"); if(nt)nt.textContent=t("installIOSsteps"); }
+}
 
 </script>
 <script>
